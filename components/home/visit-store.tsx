@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { STORE_IMAGE } from "@/lib/data";
 import Image from "next/image";
 import { MagneticElement } from "@/components/ui/magnetic-element";
+import { generateWhatsAppURL } from "@/lib/whatsapp";
 
 export function VisitStore() {
   return (
@@ -74,7 +75,7 @@ export function VisitStore() {
 
           <MagneticElement>
             <a
-              href="https://wa.me/91XXXXXXXXXX"
+              href={generateWhatsAppURL()}
               className="inline-block border border-white px-10 py-4 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-white hover:bg-white/5 transition-colors"
             >
               WhatsApp Us

@@ -68,8 +68,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               className="p-8 border-t border-border-dark"
             >
               <div className="flex flex-col gap-3 text-text-muted text-sm font-montserrat">
-                <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-3 hover:text-text-light transition-colors">
-                  <Phone size={16} className="text-accent" /> +91 XXXXXXXXXX
+                <a href="tel:+919895884796" className="flex items-center gap-3 hover:text-text-light transition-colors">
+                  <Phone size={16} className="text-accent" /> +91 9895884796
                 </a>
                 <span className="flex items-center gap-3">
                   <MapPin size={16} className="text-accent" /> Store Location

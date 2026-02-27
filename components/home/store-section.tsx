@@ -42,9 +42,9 @@ export default function StoreSection() {
                 </div>
               </div>
 
-              <a href="tel:+91XXXXXXXXXX" className="flex items-center gap-4 text-text-subtle hover:text-text-light transition-colors">
+              <a href="tel:+919895884796" className="flex items-center gap-4 text-text-subtle hover:text-text-light transition-colors">
                 <Phone size={18} className="text-accent flex-shrink-0" />
-                <span className="font-inter text-sm">+91 XXXXXXXXXX</span>
+                <span className="font-inter text-sm">+91 9895884796</span>
               </a>
 
               <a href="#" className="flex items-center gap-4 text-text-subtle hover:text-text-light transition-colors">

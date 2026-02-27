@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { MapPin, Phone, MessageCircle, Clock, ArrowRight } from 'lucide-react'
 import { RevealImage } from '@/components/ui/reveal-image'
 import { RevealText } from '@/components/ui/reveal-text'
+import { generateWhatsAppURL } from "@/lib/whatsapp";
 
 
 const contactItems = [
@@ -72,7 +73,7 @@ export default function StorePage() {
             
             <div className="md:col-span-2 pt-10">
               <a 
-                href="https://wa.me/919895884796" 
+                href={generateWhatsAppURL()} 
                 className="group relative flex items-center justify-center w-full py-6 bg-white overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
