@@ -45,6 +45,7 @@ export const metadata: Metadata = {
 
 import { SmoothScroll } from '@/components/layout/smooth-scroll'
 import { NavbarWrapper } from '@/components/layout/navbar-wrapper'
+import { CustomCursor } from '@/components/ui/custom-cursor'
 
 export default function RootLayout({
   children,
@@ -53,7 +54,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable}`}>
-      <body className="font-body antialiased bg-black text-white">
+      <body className="font-body antialiased bg-rich-black text-white cursor-auto md:cursor-none">
+        <CustomCursor />
         <SmoothScroll>
           <NavbarWrapper>
             {children}
@@ -63,5 +65,6 @@ export default function RootLayout({
     </html>
   )
 }
+
 
 

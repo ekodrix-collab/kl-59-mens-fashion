@@ -52,14 +52,14 @@ export function HeroVideo() {
           <Logo size="large" />
         </motion.div>
 
-        <motion.p
+        <motion.h1
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-          className="font-sans font-light text-xs md:text-sm uppercase tracking-[0.4em] text-white/60 mb-12 max-w-sm mx-auto"
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+          className="font-display text-4xl md:text-5xl lg:text-7xl text-white font-medium mb-12 max-w-3xl mx-auto italic leading-[1.1] tracking-tight"
         >
-          Defining the Modern Masculine <br className="hidden md:block" /> Since 1959
-        </motion.p>
+          The Art of <br className="md:hidden" /> Modern Masculinity.
+        </motion.h1>
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}

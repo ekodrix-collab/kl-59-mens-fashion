@@ -7,6 +7,7 @@ import { cn, formatPrice } from "@/lib/utils";
 import { generateWhatsAppURL } from "@/lib/whatsapp";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import { MessageSquare } from "lucide-react";
+import { WhatsAppDrawer } from "./whatsapp-drawer";
 
 export function ProductGallery({ images }: { images: string[] }) {
   const [activeImage, setActiveImage] = useState(0);
@@ -56,13 +57,18 @@ export function ProductInfo({ product }: { product: any }) {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [error, setError] = useState("");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleOrder = () => {
+  const handleOrderClick = () => {
     if (!selectedSize && product.sizes?.length > 0) {
       setError("Please select a size");
       return;
     }
     setError("");
+    setIsDrawerOpen(true);
+  };
+
+  const confirmWhatsAppOrder = () => {
     const url = generateWhatsAppURL(product, selectedSize, selectedColor);
     window.open(url, "_blank");
   };
@@ -146,17 +152,37 @@ export function ProductInfo({ product }: { product: any }) {
         </div>
       )}
 
-      <div className="mt-8">
+      <div className="mt-8 pb-24 md:pb-0">
         <MagneticElement>
           <button
-            onClick={handleOrder}
-            className="w-full bg-[#25D366] text-white font-sans text-[12px] font-medium uppercase tracking-[0.2em] py-5 transition-colors flex items-center justify-center gap-3 active:scale-95"
+            onClick={handleOrderClick}
+            className="hidden md:flex w-full bg-[#25D366] text-white font-sans text-[12px] font-medium uppercase tracking-[0.2em] py-5 transition-colors items-center justify-center gap-3 hover:bg-[#20bd5a]"
           >
             <MessageSquare size={18} />
             Order on WhatsApp
           </button>
         </MagneticElement>
       </div>
+
+      {/* Mobile Sticky Order Button */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-rich-black via-rich-black to-transparent z-50 md:hidden">
+        <button
+          onClick={handleOrderClick}
+          className="w-full bg-[#25D366] text-white font-sans text-[11px] font-medium uppercase tracking-[0.2em] py-4 flex items-center justify-center gap-3 shadow-2xl active:scale-95 transition-transform"
+        >
+          <MessageSquare size={16} />
+          Order on WhatsApp
+        </button>
+      </div>
+
+      <WhatsAppDrawer 
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onConfirm={confirmWhatsAppOrder}
+        product={product}
+        selectedSize={selectedSize}
+        selectedColor={selectedColor}
+      />
     </div>
   );
 }
