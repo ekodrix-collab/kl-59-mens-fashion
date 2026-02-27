@@ -35,86 +35,91 @@ export default function NewProductPage() {
     }
   }
 
-  return (
-    <div className="max-w-3xl">
-      <h1 className="font-montserrat font-bold text-2xl text-gray-900 mb-8">Add New Product</h1>
+  // Premium input class
+  const inputClass = "w-full bg-rich-black/50 backdrop-blur-sm px-6 py-4 border border-white/10 text-sm font-body text-white focus:outline-none focus:border-gold transition-colors placeholder:text-white/20 rounded-none";
+  const labelClass = "block font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-3";
 
-      <div className="space-y-6">
+  return (
+    <div className="max-w-4xl">
+      <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight mb-8">Add New Product</h1>
+
+      <div className="space-y-8 bg-rich-black/30 p-8 border border-white/5">
         {/* Name */}
         <div>
-          <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">Product Name *</label>
+          <label className={labelClass}>Product Designation *</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Classic Slim Fit Denim Jeans"
+            className={inputClass}
+            placeholder="e.g. Classic Slim Fit Denim"
           />
-          {name && <p className="text-xs text-gray-400 mt-1">Slug: {slugify(name)}</p>}
+          {name && <p className="text-[10px] font-body text-gold mt-2">Slug: {slugify(name)}</p>}
         </div>
 
         {/* Category */}
         <div>
-          <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">Category *</label>
+          <label className={labelClass}>Collection *</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`${inputClass} appearance-none cursor-pointer`}
           >
-            <option value="">Select category</option>
+            <option value="" className="bg-rich-black text-white/50">Select collection</option>
             {PLACEHOLDER_CATEGORIES.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id} className="bg-rich-black text-white">{c.name}</option>
             ))}
           </select>
         </div>
 
         {/* Description */}
         <div>
-          <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">Description</label>
+          <label className={labelClass}>Editorial Description</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={4}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={inputClass}
+            placeholder="Describe the piece..."
           />
         </div>
 
         {/* Images */}
         <div>
-          <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">Images</label>
-          <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
-            <Upload size={32} className="mx-auto text-gray-400 mb-2" />
-            <p className="text-sm text-gray-500">📷 Click or drag images to upload</p>
-            <p className="text-xs text-gray-400 mt-1">Max 5MB per image • JPEG, PNG, WebP</p>
+          <label className={labelClass}>Visual Assets</label>
+          <div className="border border-dashed border-white/20 bg-white/5 p-12 text-center hover:border-gold transition-colors cursor-pointer group">
+            <Upload size={24} strokeWidth={1.5} className="mx-auto text-white/30 mb-4 group-hover:text-gold transition-colors" />
+            <p className="text-sm font-sans text-white/70">Click or drag high-res images to upload</p>
+            <p className="text-[10px] font-sans uppercase tracking-[0.1em] text-white/40 mt-2">Max 5MB per image • JPEG, PNG, WebP</p>
           </div>
         </div>
 
         {/* Pricing */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">MRP (₹) *</label>
-            <input type="number" value={mrp} onChange={(e) => setMrp(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <label className={labelClass}>MRP (₹) *</label>
+            <input type="number" value={mrp} onChange={(e) => setMrp(e.target.value)} className={inputClass} placeholder="0.00" />
           </div>
           <div>
-            <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">Selling Price (₹) *</label>
-            <input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <label className={labelClass}>Selling Price (₹) *</label>
+            <input type="number" value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)} className={inputClass} placeholder="0.00" />
           </div>
         </div>
         {discount > 0 && (
-          <span className="inline-block bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">{discount}% OFF</span>
+          <span className="inline-block border border-gold/30 text-gold bg-gold/5 text-[10px] uppercase font-sans tracking-[0.2em] px-4 py-1.5">{discount}% OFF</span>
         )}
 
         {/* Sizes */}
         <div>
-          <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">Available Sizes</label>
-          <div className="flex gap-2">
+          <label className={labelClass}>Available Sizes</label>
+          <div className="flex flex-wrap gap-3">
             {SIZES.map(size => (
               <button
                 key={size}
                 type="button"
                 onClick={() => toggleSize(size)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
-                  selectedSizes.includes(size) ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-200 hover:border-blue-400'
+                className={`w-12 h-12 flex items-center justify-center text-[10px] font-sans uppercase tracking-widest border transition-colors duration-300 ${
+                  selectedSizes.includes(size) ? 'bg-white text-black border-white' : 'bg-transparent text-white/50 border-white/20 hover:border-white hover:text-white'
                 }`}
               >
                 {size}
@@ -125,46 +130,50 @@ export default function NewProductPage() {
 
         {/* Colors */}
         <div>
-          <label className="block font-montserrat text-xs font-medium text-gray-700 mb-1.5">Colors</label>
-          <div className="flex gap-2 mb-2 flex-wrap">
+          <label className={labelClass}>Colors</label>
+          <div className="flex gap-2 mb-4 flex-wrap">
             {colors.map(c => (
-              <span key={c} className="flex items-center gap-1 bg-gray-100 px-3 py-1 rounded-full text-sm">
-                {c} <button onClick={() => setColors(colors.filter(x => x !== c))} className="text-gray-400 hover:text-red-500"><X size={14} /></button>
+              <span key={c} className="flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-white">
+                {c} 
+                <button onClick={() => setColors(colors.filter(x => x !== c))} className="text-white/40 hover:text-red-500 transition-colors">
+                  <X size={12} strokeWidth={2} />
+                </button>
               </span>
             ))}
           </div>
-          <div className="flex gap-2">
-            <input
-              value={colorInput}
-              onChange={(e) => setColorInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addColor())}
-              className="flex-1 px-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Type color and press Enter"
-            />
-          </div>
+          <input
+            value={colorInput}
+            onChange={(e) => setColorInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addColor())}
+            className={inputClass}
+            placeholder="Type color and press Enter"
+          />
         </div>
 
         {/* Toggles */}
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-8 py-4">
           {[
-            { label: 'Featured', value: featured, set: setFeatured },
+            { label: 'Featured Highlight', value: featured, set: setFeatured },
             { label: 'New Arrival', value: newArrival, set: setNewArrival },
-            { label: 'On Offer', value: onOffer, set: setOnOffer },
+            { label: 'Active Campaign', value: onOffer, set: setOnOffer },
           ].map(t => (
-            <label key={t.label} className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={t.value} onChange={(e) => t.set(e.target.checked)} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-              <span className="text-sm font-inter text-gray-700">{t.label}</span>
+            <label key={t.label} className="flex items-center gap-3 cursor-pointer group">
+              <div className={`w-4 h-4 border transition-colors flex items-center justify-center ${t.value ? 'bg-gold border-gold' : 'border-white/30 group-hover:border-gold'}`}>
+                {t.value && <div className="w-2 h-2 bg-black" />}
+              </div>
+              <input type="checkbox" checked={t.value} onChange={(e) => t.set(e.target.checked)} className="hidden" />
+              <span className="text-[10px] font-sans uppercase tracking-[0.2em] text-white/70 group-hover:text-white transition-colors">{t.label}</span>
             </label>
           ))}
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 pt-4">
-          <button className="px-6 py-3 bg-blue-600 text-white font-montserrat font-semibold text-sm rounded-xl hover:bg-blue-700 transition-colors">
-            Publish Product
+        <div className="flex gap-4 pt-8 border-t border-white/10">
+          <button className="px-8 py-4 bg-white text-black font-sans text-[10px] font-medium uppercase tracking-[0.3em] hover:bg-gold hover:text-white transition-colors duration-500">
+            Publish Artifact
           </button>
-          <button className="px-6 py-3 border border-gray-200 text-gray-700 font-montserrat font-semibold text-sm rounded-xl hover:bg-gray-50 transition-colors">
-            Save as Draft
+          <button className="px-8 py-4 border border-white/20 text-white font-sans text-[10px] font-medium uppercase tracking-[0.3em] hover:border-white transition-colors duration-500">
+            Save Draft
           </button>
         </div>
       </div>

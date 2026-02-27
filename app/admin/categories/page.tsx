@@ -9,38 +9,41 @@ export default function AdminCategoriesPage() {
   const [newName, setNewName] = useState('')
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <h1 className="font-montserrat font-bold text-2xl text-gray-900">Categories</h1>
+    <div className="space-y-8 max-w-3xl">
+      <div>
+        <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Collections</h1>
+        <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage Site Taxonomy</p>
+      </div>
 
       {/* Add category */}
-      <div className="flex gap-3">
+      <div className="flex gap-4">
         <input
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
-          className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="New category name..."
+          className="flex-1 bg-rich-black/50 backdrop-blur-sm border border-white/10 px-6 py-4 text-sm font-sans text-white focus:outline-none focus:border-gold transition-colors placeholder:text-white/20 placeholder:uppercase placeholder:tracking-[0.2em] placeholder:text-[10px]"
+          placeholder="New Collection Name..."
         />
-        <button className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
-          <Plus size={16} /> Add
+        <button className="flex items-center gap-2 px-8 py-4 bg-white text-black text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-colors duration-500 whitespace-nowrap">
+          <Plus size={14} strokeWidth={2} /> Create
         </button>
       </div>
 
       {/* List */}
-      <div className="bg-white rounded-xl border border-gray-100 divide-y divide-gray-50">
+      <div className="bg-rich-black/50 backdrop-blur-sm border border-white/5 divide-y divide-white/5">
         {categories.map((cat, i) => (
-          <div key={cat.id} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 group">
-            <GripVertical size={16} className="text-gray-300 cursor-grab" />
-            <span className="flex-1 font-inter text-sm text-gray-900">{cat.name}</span>
-            <span className="text-xs text-gray-400 font-inter">{cat.slug}</span>
-            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-blue-600"><Pencil size={14} /></button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-red-600"><Trash2 size={14} /></button>
+          <div key={cat.id} className="flex items-center gap-6 px-8 py-5 hover:bg-white/5 transition-colors group">
+            <GripVertical size={16} strokeWidth={1.5} className="text-white/20 cursor-grab hover:text-white transition-colors" />
+            <span className="flex-1 font-sans text-sm text-white group-hover:text-gold transition-colors">{cat.name}</span>
+            <span className="text-[10px] text-white/30 font-sans uppercase tracking-[0.2em]">{cat.slug}</span>
+            <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button className="text-white/40 hover:text-gold transition-colors"><Pencil size={16} strokeWidth={1.5} /></button>
+              <button className="text-white/40 hover:text-red-500 transition-colors"><Trash2 size={16} strokeWidth={1.5} /></button>
             </div>
           </div>
         ))}
       </div>
 
-      <p className="text-xs text-gray-400 font-inter">💡 Drag to reorder. Categories appear on the site in this order.</p>
+      <p className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-sans mt-4">Drag to reorder. Ordering reflects onto main navigation.</p>
     </div>
   )
 }
