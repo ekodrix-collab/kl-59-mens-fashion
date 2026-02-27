@@ -6,63 +6,78 @@ import { PLACEHOLDER_PRODUCTS, PLACEHOLDER_CATEGORIES } from '@/lib/constants'
 
 export default function AdminProductsPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-montserrat font-bold text-2xl text-gray-900">Products</h1>
-        <Link href="/admin/products/new" className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700">
-          <Plus size={16} /> Add Product
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Product Register</h1>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage Collection Items</p>
+        </div>
+        <Link href="/admin/products/new" className="group flex items-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-colors duration-500">
+          <Plus size={14} strokeWidth={2} /> Add Product
         </Link>
       </div>
 
-      {/* Search */}
+      {/* Premium Search */}
       <div className="relative">
-        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-white/30" strokeWidth={1.5} />
         <input
           type="text"
-          placeholder="Search products..."
-          className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm font-inter focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="SEARCH REGISTER..."
+          className="w-full pl-14 pr-6 py-5 bg-rich-black/50 backdrop-blur-sm border border-white/10 text-xs font-sans uppercase tracking-[0.2em] text-white focus:outline-none focus:border-gold transition-colors placeholder:text-white/20"
         />
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+      {/* Premium Table */}
+      <div className="bg-rich-black/50 backdrop-blur-sm border border-white/5 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gray-50 border-b">
-                <th className="text-left px-6 py-3 font-montserrat text-xs font-medium text-gray-500 uppercase">Image</th>
-                <th className="text-left px-6 py-3 font-montserrat text-xs font-medium text-gray-500 uppercase">Name</th>
-                <th className="text-left px-6 py-3 font-montserrat text-xs font-medium text-gray-500 uppercase">Category</th>
-                <th className="text-left px-6 py-3 font-montserrat text-xs font-medium text-gray-500 uppercase">MRP</th>
-                <th className="text-left px-6 py-3 font-montserrat text-xs font-medium text-gray-500 uppercase">Price</th>
-                <th className="text-left px-6 py-3 font-montserrat text-xs font-medium text-gray-500 uppercase">Status</th>
-                <th className="text-left px-6 py-3 font-montserrat text-xs font-medium text-gray-500 uppercase">Actions</th>
+              <tr className="border-b border-white/10 bg-black/40">
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Preview</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Designation</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Collection</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Value</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">State</th>
+                <th className="text-right px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Modify</th>
               </tr>
             </thead>
             <tbody>
               {PLACEHOLDER_PRODUCTS.map((product) => {
                 const cat = PLACEHOLDER_CATEGORIES.find(c => c.id === product.category_id)
                 return (
-                  <tr key={product.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="w-12 h-16 rounded-lg bg-gray-200" />
+                  <tr key={product.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                    <td className="px-8 py-6">
+                      <div className="w-12 h-16 bg-white/5 border border-white/10 overflow-hidden">
+                        {product.images?.[0] ? (
+                           // eslint-disable-next-line @next/next/no-img-element
+                          <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:opacity-100 transition-all duration-700" />
+                        ) : (
+                          <div className="w-full h-full bg-white/5" />
+                        )}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 text-sm font-inter font-medium text-gray-900">{product.name}</td>
-                    <td className="px-6 py-4 text-sm font-inter text-gray-500">{cat?.name || '—'}</td>
-                    <td className="px-6 py-4 text-sm font-inter text-gray-500">₹{product.mrp.toLocaleString('en-IN')}</td>
-                    <td className="px-6 py-4 text-sm font-inter font-medium text-gray-900">₹{product.selling_price.toLocaleString('en-IN')}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${product.is_published ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                        {product.is_published ? 'Live' : 'Draft'}
+                    <td className="px-8 py-6 text-sm font-sans text-white group-hover:text-gold transition-colors">{product.name}</td>
+                    <td className="px-8 py-6 text-[11px] font-sans uppercase tracking-[0.1em] text-white/50">{cat?.name || '—'}</td>
+                    <td className="px-8 py-6">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-sm font-body text-white">₹{product.selling_price.toLocaleString('en-IN')}</span>
+                        {product.mrp > product.selling_price && (
+                           <span className="text-[10px] font-body text-white/30 line-through">₹{product.mrp.toLocaleString('en-IN')}</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <span className={`inline-flex px-3 py-1 border text-[9px] uppercase tracking-[0.2em] ${product.is_published ? 'border-gold/30 text-gold bg-gold/5' : 'border-white/20 text-white/50 bg-white/5'}`}>
+                        {product.is_published ? 'Active' : 'Archived'}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <Link href={`/admin/products/${product.id}`} className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 hover:text-blue-600 transition-colors">
-                          <Pencil size={16} />
+                    <td className="px-8 py-6">
+                      <div className="flex items-center justify-end gap-4">
+                        <Link href={`/admin/products/${product.id}`} className="text-white/40 hover:text-gold transition-colors">
+                          <Pencil size={16} strokeWidth={1.5} />
                         </Link>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 hover:text-red-600 transition-colors">
-                          <Trash2 size={16} />
+                        <button className="text-white/40 hover:text-red-500 transition-colors">
+                          <Trash2 size={16} strokeWidth={1.5} />
                         </button>
                       </div>
                     </td>

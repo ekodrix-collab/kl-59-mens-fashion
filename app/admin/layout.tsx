@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut } from 'lucide-react'
+import { Logo } from '@/components/ui/logo'
 
 const navItems = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -25,55 +26,55 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-black">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 bg-gray-900 text-white fixed inset-y-0 left-0 z-40">
-        <div className="p-6">
-          <div className="flex items-center gap-1.5">
-            <span className="font-montserrat font-black text-lg">KL</span>
-            <span className="w-4 h-[2px] bg-accent" />
-            <span className="font-montserrat font-black text-lg">59</span>
-          </div>
-          <p className="font-montserrat text-[9px] tracking-[0.2em] uppercase text-gray-400 mt-0.5">Admin Panel</p>
+      <aside className="hidden lg:flex flex-col w-64 bg-rich-black border-r border-white/10 text-white fixed inset-y-0 left-0 z-40">
+        <div className="p-8 flex flex-col items-start border-b border-white/5">
+          <Logo size="small" />
+          <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/40 mt-6">Workspace</p>
         </div>
 
-        <nav className="flex-1 px-3 space-y-1">
+        <nav className="flex-1 px-4 py-8 space-y-2">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href)
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                  isActive ? 'bg-white/10 text-white border-l-2 border-accent' : 'text-gray-400 hover:text-white hover:bg-white/5'
+                className={`flex items-center gap-4 px-4 py-3 text-sm transition-all duration-300 ${
+                  isActive 
+                    ? 'text-gold bg-white/5 border-l-2 border-gold font-medium' 
+                    : 'text-white/50 hover:text-white hover:bg-white/5 font-light'
                 }`}
               >
-                <item.icon size={18} />
-                {item.label}
+                <item.icon size={16} strokeWidth={isActive ? 2 : 1.5} />
+                <span className="font-sans uppercase tracking-widest text-[10px]">{item.label}</span>
               </Link>
             )
           })}
         </nav>
 
-        <div className="p-4 border-t border-gray-800">
-          <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-white/5 w-full transition-colors">
-            <LogOut size={18} />
-            Logout
+        <div className="p-4 border-t border-white/5">
+          <button className="flex items-center gap-4 px-4 py-3 text-white/50 hover:text-white hover:bg-white/5 w-full transition-colors text-left uppercase tracking-widest text-[10px] font-sans">
+            <LogOut size={16} strokeWidth={1.5} />
+            Secure Logout
           </button>
         </div>
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 lg:ml-60">
+      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
         {/* Admin Header */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
-          <h2 className="font-montserrat font-semibold text-sm text-gray-800">
-            {navItems.find(item => pathname.startsWith(item.href))?.label || 'Admin'}
+        <header className="bg-rich-black/50 backdrop-blur-md border-b border-white/10 px-8 py-5 flex items-center justify-between sticky top-0 z-30">
+          <h2 className="font-sans font-medium uppercase tracking-[0.2em] text-xs text-white">
+            {navItems.find(item => pathname.startsWith(item.href))?.label || 'Administration'}
           </h2>
-          <span className="text-sm text-gray-500">Welcome, Admin</span>
+          <span className="text-[10px] font-sans uppercase tracking-widest text-gold border border-gold/30 px-3 py-1 rounded-full bg-gold/5">
+            Admin Access
+          </span>
         </header>
 
-        <main className="p-6">
+        <main className="flex-1 p-8 bg-[#0a0a0a]">
           {children}
         </main>
       </div>
