@@ -27,7 +27,7 @@ export default function CollectionsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 overflow-hidden">
           {collectionsList.map((col, i) => (
             <Link key={col.slug} href={`/collections/${col.slug}`} className="relative group overflow-hidden">
-              <RevealImage src={col.image} alt={col.name} className="h-[60vh]" width={1200} height={800} />
+              <RevealImage src={col.image} alt={col.name} className="h-[60vh] w-full" aspectRatio="auto" width={1200} height={800} />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <h2 className="font-display text-4xl md:text-5xl text-white font-medium tracking-tight">

@@ -9,7 +9,7 @@ import { formatPrice } from "@/lib/utils";
 export function CollectionHero({ name, tagline, image }: { name: string; tagline: string; image: string }) {
   return (
     <section className="relative h-[60vh] w-full flex items-center justify-center overflow-hidden">
-      <RevealImage src={image} alt={name} className="absolute inset-0" />
+      <RevealImage src={image} alt={name} className="absolute inset-0" aspectRatio="auto" />
       <div className="absolute inset-0 bg-black/50" />
       
       <div className="relative z-10 text-center px-6">

@@ -10,7 +10,7 @@ interface RevealImageProps {
   width?: number;
   height?: number;
   className?: string;
-  aspectRatio?: "portrait" | "landscape" | "square";
+  aspectRatio?: "portrait" | "landscape" | "square" | "auto" | "video";
   once?: boolean;
 }
 
@@ -27,6 +27,8 @@ export function RevealImage({
     portrait: "aspect-[2/3]",
     landscape: "aspect-[16/9]",
     square: "aspect-square",
+    video: "aspect-video",
+    auto: "aspect-auto h-full w-full",
   }[aspectRatio];
 
   return (
