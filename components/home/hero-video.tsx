@@ -29,7 +29,11 @@ export function HeroVideo() {
           poster="https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000"
         >
           <source 
-            src="/videos/hero-background.mp4" 
+            src="https://videos.pexels.com/video-files/6765484/6765484-hd_1280_720_25fps.mp4" 
+            type="video/mp4" 
+          />
+          <source 
+            src="https://videos.pexels.com/video-files/6765484/6765484-sd_960_540_25fps.mp4" 
             type="video/mp4" 
           />
           Your browser does not support the video tag.
