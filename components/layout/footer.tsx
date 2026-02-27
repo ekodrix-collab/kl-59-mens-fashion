@@ -1,0 +1,49 @@
+import { Logo } from "@/components/ui/logo";
+import Link from "next/link";
+
+export default function Footer() {
+  return (
+    <footer className="bg-black py-20 border-t border-white/5">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex flex-col items-center text-center">
+        <div className="mb-12">
+          <Logo />
+        </div>
+
+        <nav className="flex flex-wrap justify-center gap-x-12 gap-y-6 mb-16">
+          {["Collections", "Offers", "Story", "Store"].map((item) => (
+            <Link
+              key={item}
+              href={`/${item.toLowerCase()}`}
+              className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted hover:text-white transition-colors"
+            >
+              {item}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="w-12 h-[1px] bg-gold mb-12" />
+
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 text-subtle font-body text-xs mb-16">
+          <div className="flex items-center gap-2">
+            <span>📍</span> Kozhikode, Kerala
+          </div>
+          <div className="flex items-center gap-2">
+            <span>📱</span> +91 XXXXXXXXXX
+          </div>
+          <div className="flex items-center gap-2">
+            <span>📷</span> @kl59fashion
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between w-full pt-8 border-t border-white/5 gap-4">
+          <p className="font-body text-[11px] text-subtle uppercase tracking-wider">
+            © 2025 KL-59 Men&apos;s Fashion
+          </p>
+          <p className="font-body text-[11px] text-subtle uppercase tracking-wider">
+            Crafted by <a href="https://ekodrix.com" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-gold transition-colors">Ekodrix</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
