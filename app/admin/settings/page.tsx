@@ -7,9 +7,9 @@ export default function AdminSettingsPage() {
   const [tagline] = useState("Men's Fashion")
   const [heroTagline] = useState("Redefine Your Style")
   const [heroSubtitle] = useState("Premium men's fashion that makes a statement.")
-  const [phone] = useState('')
-  const [whatsapp] = useState('')
-  const [address] = useState('')
+  const [phone] = useState('+91 9895884796')
+  const [whatsapp] = useState('919895884796')
+  const [address] = useState('NH, Taliparamba, Kannur, Kerala - 670141')
   const [instagram] = useState('')
   const [workingHours] = useState('10:00 AM - 9:00 PM')
 

@@ -25,10 +25,10 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 text-subtle font-body text-xs mb-16">
           <div className="flex items-center gap-2">
-            <span>📍</span> Kozhikode, Kerala
+            <span>📍</span> NH, Taliparamba, Kannur, Kerala - 670141
           </div>
           <div className="flex items-center gap-2">
-            <span>📱</span> +91 XXXXXXXXXX
+            <span>📱</span> +91 9895884796
           </div>
           <div className="flex items-center gap-2">
             <span>📷</span> @kl59fashion

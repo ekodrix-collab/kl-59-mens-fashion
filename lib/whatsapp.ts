@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "91XXXXXXXXXX";
+const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919895884796";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://kl59.in";
 
 interface ProductForWhatsApp {

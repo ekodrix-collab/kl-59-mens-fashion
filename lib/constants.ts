@@ -3,7 +3,7 @@ export const SITE = {
     tagline: "Men's Fashion",
     fullName: "KL-59 Men's Fashion",
     url: process.env.NEXT_PUBLIC_SITE_URL || 'https://kl59.in',
-    whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '91XXXXXXXXXX',
+    whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919895884796',
 }
 
 export const NAV_LINKS = [

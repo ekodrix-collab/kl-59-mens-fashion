@@ -7,9 +7,9 @@ import { RevealText } from '@/components/ui/reveal-text'
 
 
 const contactItems = [
-  { icon: MapPin, title: 'Heritage Showroom', content: 'Opposite New Bus Stand, Kozhikode, Kerala', subtitle: 'Global Flagship Store' },
+  { icon: MapPin, title: 'Heritage Showroom', content: 'NH, Taliparamba, Kannur, Kerala - 670141', subtitle: 'Global Flagship Store' },
   { icon: Clock, title: 'Concierge Hours', content: '10:00 AM - 9:00 PM', subtitle: 'Daily Access' },
-  { icon: Phone, title: 'Direct Access', content: '+91 XXXXXXXXXX', subtitle: 'Immediate Assistance' },
+  { icon: Phone, title: 'Direct Access', content: '+91 9895884796', subtitle: 'Immediate Assistance' },
   { icon: MessageCircle, title: 'Digital Atelier', content: 'WhatsApp Consultation', subtitle: 'Personal Styling' },
 ]
 
@@ -72,7 +72,7 @@ export default function StorePage() {
             
             <div className="md:col-span-2 pt-10">
               <a 
-                href="https://wa.me/91XXXXXXXXXX" 
+                href="https://wa.me/919895884796" 
                 className="group relative flex items-center justify-center w-full py-6 bg-white overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gold translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
