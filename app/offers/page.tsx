@@ -33,7 +33,7 @@ const campaigns = [
 
 export default function OffersPage() {
   return (
-    <main className="pt-32 bg-black min-h-screen text-white">
+    <main className="pt-24 bg-black min-h-screen text-white">
       <div className="max-w-[1400px] mx-auto px-10 mb-24">
         <motion.span 
           initial={{ opacity: 0, y: 10 }}

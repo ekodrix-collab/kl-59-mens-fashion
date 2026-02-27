@@ -8,7 +8,7 @@ import { formatPrice } from '@/lib/utils'
 
 export default function ShopPage() {
   return (
-    <main className="pt-32 bg-black min-h-screen text-white">
+    <main className="pt-24 bg-black min-h-screen text-white">
       <div className="max-w-[1400px] mx-auto px-10 mb-20">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
           <div className="max-w-2xl">
@@ -32,7 +32,7 @@ export default function ShopPage() {
       </div>
 
       <div className="max-w-[1400px] mx-auto px-10 pb-40">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-1 gap-y-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-20">
           {PLACEHOLDER_PRODUCTS.map((product, i) => (
             <motion.div
               key={product.id}

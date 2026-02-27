@@ -67,27 +67,62 @@ export function CollectionShowcase() {
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-1 md:gap-1.5 overflow-hidden">
-          {collections.map((col, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+          {collections.slice(0, 3).map((col, i) => (
             <Link
               key={col.slug}
               href={`/collections/${col.slug}`}
-              className={`relative group ${col.grid}`}
+              className="relative group block"
             >
               <RevealImage
                 src={col.image}
                 alt={col.name}
-                className="w-full h-full min-h-[50vh] md:min-h-0"
+                aspectRatio="portrait"
+                className="w-full"
               />
-              <div className="absolute inset-x-0 bottom-0 p-8 pt-20 bg-gradient-to-t from-black/80 to-transparent">
-                <p className="font-sans text-[13px] font-semibold uppercase tracking-[0.15em] text-white transition-editorial group-hover:translate-x-2">
+              <div className="mt-8">
+                <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-3 block">
                   {col.name}
-                </p>
-                <h3 className="font-display text-2xl md:text-3xl text-white italic opacity-80 mt-1">
+                </span>
+                <h3 className="font-display text-2xl md:text-3xl text-white mb-6">
                   {col.tagline}
                 </h3>
+                <div className="flex items-center gap-4 py-2 border-b border-white/10 group-hover:border-gold transition-colors">
+                  <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-white group-hover:text-gold transition-colors">Shop Series</span>
+                  <span className="text-gold transform group-hover:translate-x-2 transition-transform">→</span>
+                </div>
               </div>
-              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gold scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100" />
+            </Link>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 mt-20 md:mt-32">
+          {collections.slice(3).map((col, i) => (
+            <Link
+              key={col.slug}
+              href={`/collections/${col.slug}`}
+              className="relative group block"
+            >
+              <RevealImage
+                src={col.image}
+                alt={col.name}
+                aspectRatio="landscape"
+                className="w-full"
+              />
+              <div className="mt-8 flex justify-between items-end">
+                <div>
+                  <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-3 block">
+                    {col.name}
+                  </span>
+                  <h3 className="font-display text-2xl md:text-3xl text-white">
+                    {col.tagline}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-4 pb-2 border-b border-white/10 group-hover:border-gold transition-colors">
+                  <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-white group-hover:text-gold transition-colors">Explore</span>
+                  <span className="text-gold transform group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+              </div>
             </Link>
           ))}
         </div>

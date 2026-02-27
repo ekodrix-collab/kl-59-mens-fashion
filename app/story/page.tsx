@@ -6,7 +6,7 @@ import { RevealImage } from '@/components/ui/reveal-image'
 
 export default function StoryPage() {
   return (
-    <main className="pt-24 bg-black min-h-screen text-white">
+    <main className="bg-black min-h-screen text-white">
       {/* Cinematic Hero */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.div 

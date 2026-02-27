@@ -13,9 +13,9 @@ const collectionsList = [
 
 export default function CollectionsPage() {
   return (
-    <main className="pt-32 bg-black min-h-screen">
+    <main className="pt-24 bg-black min-h-screen">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pb-24">
-        <div className="mb-20">
+        <div className="mb-12 mt-12">
           <span className="font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-gold block mb-4">
             Curated
           </span>

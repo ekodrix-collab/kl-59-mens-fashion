@@ -19,9 +19,9 @@ export function DenimEditorial() {
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <section ref={containerRef} className="bg-black py-0 md:py-0 min-h-[80vh] flex flex-col md:flex-row overflow-hidden">
-      {/* Left: Image */}
-      <div className="relative w-full md:w-1/2 h-[60vh] md:h-auto overflow-hidden">
+    <section ref={containerRef} className="bg-black py-24 md:py-40 min-h-[70vh] flex flex-col md:flex-row items-center gap-20 md:gap-32 max-w-[1400px] mx-auto px-6 lg:px-10 overflow-hidden">
+      {/* Left: Image Container */}
+      <div className="relative w-full md:w-[45%] aspect-[3/4] overflow-hidden">
         <motion.div style={{ y }} className="absolute -inset-[10%] w-[120%] h-[120%]">
           <Image
             src={COLLECTION_IMAGES.denim}

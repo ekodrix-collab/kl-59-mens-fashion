@@ -12,30 +12,30 @@ export function FeaturedProducts() {
     <section className="bg-rich-black py-32 md:py-40">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         <div className="flex flex-col gap-24 md:gap-32">
-          {/* Featured Row 1: 60/40 */}
-          <div className="flex flex-col md:flex-row gap-12 md:gap-20">
+          {/* Featured Row 1: 50/50 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
             <ProductCard 
               product={featured[0]} 
-              className="w-full md:w-[60%]" 
+              className="w-full" 
               index={0}
             />
             <ProductCard 
               product={featured[1]} 
-              className="w-full md:w-[40%] md:mt-32" 
+              className="w-full" 
               index={1}
             />
           </div>
 
-          {/* Featured Row 2: 40/60 */}
-          <div className="flex flex-col md:flex-row-reverse gap-12 md:gap-20">
+          {/* Featured Row 2: 50/50 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
             <ProductCard 
               product={featured[2]} 
-              className="w-full md:w-[60%]" 
+              className="w-full" 
               index={2}
             />
             <ProductCard 
               product={featured[3]} 
-              className="w-full md:w-[40%] md:mt-32" 
+              className="w-full" 
               index={3}
             />
           </div>

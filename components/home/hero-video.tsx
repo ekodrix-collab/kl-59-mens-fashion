@@ -1,58 +1,49 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { HERO_IMAGES } from "@/lib/data";
+import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import { Logo } from "@/components/ui/logo";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import Link from "next/link";
 
 export function HeroVideo() {
-  const [index, setIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.8;
+    }
   }, []);
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Slideshow */}
-      <div className="absolute inset-0">
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1.06 }}
-            exit={{ opacity: 0 }}
-            transition={{ 
-              opacity: { duration: 1.5, ease: "easeInOut" },
-              scale: { duration: 5, ease: "linear" }
-            }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={HERO_IMAGES[index]}
-              alt="Luxury Fashion Hero"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30" />
-          </motion.div>
-        </AnimatePresence>
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="h-full w-full object-cover opacity-60 grayscale-[0.3]"
+          poster="https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000"
+        >
+          <source 
+            src="/videos/hero-background.mp4" 
+            type="video/mp4" 
+          />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full w-full flex flex-col items-center justify-end pb-24 md:pb-32 px-6">
+      <div className="relative z-10 h-full w-full flex flex-col items-center justify-end pb-24 md:pb-32 px-6 text-center">
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mb-6"
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+          className="mb-8"
         >
           <Logo size="large" />
         </motion.div>
@@ -60,36 +51,60 @@ export function HeroVideo() {
         <motion.p
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="font-sans font-light text-xs md:text-sm uppercase tracking-[0.3em] text-muted mb-12 text-center"
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+          className="font-sans font-light text-xs md:text-sm uppercase tracking-[0.4em] text-white/60 mb-12 max-w-sm mx-auto"
         >
-          Crafted for the Modern Man
+          Defining the Modern Masculine <br className="hidden md:block" /> Since 1959
         </motion.p>
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 1.1 }}
+          className="flex flex-col items-center gap-12"
         >
           <MagneticElement>
             <Link
               href="/collections"
-              className="inline-block border border-white/30 px-10 py-4 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-white hover:border-white hover:bg-white/5 transition-all duration-300"
+              className="group relative inline-block overflow-hidden border border-white/20 px-12 py-5 transition-all duration-500 hover:border-white"
             >
-              Explore Collection
+              <span className="relative z-10 font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-white">
+                Explore Collection
+              </span>
+              <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full" />
+              <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full">
+                 <span className="absolute inset-0 flex items-center justify-center font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                  Explore Collection
+                </span>
+              </div>
             </Link>
           </MagneticElement>
+
+          <div className="flex gap-10 md:gap-16 items-center">
+            {['Denim', 'Shirts', 'Shoes'].map((cat, i) => (
+              <Link
+                key={cat}
+                href={`/collections/${cat.toLowerCase()}`}
+                className="group flex flex-col items-center gap-2"
+              >
+                <span className="font-sans text-[10px] uppercase tracking-[0.5em] text-white/40 group-hover:text-gold transition-colors duration-500">
+                  {cat}
+                </span>
+                <div className="w-0 h-[1px] bg-gold transition-all duration-500 group-hover:w-full" />
+              </Link>
+            ))}
+          </div>
         </motion.div>
 
         {/* Scroll Indicator */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.4 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+           initial={{ opacity: 0 }}
+           animate={{ opacity: 0.3 }}
+           transition={{ delay: 2 }}
+           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
         >
-          <div className="w-[1px] h-8 bg-white/40 animate-pulse-slow origin-top" />
-          <span className="text-[10px] uppercase tracking-widest text-white/40">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/50 to-transparent" />
+          <span className="text-[9px] uppercase tracking-[0.4em] text-white/50">Scroll to Explore Story</span>
         </motion.div>
       </div>
     </section>

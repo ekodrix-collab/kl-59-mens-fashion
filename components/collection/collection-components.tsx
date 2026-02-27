@@ -38,26 +38,11 @@ export function ProductEditorialGrid({ products }: { products: any[] }) {
   return (
     <section className="bg-rich-black py-24">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-        <div className="flex flex-col gap-24">
-          {/* We'll implement a pattern: Row of 2, Row of 1 (Full), Row of 3 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            {products.slice(0, 2).map((p, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
+            {products.map((p, i) => (
               <ProductItem key={p.id} product={p} />
             ))}
           </div>
-
-          {products[2] && (
-            <div className="w-full">
-              <ProductItem product={products[2]} fullWidth />
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-            {products.slice(3, 6).map((p, i) => (
-              <ProductItem key={p.id} product={p} />
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
