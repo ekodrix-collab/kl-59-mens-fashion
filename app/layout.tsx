@@ -44,6 +44,7 @@ export const metadata: Metadata = {
 }
 
 import { SmoothScroll } from '@/components/layout/smooth-scroll'
+import { NavbarWrapper } from '@/components/layout/navbar-wrapper'
 
 export default function RootLayout({
   children,
@@ -54,7 +55,9 @@ export default function RootLayout({
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable}`}>
       <body className="font-body antialiased bg-rich-black text-white">
         <SmoothScroll>
+          <NavbarWrapper>
             {children}
+          </NavbarWrapper>
         </SmoothScroll>
       </body>
     </html>
