@@ -43,27 +43,34 @@ export const metadata: Metadata = {
   },
 }
 
+
 import { SmoothScroll } from '@/components/layout/smooth-scroll'
 import { NavbarWrapper } from '@/components/layout/navbar-wrapper'
 import { CustomCursor } from '@/components/ui/custom-cursor'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+
+function BodyWithCursor({ children }: { children: React.ReactNode }) {
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const isAdmin = pathname.startsWith('/admin');
+  return (
+    <body className="font-body antialiased bg-rich-black text-white cursor-auto">
+      <SmoothScroll>
+        <NavbarWrapper>
+          {children}
+        </NavbarWrapper>
+      </SmoothScroll>
+    </body>
+  );
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable}`}>
-      <body className="font-body antialiased bg-rich-black text-white cursor-auto md:cursor-none">
-        <CustomCursor />
-        <SmoothScroll>
-          <NavbarWrapper>
-            {children}
-          </NavbarWrapper>
-        </SmoothScroll>
-      </body>
+      <BodyWithCursor>{children}</BodyWithCursor>
     </html>
-  )
+  );
 }
 
 
