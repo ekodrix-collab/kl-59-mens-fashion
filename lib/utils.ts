@@ -26,3 +26,14 @@ export function truncate(str: string, length: number): string {
     if (str.length <= length) return str
     return str.slice(0, length) + '...'
 }
+
+export function generateWhatsAppLink(product: any): string {
+    const phoneNumber = "919876543210"; // Placeholder, can be changed later
+    const message = `Hi, I am interested in buying: ${product.name} (Code: ${product.slug}).\nPrice: ${formatPrice(product.selling_price)}\nIs it available?`;
+
+    // Encode the message to be URL safe
+    const encodedMessage = encodeURIComponent(message);
+
+    // Return the WhatsApp URL
+    return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+}
