@@ -10,14 +10,16 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export function CollectionLayout({
     initialProducts,
-    heroData
+    heroData,
+    initialCategory
 }: {
     initialProducts: any[];
     heroData: { name: string; tagline: string; image: string };
+    initialCategory?: string;
 }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [filters, setFilters] = useState<FilterState>({
-        categories: [],
+        categories: initialCategory ? [initialCategory] : [],
         priceRanges: [],
         sizes: [],
     });
