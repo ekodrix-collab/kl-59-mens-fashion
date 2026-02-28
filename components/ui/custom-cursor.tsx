@@ -2,20 +2,17 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { usePathname } from 'next/navigation'
 
 export function CustomCursor() {
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
-  const pathname = usePathname()
 
-  // Hide cursor on admin routes or touch devices
+  // Hide cursor on touch devices
   const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
-  const isAdmin = pathname?.startsWith('/admin')
 
   useEffect(() => {
-    if (isTouchDevice || isAdmin) return
+    if (isTouchDevice) return
 
     const updatePosition = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY })
@@ -51,9 +48,9 @@ export function CustomCursor() {
       window.removeEventListener('mouseover', handleMouseOver)
       window.removeEventListener('mouseleave', handleMouseLeave)
     }
-  }, [isVisible, isTouchDevice, isAdmin])
+  }, [isVisible, isTouchDevice])
 
-  if (isTouchDevice || isAdmin || !isVisible) return null
+  if (isTouchDevice || !isVisible) return null
 
   return (
     <motion.div
