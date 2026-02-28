@@ -1,10 +1,10 @@
-import { CollectionHero, ProductEditorialGrid } from "@/components/collection/collection-components";
 import { PLACEHOLDER_PRODUCTS, COLLECTION_IMAGES } from "@/lib/data";
 import { notFound } from "next/navigation";
+import { CollectionLayout } from "@/components/collection/collection-layout";
 
 export default function CollectionPage({ params }: { params: { slug: string } }) {
   const collectionProducts = PLACEHOLDER_PRODUCTS.filter(p => p.collection.slug === params.slug);
-  
+
   // Tagline mapping for placeholder
   const taglines: Record<string, string> = {
     denim: "Built to Last",
@@ -23,9 +23,9 @@ export default function CollectionPage({ params }: { params: { slug: string } })
   }
 
   return (
-    <main className="pt-16">
-      <CollectionHero name={name} tagline={tagline} image={image} />
-      <ProductEditorialGrid products={collectionProducts} />
-    </main>
+    <CollectionLayout
+      initialProducts={collectionProducts}
+      heroData={{ name, tagline, image }}
+    />
   );
 }
