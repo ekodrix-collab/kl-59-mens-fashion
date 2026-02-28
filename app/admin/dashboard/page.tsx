@@ -5,8 +5,8 @@ import { Package, Tag, Grid3X3, Plus, ArrowUpRight } from 'lucide-react'
 import { PLACEHOLDER_PRODUCTS, PLACEHOLDER_CATEGORIES } from '@/lib/constants'
 
 const stats = [
-  { label: 'Total Inventory', value: '8', icon: Package, accent: 'text-gold' },
-  { label: 'Active Campaigns', value: '4', icon: Tag, accent: 'text-white' },
+  { label: 'Total Products', value: '8', icon: Package, accent: 'text-gold' },
+  { label: 'Active Offers', value: '4', icon: Tag, accent: 'text-white' },
   { label: 'Collections', value: '6', icon: Grid3X3, accent: 'text-white/50' },
 ]
 
@@ -15,15 +15,15 @@ export default function AdminDashboard() {
     <div className="space-y-12">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">System Overview</h1>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Real-time metrics</p>
+          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Overview</h1>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Store at a glance</p>
         </div>
         <div className="flex gap-4">
           <Link href="/admin/products/new" className="group flex items-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-colors duration-500">
             <Plus size={14} strokeWidth={2} /> New Product
           </Link>
           <Link href="/admin/offers/new" className="group flex items-center gap-2 px-6 py-3 border border-white/20 text-white text-[10px] font-medium uppercase tracking-[0.2em] hover:border-gold hover:text-gold transition-colors duration-500">
-            <Plus size={14} strokeWidth={2} /> New Campaign
+            <Plus size={14} strokeWidth={2} /> New Offer
           </Link>
         </div>
       </div>
@@ -47,20 +47,20 @@ export default function AdminDashboard() {
       {/* Premium Minimal Table */}
       <div className="bg-rich-black/50 backdrop-blur-sm border border-white/5">
         <div className="p-8 border-b border-white/5 flex items-center justify-between">
-          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white">Recent Artifacts</h2>
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white">Recent Products</h2>
           <Link href="/admin/products" className="text-[10px] uppercase tracking-[0.2em] text-gold hover:text-white transition-colors flex items-center gap-2">
-            View Register <ArrowUpRight size={12} />
+            View All <ArrowUpRight size={12} />
           </Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/5">
-                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Designation</th>
-                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Collection</th>
-                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Reference</th>
-                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Value</th>
-                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">State</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Product Name</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Category</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">MRP</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Price</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Status</th>
               </tr>
             </thead>
             <tbody>

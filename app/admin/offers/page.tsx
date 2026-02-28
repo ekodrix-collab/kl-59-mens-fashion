@@ -15,11 +15,11 @@ export default function AdminOffersPage() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Active Campaigns</h1>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage Store Offers</p>
+          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Offers</h1>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage your store offers</p>
         </div>
         <Link href="/admin/offers/new" className="group flex items-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-colors duration-500">
-          <Plus size={14} strokeWidth={2} /> New Campaign
+          <Plus size={14} strokeWidth={2} /> New Offer
         </Link>
       </div>
 
@@ -27,12 +27,12 @@ export default function AdminOffersPage() {
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/10 bg-black/40">
-              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Campaign Title</th>
-              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Benefit</th>
-              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Scope</th>
-              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">State</th>
-              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Deadline</th>
-              <th className="text-right px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Modify</th>
+              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Offer Name</th>
+              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Discount</th>
+              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Category</th>
+              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Status</th>
+              <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">End Date</th>
+              <th className="text-right px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -48,7 +48,7 @@ export default function AdminOffersPage() {
                     {offer.active ? 'Live' : 'Archived'}
                   </span>
                 </td>
-                <td className="px-8 py-6 text-[11px] font-sans text-white/30 uppercase tracking-[0.1em]">{offer.end || 'Indefinite'}</td>
+                <td className="px-8 py-6 text-[11px] font-sans text-white/30 uppercase tracking-[0.1em]">{offer.end || 'No End Date'}</td>
                 <td className="px-8 py-6">
                   <div className="flex items-center justify-end gap-4">
                     <button className="text-white/40 hover:text-gold transition-colors">

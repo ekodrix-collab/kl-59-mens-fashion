@@ -20,11 +20,11 @@ export default function AdminSettingsPage() {
     <div className="max-w-4xl space-y-12 pb-12">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">System Configuration</h1>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage Store Parameters</p>
+          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Store Settings</h1>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Update your store details</p>
         </div>
         <button className="px-8 py-4 bg-white text-black font-sans text-[10px] font-medium uppercase tracking-[0.3em] hover:bg-gold hover:text-white transition-colors duration-500 whitespace-nowrap">
-          Commit Changes
+          Save Changes
         </button>
       </div>
 
@@ -34,7 +34,7 @@ export default function AdminSettingsPage() {
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Brand Identity</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className={labelClass}>Registered Entity</label>
+              <label className={labelClass}>Shop Name</label>
               <input defaultValue={storeName} className={inputClass} />
             </div>
             <div>
@@ -46,20 +46,20 @@ export default function AdminSettingsPage() {
 
         {/* Hero Section */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
-          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Hero Exhibition</h2>
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Homepage Banner</h2>
           <div className="space-y-6">
             <div>
-              <label className={labelClass}>Primary Dispatch</label>
+              <label className={labelClass}>Main Headline</label>
               <input defaultValue={heroTagline} className={inputClass} />
             </div>
             <div>
-              <label className={labelClass}>Secondary Dispatch</label>
+              <label className={labelClass}>Subheadline</label>
               <input defaultValue={heroSubtitle} className={inputClass} />
             </div>
             <div>
-              <label className={labelClass}>Cinematic Asset</label>
+              <label className={labelClass}>Banner Video</label>
               <div className="border border-dashed border-white/20 bg-white/5 p-12 text-center hover:border-gold transition-colors cursor-pointer group">
-                <p className="text-sm font-sans text-white/70 group-hover:text-gold transition-colors">Replace exhibition media</p>
+                <p className="text-sm font-sans text-white/70 group-hover:text-gold transition-colors">Replace banner video</p>
                 <p className="text-[10px] font-sans uppercase tracking-[0.1em] text-white/40 mt-2">MP4 or WEBM • Max 10MB</p>
               </div>
             </div>
@@ -68,31 +68,31 @@ export default function AdminSettingsPage() {
 
         {/* Contact */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
-          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Communications</h2>
-          
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Contact Details</h2>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className={labelClass}>Voice Line</label>
+              <label className={labelClass}>Phone Number</label>
               <input defaultValue={phone} placeholder="+91 XXXXXXXXXX" className={inputClass} />
             </div>
             <div>
-              <label className={labelClass}>Client Services (WhatsApp)</label>
+              <label className={labelClass}>WhatsApp Number</label>
               <input defaultValue={whatsapp} placeholder="91XXXXXXXXXX" className={inputClass} />
             </div>
           </div>
 
           <div>
-            <label className={labelClass}>Physical Headquarters</label>
+            <label className={labelClass}>Store Address</label>
             <textarea defaultValue={address} rows={3} placeholder="Mailing Designation" className={inputClass} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className={labelClass}>Operational Window</label>
+              <label className={labelClass}>Working Hours</label>
               <input defaultValue={workingHours} className={inputClass} />
             </div>
             <div>
-              <label className={labelClass}>Social presence</label>
+              <label className={labelClass}>Instagram Handle</label>
               <input defaultValue={instagram} placeholder="@" className={inputClass} />
             </div>
           </div>
@@ -100,14 +100,14 @@ export default function AdminSettingsPage() {
 
         {/* Maps */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
-          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Geolocation Data</h2>
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Store Location</h2>
           <div className="space-y-6">
             <div>
-              <label className={labelClass}>Maps Pointer</label>
+              <label className={labelClass}>Google Maps Link</label>
               <input placeholder="https://goo.gl/maps/..." className={inputClass} />
             </div>
             <div>
-              <label className={labelClass}>Integration Script</label>
+              <label className={labelClass}>Maps Embed Code</label>
               <textarea rows={4} placeholder='<iframe src="..." />' className={inputClass} />
             </div>
           </div>

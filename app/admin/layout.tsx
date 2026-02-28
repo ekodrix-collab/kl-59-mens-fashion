@@ -9,7 +9,7 @@ const navItems = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { label: 'Products', href: '/admin/products', icon: Package },
   { label: 'Offers', href: '/admin/offers', icon: Tag },
-  { label: 'Categories', href: '/admin/categories', icon: Grid3X3 },
+  { label: 'Collections', href: '/admin/categories', icon: Grid3X3 },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ]
 
@@ -31,7 +31,7 @@ export default function AdminLayout({
       <aside className="hidden lg:flex flex-col w-64 bg-rich-black border-r border-white/10 text-white fixed inset-y-0 left-0 z-40">
         <div className="p-8 flex flex-col items-start border-b border-white/5">
           <Logo size="small" />
-          <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/40 mt-6">Workspace</p>
+          <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/40 mt-6">Control Panel</p>
         </div>
 
         <nav className="flex-1 px-4 py-8 space-y-2">
@@ -57,7 +57,7 @@ export default function AdminLayout({
         <div className="p-4 border-t border-white/5">
           <button className="flex items-center gap-4 px-4 py-3 text-white/50 hover:text-white hover:bg-white/5 w-full transition-colors text-left uppercase tracking-widest text-[10px] font-sans">
             <LogOut size={16} strokeWidth={1.5} />
-            Secure Logout
+            Sign Out
           </button>
         </div>
       </aside>

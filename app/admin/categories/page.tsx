@@ -11,8 +11,8 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-8 max-w-3xl">
       <div>
-        <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Collections</h1>
-        <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage Site Taxonomy</p>
+        <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Categories</h1>
+        <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage product categories</p>
       </div>
 
       {/* Add category */}
@@ -21,7 +21,7 @@ export default function AdminCategoriesPage() {
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
           className="flex-1 bg-rich-black/50 backdrop-blur-sm border border-white/10 px-6 py-4 text-sm font-sans text-white focus:outline-none focus:border-gold transition-colors placeholder:text-white/20 placeholder:uppercase placeholder:tracking-[0.2em] placeholder:text-[10px]"
-          placeholder="New Collection Name..."
+          placeholder="New Category Name..."
         />
         <button className="flex items-center gap-2 px-8 py-4 bg-white text-black text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-colors duration-500 whitespace-nowrap">
           <Plus size={14} strokeWidth={2} /> Create
@@ -43,7 +43,7 @@ export default function AdminCategoriesPage() {
         ))}
       </div>
 
-      <p className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-sans mt-4">Drag to reorder. Ordering reflects onto main navigation.</p>
+      <p className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-sans mt-4">Drag to reorder. Order appears in store navigation.</p>
     </div>
   )
 }
