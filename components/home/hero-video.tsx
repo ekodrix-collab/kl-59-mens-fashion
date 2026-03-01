@@ -19,7 +19,7 @@ export function HeroVideo() {
   }, []);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
+    <section className="relative h-screen min-h-[660px] md:min-h-0 h-[100dvh] w-full overflow-hidden bg-black">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
@@ -42,77 +42,83 @@ export function HeroVideo() {
           )}
           Your browser does not support the video tag.
         </video>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 h-full w-full flex flex-col items-center justify-end pb-24 md:pb-32 px-6 text-center">
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
-          className="mb-8"
-        >
-          <Logo size="large" />
-        </motion.div>
+      <div className="relative z-10 h-full w-full flex flex-col items-center justify-center md:justify-end pb-12 md:pb-32 px-6 text-center">
+        <div className="flex flex-col items-center flex-1 justify-center max-w-4xl mx-auto">
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+            className="mb-8 scale-90 md:scale-100"
+          >
+            <Logo size="large" />
+          </motion.div>
 
-        <motion.h1
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-          className="font-display text-4xl md:text-5xl lg:text-7xl text-white font-medium mb-12 max-w-3xl mx-auto italic leading-[1.1] tracking-tight"
-        >
-          {storeInfo?.tagline || "The Art of Modern Masculinity."}
-        </motion.h1>
+          <motion.h1
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+            className="font-display text-4xl md:text-5xl lg:text-7xl text-white font-light mb-12 italic leading-[1.1] tracking-tight"
+          >
+            {storeInfo?.tagline || "Modern Menswear for Defined Living."}
+          </motion.h1>
 
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 1.1 }}
-          className="flex flex-col items-center gap-12"
-        >
-          <MagneticElement>
-            <Link
-              href="/shop"
-              className="group relative inline-block overflow-hidden border border-white/20 px-12 py-5 transition-all duration-500 hover:border-white"
-            >
-              <span className="relative z-10 font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-white">
-                Explore Collection
-              </span>
-              <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full" />
-              <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full">
-                <span className="absolute inset-0 flex items-center justify-center font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-black opacity-0 group-hover:opacity-100 transition-opacity">
-                  Explore Collection
-                </span>
-              </div>
-            </Link>
-          </MagneticElement>
-
-          <div className="flex gap-10 md:gap-16 items-center">
-            {['Denim', 'Shirts', 'Shoes'].map((cat, i) => (
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 1.1 }}
+            className="flex flex-col items-center gap-12"
+          >
+            <MagneticElement>
               <Link
-                key={cat}
-                href={`/collections/${cat.toLowerCase()}`}
-                className="group flex flex-col items-center gap-2"
+                href="/shop"
+                className="group relative inline-block overflow-hidden border border-white/10 px-14 py-6 transition-all duration-700 hover:border-gold/50"
               >
-                <span className="font-sans text-[10px] uppercase tracking-[0.5em] text-white/40 group-hover:text-gold transition-colors duration-500">
-                  {cat}
+                <span className="relative z-10 font-sans text-[10px] font-medium uppercase tracking-[0.4em] text-white">
+                  Enter The Archive
                 </span>
-                <div className="w-0 h-[1px] bg-gold transition-all duration-500 group-hover:w-full" />
+                <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full" />
+                <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full">
+                  <span className="absolute inset-0 flex items-center justify-center font-sans text-[10px] font-medium uppercase tracking-[0.4em] text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                    Enter The Archive
+                  </span>
+                </div>
               </Link>
-            ))}
-          </div>
-        </motion.div>
+            </MagneticElement>
+
+            <div className="flex gap-10 md:gap-20 items-center">
+              {[
+                { label: 'Denim', slug: 'denim' },
+                { label: 'Tailoring', slug: 'formals' },
+                { label: 'Essentials', slug: 't-shirts' }
+              ].map((cat, i) => (
+                <Link
+                  key={cat.slug}
+                  href={`/collections/${cat.slug}`}
+                  className="group flex flex-col items-center gap-3"
+                >
+                  <span className="font-sans text-[9px] uppercase tracking-[0.6em] text-white/30 group-hover:text-gold transition-colors duration-700">
+                    {cat.label}
+                  </span>
+                  <div className="w-0 h-[1px] bg-gold/50 transition-all duration-700 group-hover:w-8" />
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        </div>
 
         {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.3 }}
           transition={{ delay: 2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+          className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
         >
-          <div className="w-[1px] h-12 bg-gradient-to-b from-gold/50 to-transparent" />
-          <span className="text-[9px] uppercase tracking-[0.4em] text-white/50">Scroll to Explore Story</span>
+          <div className="w-[1px] h-10 md:h-12 bg-gradient-to-b from-gold/50 to-transparent" />
+          <span className="text-[9px] uppercase tracking-[0.4em] text-white/50 hidden md:block">Scroll to Explore Story</span>
         </motion.div>
       </div>
     </section>
