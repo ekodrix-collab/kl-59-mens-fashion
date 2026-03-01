@@ -46,15 +46,14 @@ export const metadata: Metadata = {
 import { SmoothScroll } from '@/components/layout/smooth-scroll'
 import { NavbarWrapper } from '@/components/layout/navbar-wrapper'
 import { QueryProvider } from '@/components/providers/query-provider'
-import { LoadingScreen } from '@/components/ui/loading-screen'
-import { Preloader } from '@/components/layout/preloader'
+import { PreLoader } from '@/components/home/pre-loader'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable}`}>
       <body className="font-body antialiased bg-rich-black text-white">
         <QueryProvider>
-          <Preloader />
+          <PreLoader />
           <SmoothScroll>
             <NavbarWrapper>
               {children}
