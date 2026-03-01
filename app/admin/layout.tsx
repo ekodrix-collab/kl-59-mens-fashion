@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut, AlertTriangle, X } from 'lucide-react'
+import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut, AlertTriangle, X, Image as ImageIcon } from 'lucide-react'
 import { Logo } from '@/components/ui/logo'
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { label: 'Products', href: '/admin/products', icon: Package },
   { label: 'Offers', href: '/admin/offers', icon: Tag },
   { label: 'Collections', href: '/admin/categories', icon: Grid3X3 },
+  { label: 'Gallery', href: '/admin/media', icon: ImageIcon },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ]
 
