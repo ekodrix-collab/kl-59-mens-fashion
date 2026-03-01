@@ -46,11 +46,11 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://kl59.in'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'),
   openGraph: {
     title: "KL-59 Men's Fashion | Luxury Menswear",
     description: "Exquisite tailoring and modern fashion for the contemporary man. Discover our curated collection.",
-    url: 'https://kl59.in',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app',
     siteName: "KL-59 Men's Fashion",
     images: [
       {
