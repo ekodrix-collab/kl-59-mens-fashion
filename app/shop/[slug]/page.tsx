@@ -300,14 +300,14 @@ export default function ShopProductPage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {related.map((p: any) => (
                 <Link key={p.id} href={`/shop/${p.slug}`} className="group">
-                  <div className="aspect-[3/4] bg-rich-black overflow-hidden mb-4 relative">
-                    {p.images?.[0] ? (
-                      <Image
-                        src={p.images[0]}
-                        alt={p.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
+                    <div className="aspect-[3/4] bg-rich-black overflow-hidden mb-4 relative">
+                      {p.images?.[0] ? (
+                        <Image
+                          src={p.images[0]}
+                          alt={p.name}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
                     ) : (
                       <div className="w-full h-full bg-white/5" />
                     )}
