@@ -62,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </NavbarWrapper>
           </SmoothScroll>
           <Toaster 
-            position="bottom-right" 
+            position="top-center" 
             toastOptions={{
               style: {
                 background: '#1A1A1A',
