@@ -114,7 +114,6 @@ export default function NewProductPage() {
         {/* Name */}
         <div>
           <label className={labelClass}>Product Name *</label>
-          <label className={labelClass}>Product Name *</label>
           <input
             type="text"
             value={name}
@@ -157,7 +156,6 @@ export default function NewProductPage() {
 
         {/* Description */}
         <div>
-          <label className={labelClass}>Description</label>
           <label className={labelClass}>Description</label>
           <textarea
             value={description}
@@ -221,8 +219,6 @@ export default function NewProductPage() {
                 onClick={() => toggleSize(size)}
                 className={`w-12 h-12 flex items-center justify-center text-[10px] font-sans uppercase tracking-widest border transition-colors duration-300 ${selectedSizes.includes(size) ? 'bg-white text-black border-white' : 'bg-transparent text-white/50 border-white/20 hover:border-white hover:text-white'
                   }`}
-                className={`w-12 h-12 flex items-center justify-center text-[10px] font-sans uppercase tracking-widest border transition-colors duration-300 ${selectedSizes.includes(size) ? 'bg-white text-black border-white' : 'bg-transparent text-white/50 border-white/20 hover:border-white hover:text-white'
-                  }`}
               >
                 {size}
               </button>
@@ -236,7 +232,6 @@ export default function NewProductPage() {
           <div className="flex gap-2 mb-4 flex-wrap">
             {colors.map(c => (
               <span key={c} className="flex items-center gap-2 border border-white/20 bg-white/5 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-white">
-                {c}
                 {c}
                 <button onClick={() => setColors(colors.filter(x => x !== c))} className="text-white/40 hover:text-red-500 transition-colors">
                   <X size={12} strokeWidth={2} />
@@ -257,9 +252,7 @@ export default function NewProductPage() {
         <div className="flex flex-wrap gap-8 py-4">
           {[
             { label: 'Featured', value: featured, set: setFeatured },
-            { label: 'Featured', value: featured, set: setFeatured },
             { label: 'New Arrival', value: newArrival, set: setNewArrival },
-            { label: 'On Offer', value: onOffer, set: setOnOffer },
             { label: 'On Offer', value: onOffer, set: setOnOffer },
           ].map(t => (
             <label key={t.label} className="flex items-center gap-3 cursor-pointer group">

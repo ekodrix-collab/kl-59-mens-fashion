@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { Plus, Pencil, Trash2, Search, Loader2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, Search } from 'lucide-react'
 import { useProducts } from '@/hooks/use-products'
 import { useState } from 'react'
 import { ConfirmationModal } from '@/components/ui/confirmation-modal'
+import { LoadingScreen } from '@/components/ui/loading-screen'
 
 export default function AdminProductsPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -27,19 +28,13 @@ export default function AdminProductsPage() {
   )
 
   if (isPending && !products) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="animate-spin text-gold" size={32} />
-      </div>
-    )
+    return <LoadingScreen fullScreen={false} />
   }
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Products</h1>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage your items</p>
           <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Products</h1>
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage your items</p>
         </div>
@@ -83,7 +78,6 @@ export default function AdminProductsPage() {
                       <div className="w-12 h-16 bg-white/5 border border-white/10 overflow-hidden">
                         {product.images?.[0] ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          // eslint-disable-next-line @next/next/no-img-element
                           <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:opacity-100 transition-all duration-700" />
                         ) : (
                           <div className="w-full h-full bg-white/5" />
@@ -98,7 +92,6 @@ export default function AdminProductsPage() {
                       <div className="flex flex-col gap-1">
                         <span className="text-sm font-body text-white">₹{product.selling_price.toLocaleString('en-IN')}</span>
                         {product.mrp > product.selling_price && (
-                          <span className="text-[10px] font-body text-white/30 line-through">₹{product.mrp.toLocaleString('en-IN')}</span>
                           <span className="text-[10px] font-body text-white/30 line-through">₹{product.mrp.toLocaleString('en-IN')}</span>
                         )}
                       </div>

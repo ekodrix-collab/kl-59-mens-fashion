@@ -5,6 +5,7 @@ import { Plus, Pencil, Trash2, Loader2 } from 'lucide-react'
 import { useOffers } from '@/hooks/use-offers'
 import { useState } from 'react'
 import { ConfirmationModal } from '@/components/ui/confirmation-modal'
+import { LoadingScreen } from '@/components/ui/loading-screen'
 
 export default function AdminOffersPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -22,11 +23,7 @@ export default function AdminOffersPage() {
   }
 
   if (isPending) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="animate-spin text-gold" size={32} />
-      </div>
-    )
+    return <LoadingScreen fullScreen={false} />
   }
 
   return (
@@ -35,11 +32,8 @@ export default function AdminOffersPage() {
         <div>
           <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Offers</h1>
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage your store offers</p>
-          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Offers</h1>
-          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Manage your store offers</p>
         </div>
         <Link href="/admin/offers/new" className="group flex items-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-colors duration-500">
-          <Plus size={14} strokeWidth={2} /> New Offer
           <Plus size={14} strokeWidth={2} /> New Offer
         </Link>
       </div>
