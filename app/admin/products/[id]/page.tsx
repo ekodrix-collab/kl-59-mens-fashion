@@ -152,6 +152,15 @@ export default function EditProductPage() {
                     <ArrowLeft size={20} />
                 </Link>
                 <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Edit Product</h1>
+                {product?.slug && (
+                    <Link 
+                        href={`/shop/${product.slug}`} 
+                        target="_blank"
+                        className="ml-auto flex items-center gap-2 text-[10px] font-sans uppercase tracking-[0.2em] text-gold hover:text-white transition-colors"
+                    >
+                        View on Site →
+                    </Link>
+                )}
             </div>
 
             <div className="space-y-8 bg-rich-black/30 p-8 border border-white/5">
