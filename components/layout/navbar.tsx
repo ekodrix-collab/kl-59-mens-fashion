@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 
 const navLinks = [
-  { name: "Catalogue", href: "/shop" },
+  { name: "Shop", href: "/shop" },
   { name: "Collections", href: "/collections" },
   { name: "Offers", href: "/offers" },
   { name: "Story", href: "/story" },
