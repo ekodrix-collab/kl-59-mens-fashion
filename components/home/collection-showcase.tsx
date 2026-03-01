@@ -68,12 +68,12 @@ export function CollectionShowcase() {
                   <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-3 block">
                     {col.name}
                   </span>
-                  <h3 className="hidden md:block font-display text-2xl md:text-3xl text-white mb-6 font-light">
+                  <h3 className="font-display text-2xl md:text-3xl text-white mb-6 font-light leading-snug">
                     {theme.tagline}
                   </h3>
                   <div className="flex items-center gap-4 py-2 border-b border-white/10 group-hover:border-gold transition-colors">
                     <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-white group-hover:text-gold transition-colors">
-                      <span className="md:inline hidden">{theme.cta}</span>
+                      {theme.cta}
                     </span>
                     <span className="text-gold transform group-hover:translate-x-2 transition-transform">→</span>
                   </div>
@@ -84,7 +84,7 @@ export function CollectionShowcase() {
         </div>
 
         {displayCollections.length > 3 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 mt-20 md:mt-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-10 mt-16 md:mt-32">
             {displayCollections.slice(3, 5).map((col) => {
               const theme = getTheme(col.slug);
               return (
@@ -99,18 +99,18 @@ export function CollectionShowcase() {
                     aspectRatio="landscape"
                     className="w-full"
                   />
-                  <div className="mt-8 flex justify-between items-end">
+                  <div className="mt-8 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
                     <div>
                       <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-3 block">
                         {col.name}
                       </span>
-                      <h3 className="hidden md:block font-display text-2xl md:text-3xl text-white font-light">
+                      <h3 className="font-display text-2xl md:text-3xl text-white font-light leading-snug">
                         {theme.tagline}
                       </h3>
                     </div>
-                    <div className="flex items-center gap-4 pb-2 border-b border-white/10 group-hover:border-gold transition-colors">
+                    <div className="flex items-center gap-4 pb-2 border-b border-white/10 group-hover:border-gold transition-colors self-start md:self-auto">
                       <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-white group-hover:text-gold transition-colors">
-                        <span className="md:inline hidden">{theme.cta}</span>
+                        {theme.cta}
                       </span>
                       <span className="text-gold transform group-hover:translate-x-1 transition-transform">→</span>
                     </div>
