@@ -5,6 +5,7 @@ import { Plus, Pencil, Trash2, Loader2 } from 'lucide-react'
 import { useOffers } from '@/hooks/use-offers'
 import { useState } from 'react'
 import { ConfirmationModal } from '@/components/ui/confirmation-modal'
+import { LoadingScreen } from '@/components/ui/loading-screen'
 
 export default function AdminOffersPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -22,11 +23,7 @@ export default function AdminOffersPage() {
   }
 
   if (isPending) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="animate-spin text-gold" size={32} />
-      </div>
-    )
+    return <LoadingScreen fullScreen={false} />
   }
 
   return (

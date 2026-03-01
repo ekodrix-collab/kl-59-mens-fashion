@@ -92,7 +92,7 @@ export function HeroVideo() {
             {['Denim', 'Shirts', 'Shoes'].map((cat, i) => (
               <Link
                 key={cat}
-                href={`/shop?category=${cat.toLowerCase()}`}
+                href={`/collections/${cat.toLowerCase()}`}
                 className="group flex flex-col items-center gap-2"
               >
                 <span className="font-sans text-[10px] uppercase tracking-[0.5em] text-white/40 group-hover:text-gold transition-colors duration-500">

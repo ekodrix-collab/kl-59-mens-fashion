@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Loader2, Check } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Loader2, Check, Upload, Image as ImageIcon, X } from 'lucide-react'
 import { useStoreInfo } from '@/hooks/use-store-info'
 
 export default function AdminSettingsPage() {
@@ -10,12 +10,65 @@ export default function AdminSettingsPage() {
 
   const [formData, setFormData] = useState<any>(null)
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (storeInfo) {
       setFormData(storeInfo)
     }
   }, [storeInfo])
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !formData?.id) return
+
+    setIsUploading(true)
+    try {
+      // 1. Get Signature from our secure API
+      const timestamp = Math.round(new Date().getTime() / 1000)
+      const paramsToSign = { timestamp }
+      const signRes = await fetch('/api/admin/cloudinary-sign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paramsToSign })
+      })
+      const { signature } = await signRes.json()
+
+      // 2. Upload directly to Cloudinary using the signature
+      const uploadData = new FormData()
+      uploadData.append('file', file)
+      uploadData.append('api_key', '175967811318335') // From .env.local
+      uploadData.append('timestamp', timestamp.toString())
+      uploadData.append('signature', signature)
+
+      const cloudName = 'du6cwjfyw' // From .env.local
+      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: 'POST',
+        body: uploadData
+      })
+      const data = await uploadRes.json()
+
+      if (data.secure_url) {
+        // Ensure we use auto-format and auto-quality for better browser support (fixes HEIC issues)
+        const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+        
+        // 3. Update local state and DB instantly
+        // Using a functional update to ensure we have the latest formData
+        setFormData((prev: any) => ({ ...prev, store_image: optimizedUrl }));
+        
+        await updateStoreInfo.mutateAsync({ ...formData, store_image: optimizedUrl });
+        setSaveStatus('saved');
+        setTimeout(() => setSaveStatus('idle'), 3000);
+      }
+    } catch (err) {
+      console.error('Upload failed:', err)
+      alert('Asset upload failed. Please try again.')
+    } finally {
+      setIsUploading(false)
+    }
+  }
 
   const handleSave = async () => {
     if (!formData || !formData.id) return
@@ -66,7 +119,7 @@ export default function AdminSettingsPage() {
       </div>
 
       <div className="space-y-8">
-        {/* Store Info */}
+        {/* Brand Identity */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Brand Identity</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -81,7 +134,97 @@ export default function AdminSettingsPage() {
           </div>
         </div>
 
-        {/* Hero Section */}
+        {/* Store Visuals */}
+        <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70">Store Visuals</h2>
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setUploadMode('file')}
+                className={`text-[9px] uppercase tracking-widest ${uploadMode === 'file' ? 'text-gold' : 'text-white/30'}`}
+              >
+                Upload File
+              </button>
+              <button 
+                onClick={() => setUploadMode('url')}
+                className={`text-[9px] uppercase tracking-widest ${uploadMode === 'url' ? 'text-gold' : 'text-white/30'}`}
+              >
+                Paste Link
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <label className={labelClass}>Interior / Boutique Shot</label>
+            
+            {uploadMode === 'url' ? (
+              <div className="space-y-4">
+                <input 
+                  id="store_image" 
+                  value={formData.store_image || ''} 
+                  onChange={handleChange} 
+                  placeholder="Paste URL from Gallery here..." 
+                  className={inputClass} 
+                />
+                <p className="text-[8px] uppercase tracking-widest text-white/20 italic">
+                  💡 Hint: Copy a URL from the "Gallery" tab and paste it here.
+                </p>
+                {formData.store_image && (
+                  <div className="aspect-[21/9] w-full border border-white/10 overflow-hidden">
+                    <img src={formData.store_image} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="relative group">
+                <div className="aspect-[21/9] w-full bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center overflow-hidden relative group-hover:border-gold/30 transition-colors duration-500">
+                  {formData.store_image ? (
+                    <>
+                      <img 
+                        src={formData.store_image} 
+                        alt="Store Preview" 
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" 
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                        <button 
+                          onClick={() => fileInputRef.current?.click()}
+                          className="px-6 py-3 bg-white/10 backdrop-blur-md rounded border border-white/20 text-white font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all"
+                        >
+                          Change Visual
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <button 
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploading}
+                      className="flex flex-col items-center gap-4 text-white/30 hover:text-gold transition-colors p-12 w-full h-full"
+                    >
+                      <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:scale-110 transition-transform duration-500">
+                        {isUploading ? <Loader2 className="animate-spin text-gold" size={24} /> : <ImageIcon size={24} />}
+                      </div>
+                      <div className="text-center">
+                        <span className="font-sans text-[10px] uppercase tracking-widest block mb-1">
+                          {isUploading ? 'Processing Asset...' : 'Upload Boutique Interior'}
+                        </span>
+                        <span className="font-sans text-[8px] uppercase tracking-widest opacity-40">HEIC, WEBP, JPG supported</span>
+                      </div>
+                    </button>
+                  )}
+                </div>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleImageUpload} 
+                  className="hidden" 
+                  accept="image/*" 
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Homepage Banner */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Homepage Banner</h2>
           <div className="space-y-6">

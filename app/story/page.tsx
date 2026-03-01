@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { RevealText, ScrollRevealText } from '@/components/ui/reveal-text'
 import { RevealImage } from '@/components/ui/reveal-image'
@@ -15,12 +16,14 @@ export default function StoryPage() {
           transition={{ duration: 2, ease: "easeOut" }}
           className="absolute inset-0"
         >
-          <img 
-            src="https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000" 
+          <Image 
+            src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1920&q=80" 
             alt="KL-59 Heritage" 
-            className="w-full h-full object-cover grayscale-[0.2] opacity-60"
+            fill
+            priority
+            className="object-cover grayscale-[0.2] opacity-60"
           />
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
         </motion.div>
         
         <div className="relative z-10 text-center px-10">
@@ -58,7 +61,7 @@ export default function StoryPage() {
         <div className="max-w-[1400px] mx-auto px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
             <RevealImage
-              src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=90&w=1200"
+              src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200&q=80"
               alt="Craftsmanship"
               className="aspect-[3/4]"
             />

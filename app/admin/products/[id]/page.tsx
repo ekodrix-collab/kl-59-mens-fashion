@@ -9,6 +9,7 @@ import { useCategories } from '@/hooks/use-categories'
 import { useProducts } from '@/hooks/use-products'
 import { uploadToCloudinary } from '@/lib/cloudinary-upload'
 import Link from 'next/link'
+import { toast } from 'react-hot-toast'
 
 export default function EditProductPage() {
     const router = useRouter()
@@ -102,7 +103,7 @@ export default function EditProductPage() {
 
     const handleSave = async (publishedStatus: boolean = isPublished) => {
         if (!name || selectedCategoryIds.length === 0 || !mrp || !sellingPrice) {
-            alert('Please fill required fields (Name, Category, MRP, Selling Price)')
+            toast.error('Please fill required fields (Name, Category, MRP, Selling Price)')
             return
         }
 
@@ -125,10 +126,11 @@ export default function EditProductPage() {
                 category_ids: selectedCategoryIds,
                 primary_category_id: primaryCategoryId || selectedCategoryIds[0]
             })
+            toast.success('Product updated successfully')
             router.push('/admin/products')
         } catch (error) {
             console.error('Failed to update product:', error)
-            alert('Error updating product. See console.')
+            toast.error('Error updating product. Please try again.')
         }
     }
 
