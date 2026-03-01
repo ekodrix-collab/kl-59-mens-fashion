@@ -1,9 +1,11 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import ScrollReveal from '@/components/ui/scroll-reveal'
+import { optimizeImageUrl } from '@/lib/utils'
 
 const offers = [
   { 
@@ -55,11 +57,15 @@ export default function OfferCards() {
           {offers.map((offer, i) => (
             <ScrollReveal key={offer.id} delay={i * 0.15}>
               <Link href="/offers" className="group block relative aspect-[4/5] overflow-hidden bg-brand-light">
-                <motion.img 
-                  src={offer.image} 
-                  alt={offer.title} 
-                  className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-[1.5s] ease-out group-hover:scale-110"
-                />
+                <motion.div className="absolute inset-0 z-0 h-full w-full">
+                  <Image 
+                    src={optimizeImageUrl(offer.image)} 
+                    alt={offer.title} 
+                    fill
+                    className="object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-[1.5s] ease-out group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </motion.div>
                 
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-brand-black/20 group-hover:bg-brand-black/10 transition-colors duration-700" />
