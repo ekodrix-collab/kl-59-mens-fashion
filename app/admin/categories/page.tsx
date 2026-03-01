@@ -6,6 +6,7 @@ import { useCategories } from '@/hooks/use-categories'
 import { slugify } from '@/lib/utils'
 import { ConfirmationModal } from '@/components/ui/confirmation-modal'
 import { uploadToCloudinary } from '@/lib/cloudinary-upload'
+import { LoadingScreen } from '@/components/ui/loading-screen'
 
 export default function AdminCategoriesPage() {
   const { categoriesQuery, createCategory, updateCategory, deleteCategory } = useCategories()
@@ -94,11 +95,7 @@ export default function AdminCategoriesPage() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="animate-spin text-gold" size={32} />
-      </div>
-    )
+    return <LoadingScreen fullScreen={false} />
   }
 
   return (
