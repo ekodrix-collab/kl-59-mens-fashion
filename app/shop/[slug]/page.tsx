@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${product.name} | KL-59`,
       description,
-      url: `https://kl59.in/shop/${slug}`,
+      url: `https://kl-59-mens-fashion.vercel.app/shop/${slug}`,
       siteName: "KL-59 Men's Fashion",
       images: image ? [
         {
