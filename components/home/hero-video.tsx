@@ -6,24 +6,27 @@ import { Logo } from "@/components/ui/logo";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import Link from "next/link";
 import { useStoreInfo } from "@/hooks/use-store-info";
+import { optimizeVideoUrl } from "@/lib/utils";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { storeInfoQuery } = useStoreInfo();
   const { data: storeInfo } = storeInfoQuery;
 
+  const videoUrl = optimizeVideoUrl(storeInfo?.hero_video || "https://res.cloudinary.com/dnd76mj4h/video/upload/v1740810842/kl59/hero-cinematic_p8j9v7.mp4");
+
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.8;
     }
-  }, []);
+  }, [videoUrl]);
 
   return (
     <section className="relative h-screen min-h-[660px] md:min-h-0 h-[100dvh] w-full overflow-hidden bg-black">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
-          key={storeInfo?.hero_video}
+          key={videoUrl}
           ref={videoRef}
           autoPlay
           muted
@@ -33,7 +36,7 @@ export function HeroVideo() {
           poster={storeInfo?.hero_image || "https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000"}
         >
           {storeInfo?.hero_video ? (
-            <source src={storeInfo.hero_video} type="video/mp4" />
+            <source src={videoUrl} type="video/mp4" />
           ) : (
             <>
               <source src="https://videos.pexels.com/video-files/6765484/6765484-hd_1280_720_25fps.mp4" type="video/mp4" />

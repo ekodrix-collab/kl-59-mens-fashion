@@ -95,9 +95,19 @@ export interface StoreInfo {
     hero_image: string | null;
     store_image: string | null;
     hero_video: string | null;
+    story_video: string | null;
     stats_customers: string;
     stats_brands: string;
     stats_rating: string;
+    // Dynamic Story Content
+    story_hero_title: string;
+    story_hero_subtitle: string;
+    story_main_title: string;
+    story_main_subtitle: string;
+    story_main_content: string;
+    story_hero_image: string;
+    story_main_image: string;
+    philosophy_json: any[];
 }
 
 export interface OutfitLook {

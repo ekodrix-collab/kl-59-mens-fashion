@@ -1,8 +1,8 @@
-'use client'
-
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import ScrollReveal from '@/components/ui/scroll-reveal'
+import { optimizeImageUrl } from '@/lib/utils'
 
 const categories = [
   { 
@@ -60,11 +60,13 @@ export default function CategoriesBento() {
                 href={`/shop?category=${cat.slug}`}
                 className="relative block w-full h-full overflow-hidden"
               >
-                <motion.div className="absolute inset-0 z-0">
-                  <img 
-                    src={cat.image} 
+                <motion.div className="absolute inset-0 z-0 h-full w-full">
+                  <Image 
+                    src={optimizeImageUrl(cat.image)} 
                     alt={cat.name} 
-                    className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-[1.5s] ease-out group-hover:scale-110"
+                    fill
+                    className="object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-[1.5s] ease-out group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </motion.div>
                 

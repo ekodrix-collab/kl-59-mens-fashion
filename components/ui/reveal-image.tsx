@@ -2,16 +2,19 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, optimizeImageUrl } from "@/lib/utils";
 
 interface RevealImageProps {
   src: string;
   alt: string;
   width?: number;
   height?: number;
-  className?: string;
+  className?: string; // Container classes (aspect ratio etc)
+  imageClassName?: string; // Direct image classes
   aspectRatio?: "portrait" | "landscape" | "square" | "auto" | "video";
   once?: boolean;
+  priority?: boolean;
+  sizes?: string;
 }
 
 export function RevealImage({
@@ -20,8 +23,11 @@ export function RevealImage({
   width,
   height,
   className,
+  imageClassName,
   aspectRatio = "portrait",
   once = true,
+  priority = false,
+  sizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw",
 }: RevealImageProps) {
   const aspectClass = {
     portrait: "aspect-[2/3]",
@@ -31,8 +37,10 @@ export function RevealImage({
     auto: "aspect-auto h-full w-full",
   }[aspectRatio];
 
+  const optimizedUrl = optimizeImageUrl(src);
+
   return (
-    <div className={cn("relative overflow-hidden group bg-rich-black", aspectClass, className)}>
+    <div className={cn("relative overflow-hidden group bg-brand-light", aspectClass, className)}>
       <motion.div
         initial={{ clipPath: "inset(100% 0 0 0)" }}
         whileInView={{ clipPath: "inset(0% 0 0 0)" }}
@@ -41,20 +49,33 @@ export function RevealImage({
           duration: 1.2,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="w-full h-full"
+        className="w-full h-full relative"
       >
         <motion.div
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="w-full h-full"
         >
-          <Image
-            src={src}
-            alt={alt}
-            width={width || 800}
-            height={height || 1200}
-            className="w-full h-full object-cover"
-          />
+          {aspectRatio === "auto" && width && height ? (
+            <Image
+              src={optimizedUrl}
+              alt={alt}
+              width={width}
+              height={height}
+              className={cn("w-full h-full object-cover", imageClassName)}
+              priority={priority}
+              sizes={sizes}
+            />
+          ) : (
+            <Image
+              src={optimizedUrl}
+              alt={alt}
+              fill
+              className={cn("w-full h-full object-cover", imageClassName)}
+              priority={priority}
+              sizes={sizes}
+            />
+          )}
         </motion.div>
       </motion.div>
     </div>

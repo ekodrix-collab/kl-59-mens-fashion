@@ -1,24 +1,34 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import MagneticButton from '@/components/ui/magnetic-button'
+import { optimizeImageUrl } from '@/lib/utils'
 
 export default function Hero() {
+  const heroBackground = "https://images.unsplash.com/photo-1550246140-5119ae4790b8?auto=format&fit=crop&q=90&w=2400";
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden bg-brand-black">
       {/* Visual background */}
       <div className="absolute inset-0">
         <motion.div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1550246140-5119ae4790b8?auto=format&fit=crop&q=90&w=2400')",
-          }}
+          className="absolute inset-0"
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.6 }}
           transition={{ duration: 2, ease: "circOut" }}
-        />
+        >
+          <Image
+            src={optimizeImageUrl(heroBackground)}
+            alt="KL-59 Heritage"
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/20 to-transparent" />
       </div>
 

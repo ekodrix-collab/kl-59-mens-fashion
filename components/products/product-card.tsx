@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { formatPrice } from '@/lib/utils'
-import Badge from '@/components/ui/badge'
+import { RevealImage } from '@/components/ui/reveal-image'
 import type { Product } from '@/types'
 
 interface ProductCardProps {
@@ -17,11 +16,13 @@ export default function ProductCard({ product }: ProductCardProps) {
     <Link href={`/shop/${product.slug}`} className="group block" data-cursor="view">
       <div className="relative overflow-hidden bg-brand-light">
         {/* Image Container */}
-        <div className="relative aspect-[3/4.5] overflow-hidden">
-          <motion.img
+        <div className="relative overflow-hidden">
+          <RevealImage 
             src={primaryImage}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
+            aspectRatio="portrait"
+            className="aspect-[3/4.5]"
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
           
           {/* Subtle Overlay on hover */}

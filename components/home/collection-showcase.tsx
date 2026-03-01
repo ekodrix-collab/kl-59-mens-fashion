@@ -62,7 +62,7 @@ export function CollectionShowcase() {
                   src={col.image || 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=1200&q=80'}
                   alt={col.name}
                   aspectRatio="portrait"
-                  className="w-full"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="mt-8">
                   <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-3 block">
@@ -96,8 +96,8 @@ export function CollectionShowcase() {
                   <RevealImage
                     src={col.image || 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=1200&q=80'}
                     alt={col.name}
-                    aspectRatio="landscape"
-                    className="w-full"
+                    aspectRatio="portrait"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div className="mt-8 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
                     <div>

@@ -8,6 +8,7 @@ import Link from "next/link";
 import { COLLECTION_IMAGES } from "@/lib/data";
 import { RevealImage } from "@/components/ui/reveal-image";
 import { MagneticElement } from "@/components/ui/magnetic-element";
+import { optimizeImageUrl } from "@/lib/utils";
 
 export function DenimEditorial() {
   const containerRef = useRef(null);
@@ -24,10 +25,12 @@ export function DenimEditorial() {
       <div className="relative w-full md:w-[45%] aspect-[3/4] overflow-hidden">
         <motion.div style={{ y }} className="absolute -inset-[10%] w-[120%] h-[120%]">
           <Image
-            src={COLLECTION_IMAGES.denim}
+            src={optimizeImageUrl(COLLECTION_IMAGES.denim)}
             alt="Denim Collection Editorial"
             fill
             className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
           />
         </motion.div>
         <motion.div

@@ -6,7 +6,7 @@ import { useProducts } from '@/hooks/use-products'
 import { useCategories } from '@/hooks/use-categories'
 import Image from 'next/image'
 import Link from 'next/link'
-import { formatPrice, cn } from '@/lib/utils'
+import { formatPrice, cn, optimizeImageUrl } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 
 export default function ShopPage() {
@@ -117,10 +117,12 @@ export default function ShopPage() {
                       <div className="aspect-[3/4] bg-rich-black overflow-hidden mb-6 relative">
                         {product.images?.[0] ? (
                           <Image
-                            src={product.images[0]}
+                            src={optimizeImageUrl(product.images[0])}
                             alt={product.name}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                            priority={i < 4}
                           />
                         ) : (
                           <div className="w-full h-full bg-white/5 flex items-center justify-center">
