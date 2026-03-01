@@ -1,29 +1,30 @@
 const WHATSAPP_NUMBER =
-  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919895884796";
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919895884796";
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://kl59.in";
+    process.env.NEXT_PUBLIC_SITE_URL || "https://kl59.in";
 
 interface ProductForWhatsApp {
-  name: string;
-  selling_price: number;
-  mrp: number;
-  discount_percent: number;
-  slug: string;
+    name: string;
+    selling_price: number;
+    mrp: number;
+    discount_percent: number;
+    slug: string;
+    images?: string[];
 }
 
 export function generateWhatsAppURL(
-  product?: ProductForWhatsApp,
-  selectedSize?: string,
-  selectedColor?: string,
-  customNumber?: string | null
+    product?: ProductForWhatsApp,
+    selectedSize?: string,
+    selectedColor?: string,
+    customNumber?: string | null
 ): string {
 
-  const number = customNumber || WHATSAPP_NUMBER;
-  const base = `https://api.whatsapp.com/send?phone=${number}`;
+    const number = customNumber || WHATSAPP_NUMBER;
+    const base = `https://api.whatsapp.com/send?phone=${number}`;
 
-  const msg = product
-    ? `Hi KL-59! ✨
+    const msg = product
+        ? `Hi KL-59! ✨
 
 I would like to place an order for the following item from your collection:
 
@@ -34,20 +35,23 @@ I would like to place an order for the following item from your collection:
 🎨 Color: ${selectedColor || "As shown"}
 📦 Availability: Please confirm
 
-Item Details:
-${SITE_URL}/product/${product.slug}
+📸 View Image:
+${product.images?.[0] || ""}
+
+🔗 Product Link:
+${SITE_URL}/shop/${product.slug}
 
 Looking forward to your response! 🙏`
-    : `Hello KL-59! 👋
+        : `Hello KL-59! 👋
 
 I am exploring your exquisite collection and would like more details. Please assist me.`;
 
-  // ✅ UTF-8 safe but NOT double encoded
-  const encodedMessage = encodeURIComponent(
-    new TextDecoder().decode(
-      new TextEncoder().encode(msg)
-    )
-  );
+    // ✅ UTF-8 safe but NOT double encoded
+    const encodedMessage = encodeURIComponent(
+        new TextDecoder().decode(
+            new TextEncoder().encode(msg)
+        )
+    );
 
-  return `${base}&text=${encodedMessage}`;
+    return `${base}&text=${encodedMessage}`;
 }

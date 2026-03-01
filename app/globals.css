@@ -28,39 +28,34 @@
         background-color: #000000;
         overflow-x: hidden;
     }
-
-    ::selection {
-        background-color: #C8A97E;
-        color: #000000;
-    }
-
-    *:focus-visible {
-        outline: 1px solid #C8A97E;
-        outline-offset: 4px;
-    }
 }
 
-@layer utilities {
-    .hide-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-
-    .hide-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-
-    .text-balance {
-        text-wrap: balance;
-    }
+/* Bespoke Premium Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
 }
 
-/* Smooth image loading */
-img {
-    transition: opacity 0.3s ease;
+::-webkit-scrollbar-track {
+    background: #000000;
 }
 
-/* Custom transitions */
-.transition-editorial {
-    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+::-webkit-scrollbar-thumb {
+    background: #222222;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #C8A97E;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #222222 #000000;
+}
+
+/* Global Selection */
+::selection {
+    background-color: rgba(200, 169, 126, 0.2);
+    color: #C8A97E;
 }
