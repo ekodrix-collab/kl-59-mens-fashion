@@ -54,20 +54,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!product) return { title: 'Product Not Found' }
 
+  const description = product.description || `Discover the ${product.name} at KL-59 Men's Fashion. Premium quality, modern design.`
+  const image = product.images?.[0]
+
   return {
     title: product.name,
-    description: product.description || `Buy ${product.name} at KL-59 Men's Fashion.`,
+    description,
     openGraph: {
-      title: product.name,
-      description: product.description || `Buy ${product.name} at KL-59 Men's Fashion.`,
-      images: product.images?.[0] ? [{ url: product.images[0] }] : [],
-      type: 'article',
+      title: `${product.name} | KL-59`,
+      description,
+      url: `https://kl59.in/shop/${slug}`,
+      siteName: "KL-59 Men's Fashion",
+      images: image ? [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: product.name,
+        }
+      ] : [],
+      type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
       title: product.name,
-      description: product.description || `Buy ${product.name} at KL-59 Men's Fashion.`,
-      images: product.images?.[0] ? [product.images[0]] : [],
+      description,
+      images: image ? [image] : [],
     },
   }
 }

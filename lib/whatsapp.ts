@@ -1,8 +1,7 @@
 const WHATSAPP_NUMBER =
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919895884796";
 
-const SITE_URL =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://kl59.in";
+const SITE_URL = "https://kl59.in";
 
 interface ProductForWhatsApp {
     name: string;
@@ -34,14 +33,12 @@ I would like to place an order for the following item from your collection:
 📏 Size: ${selectedSize || "Default"}
 🎨 Color: ${selectedColor || "As shown"}
 📦 Availability: Please confirm
+------------------
 
-📸 View Image:
-${product.images?.[0] || ""}
+Looking forward to your response! 🙏
 
-🔗 Product Link:
-${SITE_URL}/shop/${product.slug}
-
-Looking forward to your response! 🙏`
+🔗 *VIEW PIECE ON SITE*
+${SITE_URL}/shop/${product.slug}`
         : `Hello KL-59! 👋
 
 I am exploring your exquisite collection and would like more details. Please assist me.`;
