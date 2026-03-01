@@ -102,15 +102,24 @@ export default function AdminProductsPage() {
                       </span>
                     </td>
                     <td className="px-8 py-6">
-                      <div className="flex items-center justify-end gap-4">
-                        <Link href={`/admin/products/${product.id}`} className="text-white/40 hover:text-gold transition-colors">
-                          <Pencil size={16} strokeWidth={1.5} />
+                      <div className="flex items-center justify-end gap-5">
+                        <Link 
+                          href={`/shop/${product.slug}`} 
+                          target="_blank"
+                          className="text-white/20 hover:text-gold transition-colors"
+                          title="View on site"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </Link>
+                        <Link href={`/admin/products/${product.id}`} className="text-white/20 hover:text-gold transition-colors" title="Edit">
+                          <Pencil size={15} strokeWidth={1.5} />
                         </Link>
                         <button
                           onClick={() => setDeleteId(product.id)}
-                          className="text-white/40 hover:text-red-500 transition-colors"
+                          className="text-white/20 hover:text-red-500 transition-colors"
+                          title="Delete"
                         >
-                          <Trash2 size={16} strokeWidth={1.5} />
+                          <Trash2 size={15} strokeWidth={1.5} />
                         </button>
                       </div>
                     </td>
