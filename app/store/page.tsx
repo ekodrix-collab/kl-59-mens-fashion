@@ -1,20 +1,50 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { MapPin, Phone, MessageCircle, Clock, ArrowRight } from 'lucide-react'
+import { MapPin, Phone, MessageCircle, Clock, ArrowRight, Loader2 } from 'lucide-react'
 import { RevealImage } from '@/components/ui/reveal-image'
-import { RevealText } from '@/components/ui/reveal-text'
 import { generateWhatsAppURL } from "@/lib/whatsapp";
-
-
-const contactItems = [
-  { icon: MapPin, title: 'Heritage Showroom', content: 'NH, Taliparamba, Kannur, Kerala - 670141', subtitle: 'Global Flagship Store' },
-  { icon: Clock, title: 'Concierge Hours', content: '10:00 AM - 9:00 PM', subtitle: 'Daily Access' },
-  { icon: Phone, title: 'Direct Access', content: '+91 9895884796', subtitle: 'Immediate Assistance' },
-  { icon: MessageCircle, title: 'Digital Atelier', content: 'WhatsApp Consultation', subtitle: 'Personal Styling' },
-]
+import { useStoreInfo } from '@/hooks/use-store-info'
 
 export default function StorePage() {
+  const { storeInfoQuery } = useStoreInfo()
+  const { data: storeInfo, isLoading } = storeInfoQuery
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <Loader2 className="animate-spin text-gold" size={40} />
+      </div>
+    )
+  }
+
+  const contactItems = [
+    { 
+      icon: MapPin, 
+      title: 'Heritage Showroom', 
+      content: storeInfo?.address || 'NH, Taliparamba, Kannur, Kerala - 670141', 
+      subtitle: 'Global Flagship Store' 
+    },
+    { 
+      icon: Clock, 
+      title: 'Concierge Hours', 
+      content: storeInfo?.working_hours || '10:00 AM - 9:00 PM', 
+      subtitle: 'Daily Access' 
+    },
+    { 
+      icon: Phone, 
+      title: 'Direct Access', 
+      content: storeInfo?.phone || '+91 9895884796', 
+      subtitle: 'Immediate Assistance' 
+    },
+    { 
+      icon: MessageCircle, 
+      title: 'Digital Atelier', 
+      content: 'WhatsApp Consultation', 
+      subtitle: 'Personal Styling' 
+    },
+  ]
+
   return (
     <main className="pt-32 bg-black min-h-screen text-white">
       <div className="max-w-[1400px] mx-auto px-10 mb-24 flex flex-col md:flex-row justify-between items-end gap-10">
@@ -41,7 +71,7 @@ export default function StorePage() {
           transition={{ delay: 0.3 }}
           className="font-body text-sm text-link-muted leading-relaxed max-w-xs"
         >
-          Visit our physical atelier for a personalized styling experience. Our consultants are available to guide you through the current series.
+          {storeInfo?.about_text || "Visit our physical atelier for a personalized styling experience. Our consultants are available to guide you through the current series."}
         </motion.p>
       </div>
 
@@ -88,7 +118,7 @@ export default function StorePage() {
           {/* Visual Storefront / Map */}
           <div className="lg:col-span-7">
             <RevealImage 
-              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=90&w=1600" 
+              src={storeInfo?.store_image || "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=90&w=1600"} 
               alt="KL-59 Flagship Store" 
               className="h-full min-h-[500px]"
             />
