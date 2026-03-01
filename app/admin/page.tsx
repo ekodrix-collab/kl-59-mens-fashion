@@ -1,7 +1,5 @@
+import { redirect } from 'next/navigation'
+
 export default function AdminPage() {
-  // Redirect to dashboard
-  if (typeof window !== 'undefined') {
-    window.location.href = '/admin/dashboard'
-  }
-  return null
+  redirect('/admin/dashboard')
 }

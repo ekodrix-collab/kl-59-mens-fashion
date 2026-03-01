@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -25,15 +25,42 @@ export default function AdminLayout({
   const router = useRouter()
   const [showSignOutModal, setShowSignOutModal] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
   const confirmSignOut = () => {
     localStorage.removeItem('kl59_admin_auth')
     router.push('/admin/login')
   }
 
-  // Don't show sidebar on login page
+  // Robust Auth Guard
+  useEffect(() => {
+    const checkAuth = () => {
+      if (pathname === '/admin/login') {
+        setIsCheckingAuth(false)
+        return
+      }
+
+      const isAuth = localStorage.getItem('kl59_admin_auth') === 'true'
+      if (!isAuth) {
+        router.replace('/admin/login')
+      } else {
+        setIsCheckingAuth(false)
+      }
+    }
+
+    checkAuth()
+  }, [pathname, router])
+
+  // Don't show anything on login page except the children
   if (pathname === '/admin/login') {
     return <>{children}</>
+  }
+
+  // Show nothing while checking auth to prevent layout flicker
+  if (isCheckingAuth) {
+    return <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
+    </div>
   }
 
   const SidebarContent = () => (
