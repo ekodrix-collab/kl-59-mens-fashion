@@ -288,6 +288,7 @@ create index if not exists idx_outfit_looks_is_active   on public.outfit_looks(i
 -- ============================================================
 -- END OF MIGRATION
 -- ============================================================
+<<<<<<< HEAD
 
 
 -- Allow all operations for testing. (You can restrict these to authenticated users later)
@@ -312,3 +313,5 @@ CREATE POLICY "Enable all for anyone" ON offers FOR ALL USING (true) WITH CHECK 
 DROP POLICY IF EXISTS "Enable all for anyone" ON store_info;
 CREATE POLICY "Enable all for anyone" ON store_info FOR ALL USING (true) WITH CHECK (true);
 
+=======
+>>>>>>> dev

@@ -37,6 +37,8 @@ export default function AdminDashboard() {
         <div>
           <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Overview</h1>
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Store at a glance</p>
+          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Overview</h1>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Store at a glance</p>
         </div>
         <div className="flex gap-4">
           <Link href="/admin/products/new" className="group flex items-center gap-2 px-6 py-3 bg-white text-black text-[10px] font-medium uppercase tracking-[0.2em] hover:bg-gold hover:text-white transition-colors duration-500">
@@ -68,7 +70,9 @@ export default function AdminDashboard() {
       <div className="bg-rich-black/50 backdrop-blur-sm border border-white/5">
         <div className="p-8 border-b border-white/5 flex items-center justify-between">
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white">Recent Products</h2>
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white">Recent Products</h2>
           <Link href="/admin/products" className="text-[10px] uppercase tracking-[0.2em] text-gold hover:text-white transition-colors flex items-center gap-2">
+            View All <ArrowUpRight size={12} />
             View All <ArrowUpRight size={12} />
           </Link>
         </div>
@@ -76,6 +80,11 @@ export default function AdminDashboard() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/5">
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Product Name</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Category</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">MRP</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Price</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Status</th>
                 <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Product Name</th>
                 <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Category</th>
                 <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">MRP</th>

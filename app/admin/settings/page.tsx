@@ -53,6 +53,8 @@ export default function AdminSettingsPage() {
         <div>
           <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Store Settings</h1>
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Update your store details</p>
+          <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Store Settings</h1>
+          <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 mt-2">Update your store details</p>
         </div>
         <button
           onClick={handleSave}
@@ -84,6 +86,7 @@ export default function AdminSettingsPage() {
         {/* Hero Section */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Homepage Banner</h2>
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Homepage Banner</h2>
           <div className="space-y-6">
             <div>
               <label className={labelClass}>Main Headline</label>
@@ -98,6 +101,8 @@ export default function AdminSettingsPage() {
 
         {/* Contact */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Contact Details</h2>
+
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Contact Details</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -130,6 +135,7 @@ export default function AdminSettingsPage() {
 
         {/* Maps */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Store Location</h2>
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Store Location</h2>
           <div className="space-y-6">
             <div>
