@@ -33,6 +33,7 @@ export interface Product {
     // Virtual fields for joined data
     product_categories?: ProductCategory[];
     categories?: Category[];
+    active_offer?: Offer;
 }
 
 export interface ProductCategory {
