@@ -29,16 +29,16 @@ export default function ShopPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="font-display text-5xl md:text-8xl text-white leading-none"
+              className="font-display text-4xl md:text-8xl text-white leading-tight md:leading-none"
             >
-              The <span className="italic font-medium">Catalogue</span>
+              The <span className="italic font-medium text-gold/90">Catalogue</span>
             </motion.h1>
           </div>
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/30"
+            className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/30"
           >
             {publishedProducts.length} Pieces
           </motion.span>
@@ -56,7 +56,7 @@ export default function ShopPage() {
             <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/20">New pieces are being added to the collection</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-8 gap-y-12 md:gap-y-16">
             {publishedProducts.map((product, i) => {
               const primaryCat = product.product_categories?.find((pc: any) => pc.is_primary)?.category?.name
               return (
