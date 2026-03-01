@@ -60,9 +60,9 @@ export function StoreView() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="font-display text-5xl md:text-8xl text-white leading-none"
+            className="font-display text-6xl md:text-[100px] text-white leading-none tracking-tight"
           >
-            In-Store <span className="italic font-medium">Experience</span>
+            In-Store <span className="italic font-serif font-light text-gold/90">Experience</span>
           </motion.h1>
         </div>
         <motion.p 
@@ -86,16 +86,16 @@ export function StoreView() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group border-b border-white/5 pb-10"
+                className="group border-b border-white/5 pb-10 hover:border-gold/30 transition-colors duration-700"
               >
-                <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center mb-8 group-hover:bg-gold group-hover:border-gold transition-all duration-500">
-                  <item.icon size={16} className="text-white group-hover:text-black transition-colors" />
+                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center mb-10 group-hover:bg-gold group-hover:border-gold transition-all duration-700">
+                  <item.icon size={18} className="text-white group-hover:text-black transition-colors" />
                 </div>
-                <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-gold font-bold block mb-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold block mb-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
                   {item.subtitle}
                 </span>
-                <h3 className="font-display text-2xl mb-4 text-white">{item.title}</h3>
-                <p className="font-body text-sm text-muted leading-relaxed">
+                <h3 className="font-display text-2xl mb-4 text-white group-hover:translate-x-2 transition-transform duration-500">{item.title}</h3>
+                <p className="font-body text-sm text-subtle leading-relaxed group-hover:translate-x-2 transition-transform duration-700 delay-75">
                   {item.content}
                 </p>
               </motion.div>
@@ -116,12 +116,22 @@ export function StoreView() {
           </div>
 
           {/* Visual Storefront / Map */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 relative group overflow-hidden">
             <RevealImage 
               src={storeInfo?.store_image || "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=90&w=1600"} 
               alt="KL-59 Flagship Store" 
-              className="h-full min-h-[500px]"
+              className="h-full min-h-[500px] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+            <a 
+              href="https://www.google.com/maps/search/?api=1&query=KL-59+Mens+Fashion+Taliparamba+Kannur"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-10 right-10 bg-white/10 backdrop-blur-md border border-white/20 p-6 flex flex-col items-center justify-center group-hover:bg-gold transition-all duration-500"
+            >
+              <MapPin size={24} className="text-white group-hover:text-black mb-2" />
+              <span className="font-sans text-[9px] uppercase tracking-[0.4em] text-white group-hover:text-black font-bold">Directions</span>
+            </a>
           </div>
         </div>
       </div>
