@@ -105,26 +105,29 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="fixed inset-0 z-50 bg-black flex flex-col p-6"
+      className="fixed inset-0 z-50 bg-black flex flex-col p-6 overflow-hidden"
     >
-      <div className="flex justify-end">
-        <button onClick={onClose} className="text-white p-2">
-          <X size={32} strokeWidth={1.5} />
+      <div className="flex justify-between items-center mb-12">
+        <Link href="/" onClick={onClose}>
+          <Logo size="small" />
+        </Link>
+        <button onClick={onClose} className="text-white p-2 hover:text-gold transition-colors">
+          <X size={28} strokeWidth={1.2} />
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center gap-12 pl-4">
+      <div className="flex-1 flex flex-col justify-center gap-10 pl-6">
         {navLinks.map((link, i) => (
           <motion.div
             key={link.href}
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2 + i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.1 + i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link
               href={link.href}
               onClick={onClose}
-              className="font-display text-4xl text-white hover:text-gold transition-colors"
+              className="font-display text-[42px] leading-tight text-white hover:text-gold transition-colors font-light"
             >
               {link.name}
             </Link>
@@ -132,16 +135,25 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
         ))}
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="mt-8 flex flex-col gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-12 flex flex-col gap-6"
         >
-          <div className="w-12 h-[1px] bg-gold" />
-          <div className="flex flex-col gap-2 text-muted font-body text-[13px] font-light">
-            <span>📱 {storeInfo?.phone || '+91 9895884796'}</span>
-            <span>📍 {storeInfo?.address ? storeInfo.address.split(',')[0].trim() : 'Kerala, India'}</span>
-            <span>📷 {storeInfo?.instagram || '@kl59fashion'}</span>
+          <div className="w-8 h-[1px] bg-gold/50" />
+          <div className="flex flex-col gap-4 text-white/40 font-sans text-[10px] uppercase tracking-[0.2em]">
+            <div className="flex flex-col gap-1">
+              <span className="text-gold/40 text-[9px]">Contact</span>
+              <span className="text-white/60">{storeInfo?.phone || '+91 9895884796'}</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-gold/40 text-[9px]">Location</span>
+              <span className="text-white/60">{storeInfo?.address ? storeInfo.address.split(',')[0].trim() : 'Kerala, India'}</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-gold/40 text-[9px]">Archive</span>
+              <span className="text-white/60">{storeInfo?.instagram || '@kl59fashion'}</span>
+            </div>
           </div>
         </motion.div>
       </div>

@@ -22,7 +22,7 @@ export default function OffersPage() {
 
   return (
     <main className="pt-24 bg-black min-h-screen text-white">
-      <div className="max-w-[1400px] mx-auto px-10 mb-24">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-24">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -40,7 +40,7 @@ export default function OffersPage() {
         </motion.h1>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-10 space-y-40 pb-40">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 space-y-40 pb-40">
         {activeOffers.length > 0 ? (
           activeOffers.map((offer, i) => (
             <div key={offer.id} className={`flex flex-col ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-16 lg:gap-32 items-center`}>

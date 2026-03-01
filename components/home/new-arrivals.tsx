@@ -42,18 +42,18 @@ export function NewArrivals() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-display text-4xl md:text-5xl text-white font-medium mb-4"
+            className="font-display text-4xl md:text-5xl text-white font-light mb-4"
           >
-            Just Arrived
+            Latest <span className="italic font-serif">Additions</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-body text-muted font-light text-sm md:text-base"
+            className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/30"
           >
-            Our latest drops, curated for you
+            Curated for the modern individual
           </motion.p>
         </div>
 
