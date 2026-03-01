@@ -1,10 +1,39 @@
 'use client'
 
 import Link from 'next/link'
-import { Plus, Pencil, Trash2, Search } from 'lucide-react'
-import { PLACEHOLDER_PRODUCTS, PLACEHOLDER_CATEGORIES } from '@/lib/constants'
+import { Plus, Pencil, Trash2, Search, Loader2 } from 'lucide-react'
+import { useProducts } from '@/hooks/use-products'
+import { useState } from 'react'
+import { ConfirmationModal } from '@/components/ui/confirmation-modal'
 
 export default function AdminProductsPage() {
+  const [searchTerm, setSearchTerm] = useState('')
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const { productsQuery, deleteProduct } = useProducts()
+  const { data: products, isPending } = productsQuery
+
+  const handleDelete = async () => {
+    if (!deleteId) return
+    try {
+      await deleteProduct.mutateAsync(deleteId)
+      setDeleteId(null)
+    } catch (error) {
+      console.error('Failed to delete product:', error)
+    }
+  }
+
+  const filteredProducts = products?.filter(p =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  if (isPending && !products) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="animate-spin text-gold" size={32} />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -23,6 +52,8 @@ export default function AdminProductsPage() {
         <input
           type="text"
           placeholder="SEARCH PRODUCTS..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full pl-14 pr-6 py-5 bg-rich-black/50 backdrop-blur-sm border border-white/10 text-xs font-sans uppercase tracking-[0.2em] text-white focus:outline-none focus:border-gold transition-colors placeholder:text-white/20"
         />
       </div>
@@ -35,15 +66,15 @@ export default function AdminProductsPage() {
               <tr className="border-b border-white/10 bg-black/40">
                 <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Preview</th>
                 <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Product Name</th>
-                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Category</th>
+                <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Categories</th>
                 <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Price</th>
                 <th className="text-left px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Status</th>
                 <th className="text-right px-8 py-5 font-sans text-[9px] font-medium tracking-[0.3em] text-white/30 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {PLACEHOLDER_PRODUCTS.map((product) => {
-                const cat = PLACEHOLDER_CATEGORIES.find(c => c.id === product.category_id)
+              {filteredProducts?.map((product) => {
+                const primaryCat = product.product_categories?.find(pc => pc.is_primary)?.category?.name
                 return (
                   <tr key={product.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                     <td className="px-8 py-6">
@@ -57,7 +88,9 @@ export default function AdminProductsPage() {
                       </div>
                     </td>
                     <td className="px-8 py-6 text-sm font-sans text-white group-hover:text-gold transition-colors">{product.name}</td>
-                    <td className="px-8 py-6 text-[11px] font-sans uppercase tracking-[0.1em] text-white/50">{cat?.name || '—'}</td>
+                    <td className="px-8 py-6 text-[11px] font-sans uppercase tracking-[0.1em] text-white/50">
+                      {primaryCat || (product.product_categories?.length ? 'Multiple' : '—')}
+                    </td>
                     <td className="px-8 py-6">
                       <div className="flex flex-col gap-1">
                         <span className="text-sm font-body text-white">₹{product.selling_price.toLocaleString('en-IN')}</span>
@@ -76,7 +109,10 @@ export default function AdminProductsPage() {
                         <Link href={`/admin/products/${product.id}`} className="text-white/40 hover:text-gold transition-colors">
                           <Pencil size={16} strokeWidth={1.5} />
                         </Link>
-                        <button className="text-white/40 hover:text-red-500 transition-colors">
+                        <button
+                          onClick={() => setDeleteId(product.id)}
+                          className="text-white/40 hover:text-red-500 transition-colors"
+                        >
                           <Trash2 size={16} strokeWidth={1.5} />
                         </button>
                       </div>
@@ -88,6 +124,16 @@ export default function AdminProductsPage() {
           </table>
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleDelete}
+        title="Delete Product"
+        message="Are you sure you want to delete this product? This action cannot be undone."
+        confirmText="Delete"
+        isLoading={deleteProduct.isPending}
+      />
     </div>
   )
 }

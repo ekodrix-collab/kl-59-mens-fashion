@@ -288,3 +288,27 @@ create index if not exists idx_outfit_looks_is_active   on public.outfit_looks(i
 -- ============================================================
 -- END OF MIGRATION
 -- ============================================================
+
+
+-- Allow all operations for testing. (You can restrict these to authenticated users later)
+
+-- Categories
+DROP POLICY IF EXISTS "Enable all for anyone" ON categories;
+CREATE POLICY "Enable all for anyone" ON categories FOR ALL USING (true) WITH CHECK (true);
+
+-- Products
+DROP POLICY IF EXISTS "Enable all for anyone" ON products;
+CREATE POLICY "Enable all for anyone" ON products FOR ALL USING (true) WITH CHECK (true);
+
+-- Product Categories
+DROP POLICY IF EXISTS "Enable all for anyone" ON product_categories;
+CREATE POLICY "Enable all for anyone" ON product_categories FOR ALL USING (true) WITH CHECK (true);
+
+-- Offers
+DROP POLICY IF EXISTS "Enable all for anyone" ON offers;
+CREATE POLICY "Enable all for anyone" ON offers FOR ALL USING (true) WITH CHECK (true);
+
+-- Store Info
+DROP POLICY IF EXISTS "Enable all for anyone" ON store_info;
+CREATE POLICY "Enable all for anyone" ON store_info FOR ALL USING (true) WITH CHECK (true);
+

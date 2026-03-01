@@ -3,14 +3,18 @@
 import { ScrollRevealText } from "@/components/ui/reveal-text";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useStoreInfo } from "@/hooks/use-store-info";
 
 export function BrandStatement() {
+  const { storeInfoQuery } = useStoreInfo();
+  const { data: storeInfo } = storeInfoQuery;
+
   return (
     <section className="bg-black py-40 min-h-screen flex items-center justify-center">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <div className="mb-20">
           <ScrollRevealText
-            text="We don't follow trends. We set them."
+            text={storeInfo?.hero_tagline || "We don't follow trends. We set them."}
             className="font-display text-4xl md:text-6xl text-white font-medium italic leading-tight"
           />
         </div>
@@ -32,10 +36,10 @@ export function BrandStatement() {
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           <p className="font-body text-base md:text-lg text-muted font-light max-w-xl mx-auto mb-10 leading-relaxed">
-            KL-59 is more than a store. It&apos;s a destination for men who understand that great style doesn&apos;t need a great price tag.
+            {storeInfo?.hero_subtitle || "KL-59 is more than a store. It's a destination for men who understand that great style doesn't need a great price tag."}
           </p>
-          
-          <Link 
+
+          <Link
             href="/story"
             className="font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-gold hover:text-white transition-colors group inline-flex items-center"
           >

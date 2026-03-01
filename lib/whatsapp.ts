@@ -12,9 +12,11 @@ interface ProductForWhatsApp {
 export function generateWhatsAppURL(
     product?: ProductForWhatsApp,
     selectedSize?: string,
-    selectedColor?: string
+    selectedColor?: string,
+    customNumber?: string | null
 ): string {
-    const base = `https://wa.me/${WHATSAPP_NUMBER}`;
+    const number = customNumber || WHATSAPP_NUMBER;
+    const base = `https://wa.me/${number}`;
 
     if (!product) {
         return `${base}?text=${encodeURIComponent(
