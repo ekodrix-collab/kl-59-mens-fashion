@@ -271,14 +271,40 @@ export default function NewOfferPage() {
                                                 {item ? (
                                                     <>
                                                         <button
-                                                            onClick={() => setComboItems(prev => prev.map(i => i.product_id === p.id ? { ...i, quantity: Math.max(0, i.quantity - 1) } : i).filter(i => i.quantity > 0))}
+                                                            onClick={() => {
+                                                                setComboItems(prev => {
+                                                                    const newItems = prev.map((i: any) => i.product_id === p.id ? { ...i, quantity: Math.max(0, i.quantity - 1) } : i).filter((i: any) => i.quantity > 0);
+
+                                                                    // Auto-calculate price
+                                                                    const total = newItems.reduce((acc: number, item: any) => {
+                                                                        const prod = products?.find(pr => pr.id === item.product_id);
+                                                                        return acc + (prod?.selling_price || 0) * item.quantity;
+                                                                    }, 0);
+                                                                    setComboPrice(total.toString());
+
+                                                                    return newItems;
+                                                                });
+                                                            }}
                                                             className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold"
                                                         >
                                                             -
                                                         </button>
                                                         <span className="text-[10px] text-white w-4 text-center">{item.quantity}</span>
                                                         <button
-                                                            onClick={() => setComboItems(prev => prev.map(i => i.product_id === p.id ? { ...i, quantity: i.quantity + 1 } : i))}
+                                                            onClick={() => {
+                                                                setComboItems(prev => {
+                                                                    const newItems = prev.map((i: any) => i.product_id === p.id ? { ...i, quantity: i.quantity + 1 } : i);
+
+                                                                    // Auto-calculate price
+                                                                    const total = newItems.reduce((acc: number, item: any) => {
+                                                                        const prod = products?.find(pr => pr.id === item.product_id);
+                                                                        return acc + (prod?.selling_price || 0) * item.quantity;
+                                                                    }, 0);
+                                                                    setComboPrice(total.toString());
+
+                                                                    return newItems;
+                                                                });
+                                                            }}
                                                             className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold"
                                                         >
                                                             +
@@ -286,7 +312,20 @@ export default function NewOfferPage() {
                                                     </>
                                                 ) : (
                                                     <button
-                                                        onClick={() => setComboItems(prev => [...prev, { product_id: p.id, quantity: 1 }])}
+                                                        onClick={() => {
+                                                            setComboItems(prev => {
+                                                                const newItems = [...prev, { product_id: p.id, quantity: 1 }];
+
+                                                                // Auto-calculate price
+                                                                const total = newItems.reduce((acc: number, item: any) => {
+                                                                    const prod = products?.find(pr => pr.id === item.product_id);
+                                                                    return acc + (prod?.selling_price || 0) * item.quantity;
+                                                                }, 0);
+                                                                setComboPrice(total.toString());
+
+                                                                return newItems;
+                                                            });
+                                                        }}
                                                         className="px-3 py-1 border border-white/10 text-[9px] uppercase tracking-wider text-white/60 hover:border-gold hover:text-gold"
                                                     >
                                                         Add
