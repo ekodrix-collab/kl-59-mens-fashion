@@ -3,8 +3,7 @@
 import { motion } from 'framer-motion'
 import { useProducts } from '@/hooks/use-products'
 import { useOffers } from '@/hooks/use-offers'
-import ProductCard from '@/components/products/product-card'
-import ComboCard from '@/components/products/combo-card'
+import { useCategories } from '@/hooks/use-categories'
 import { Loader2 } from 'lucide-react'
 
 import { CollectionLayout } from '@/components/collection/collection-layout'
@@ -12,11 +11,13 @@ import { CollectionLayout } from '@/components/collection/collection-layout'
 export default function ShopPage() {
   const { productsQuery } = useProducts()
   const { offersQuery } = useOffers()
+  const { categoriesQuery } = useCategories()
 
   const { data: products, isLoading: productsLoading } = productsQuery
   const { data: offers, isLoading: offersLoading } = offersQuery
+  const { data: categories, isLoading: categoriesLoading } = categoriesQuery
 
-  if (productsLoading || offersLoading) {
+  if (productsLoading || offersLoading || categoriesLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
         <Loader2 className="animate-spin text-gold" size={32} />
@@ -40,6 +41,7 @@ export default function ShopPage() {
   return (
     <CollectionLayout
       initialProducts={productsWithOffers}
+      allCategories={categories}
       heroData={{
         name: "The Catalogue",
         tagline: `CATALOGUE ${new Date().getFullYear()}`,
