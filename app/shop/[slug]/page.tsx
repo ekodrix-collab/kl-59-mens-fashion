@@ -10,6 +10,7 @@ import { useProducts } from '@/hooks/use-products'
 import { formatPrice } from '@/lib/utils'
 import { generateWhatsAppURL } from '@/lib/whatsapp'
 import { WhatsAppDrawer } from '@/components/product/whatsapp-drawer'
+import { toast } from 'react-hot-toast'
 
 export default function ShopProductPage() {
   const params = useParams()
@@ -21,7 +22,6 @@ export default function ShopProductPage() {
   const [selectedSize, setSelectedSize] = useState('')
   const [selectedColor, setSelectedColor] = useState('')
   const [activeImage, setActiveImage] = useState(0)
-  const [sizeError, setSizeError] = useState('')
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   // Get related products from the same category
@@ -33,10 +33,20 @@ export default function ShopProductPage() {
 
   const handleOrderClick = () => {
     if (!selectedSize && (product?.sizes?.length ?? 0) > 0) {
-      setSizeError('Please select a size')
+      toast.error('Please select a size', {
+        icon: String.fromCodePoint(0x1F4CF),
+        style: {
+          borderRadius: '0',
+          background: '#111',
+          color: '#fff',
+          border: '1px solid rgba(255,255,255,0.1)',
+          fontSize: '12px',
+          textTransform: 'uppercase',
+          letterSpacing: '0.1em'
+        }
+      })
       return
     }
-    setSizeError('')
     setIsDrawerOpen(true)
   }
 
@@ -216,13 +226,13 @@ export default function ShopProductPage() {
             {product.sizes && product.sizes.length > 0 && (
               <div className="mb-10">
                 <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 block mb-4">
-                  Size — {selectedSize || 'Select'}
+                  Size
                 </span>
                 <div className="flex flex-wrap gap-3">
                   {product.sizes.map((size: string) => (
                     <button
                       key={size}
-                      onClick={() => { setSelectedSize(size); setSizeError('') }}
+                      onClick={() => setSelectedSize(size)}
                       className={`w-14 h-14 flex items-center justify-center border font-sans text-xs uppercase tracking-wider transition-all duration-300 ${
                         selectedSize === size
                           ? 'bg-white text-black border-white'
@@ -233,7 +243,6 @@ export default function ShopProductPage() {
                     </button>
                   ))}
                 </div>
-                {sizeError && <span className="text-red-400 text-xs mt-2 block">{sizeError}</span>}
               </div>
             )}
 
