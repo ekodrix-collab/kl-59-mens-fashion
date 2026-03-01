@@ -255,19 +255,122 @@ export default function EditOfferPage() {
                         </div>
                     )}
 
-                    {/* Product selection display (simplified for edit) */}
-                    {offerType === 'product_offer' && selectedProductId && (
+                    {/* Product Selection */}
+                    {offerType === 'product_offer' && (
                         <div>
-                            <label className={labelClass}>Selected Product</label>
-                            <div className="flex items-center gap-4 p-4 border border-gold bg-gold/5 max-w-sm">
-                                <div className="w-10 h-10 bg-white/5 overflow-hidden flex-shrink-0">
-                                    {products?.find(p => p.id === selectedProductId)?.images?.[0] && (
-                                        <img src={products.find(p => p.id === selectedProductId)!.images[0]} alt="" className="w-full h-full object-cover" />
-                                    )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-[11px] text-white truncate">{products?.find(p => p.id === selectedProductId)?.name}</p>
-                                </div>
+                            <label className={labelClass}>Select Product</label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                {products?.map(p => (
+                                    <div
+                                        key={p.id}
+                                        onClick={() => setSelectedProductId(p.id)}
+                                        className={`flex items-center gap-4 p-4 border transition-all cursor-pointer ${selectedProductId === p.id
+                                            ? 'border-gold bg-gold/5'
+                                            : 'border-white/5 bg-black/20 hover:border-white/20'
+                                            }`}
+                                    >
+                                        <div className="w-10 h-10 bg-white/5 overflow-hidden flex-shrink-0">
+                                            {p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-[11px] text-white truncate">{p.name}</p>
+                                            <p className="text-[9px] text-white/40">₹{p.selling_price}</p>
+                                        </div>
+                                        {selectedProductId === p.id && <Check size={14} className="text-gold" />}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+
+                    {offerType === 'combo' && (
+                        <div>
+                            <label className={labelClass}>Select Products for Combo</label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                {products?.map(p => {
+                                    const item = comboItems.find(i => i.product_id === p.id)
+                                    return (
+                                        <div
+                                            key={p.id}
+                                            className={`flex items-center gap-4 p-4 border transition-all ${item ? 'border-gold bg-gold/5' : 'border-white/5 bg-black/20'
+                                                }`}
+                                        >
+                                            <div className="w-10 h-10 bg-white/5 overflow-hidden flex-shrink-0">
+                                                {p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-[11px] text-white truncate">{p.name}</p>
+                                                <p className="text-[9px] text-white/40">₹{p.selling_price}</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                {item ? (
+                                                    <>
+                                                        <button
+                                                            onClick={() => {
+                                                                setComboItems(prev => {
+                                                                    const newItems = prev.map((i: any) => i.product_id === p.id ? { ...i, quantity: Math.max(0, i.quantity - 1) } : i).filter((i: any) => i.quantity > 0);
+
+                                                                    // Auto-calculate price
+                                                                    const total = newItems.reduce((acc: number, item: any) => {
+                                                                        const prod = products?.find(pr => pr.id === item.product_id);
+                                                                        return acc + (prod?.selling_price || 0) * item.quantity;
+                                                                    }, 0);
+                                                                    setComboPrice(total.toString());
+
+                                                                    return newItems;
+                                                                });
+                                                            }}
+                                                            className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold"
+                                                        >
+                                                            -
+                                                        </button>
+                                                        <span className="text-[10px] text-white w-4 text-center">{item.quantity}</span>
+                                                        <button
+                                                            onClick={() => {
+                                                                setComboItems(prev => {
+                                                                    const newItems = prev.map((i: any) => i.product_id === p.id ? { ...i, quantity: i.quantity + 1 } : i);
+
+                                                                    // Auto-calculate price
+                                                                    const total = newItems.reduce((acc: number, item: any) => {
+                                                                        const prod = products?.find(pr => pr.id === item.product_id);
+                                                                        return acc + (prod?.selling_price || 0) * item.quantity;
+                                                                    }, 0);
+                                                                    setComboPrice(total.toString());
+
+                                                                    return newItems;
+                                                                });
+                                                            }}
+                                                            className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold"
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => {
+                                                            setComboItems(prev => {
+                                                                const newItems = [...prev, { product_id: p.id, quantity: 1 }];
+
+                                                                // Auto-calculate price
+                                                                const total = newItems.reduce((acc: number, item: any) => {
+                                                                    const prod = products?.find(pr => pr.id === item.product_id);
+                                                                    return acc + (prod?.selling_price || 0) * item.quantity;
+                                                                }, 0);
+                                                                setComboPrice(total.toString());
+
+                                                                return newItems;
+                                                            });
+                                                        }}
+                                                        className="px-3 py-1 border border-white/10 text-[9px] uppercase tracking-wider text-white/60 hover:border-gold hover:text-gold"
+                                                    >
+                                                        Add
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
                     )}

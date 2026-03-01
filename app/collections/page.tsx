@@ -1,41 +1,93 @@
+"use client";
 import { RevealImage } from "@/components/ui/reveal-image";
 import { COLLECTION_IMAGES } from "@/lib/data";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const collectionsList = [
-  { name: "Denim", slug: "denim", image: COLLECTION_IMAGES.denim },
-  { name: "Shirts", slug: "shirts", image: COLLECTION_IMAGES.shirts },
-  { name: "T-Shirts", slug: "t-shirts", image: COLLECTION_IMAGES.tshirts },
-  { name: "Casual Wear", slug: "casual-wear", image: COLLECTION_IMAGES.casual },
-  { name: "Formals", slug: "formals", image: COLLECTION_IMAGES.formals },
+  { name: "Denim", slug: "denim", image: COLLECTION_IMAGES.denim, isShopAll: false },
+  { name: "Shirts", slug: "shirts", image: COLLECTION_IMAGES.shirts, isShopAll: false },
+  { name: "T-Shirts", slug: "t-shirts", image: COLLECTION_IMAGES.tshirts, isShopAll: false },
+  { name: "Casual Wear", slug: "casual-wear", image: COLLECTION_IMAGES.casual, isShopAll: false },
+  { name: "Formals", slug: "formals", image: COLLECTION_IMAGES.formals, isShopAll: false },
 ];
 
 export default function CollectionsPage() {
+  const allCollections = [
+    ...collectionsList,
+    { name: "Shop All", slug: "all", image: "", isShopAll: true }
+  ];
+
   return (
     <main className="pt-24 bg-black min-h-screen">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pb-24">
-        <div className="mb-12 mt-12">
-          <span className="font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-gold block mb-4">
-            Curated
-          </span>
-          <h1 className="font-display text-5xl md:text-7xl text-white font-medium">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pb-32">
+        <div className="mb-16 mt-12">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-sans text-[11px] font-bold uppercase tracking-[0.4em] text-gold block mb-4"
+          >
+            Explore Our
+          </motion.span>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="font-display text-5xl md:text-8xl text-white font-medium leading-none"
+          >
             Collections
-          </h1>
+          </motion.h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 overflow-hidden">
-          {collectionsList.map((col, i) => (
-            <Link key={col.slug} href={`/collections/${col.slug}`} className="relative group overflow-hidden">
-              <RevealImage src={col.image} alt={col.name} className="h-[60vh] w-full" aspectRatio="auto" width={1200} height={800} />
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <h2 className="font-display text-4xl md:text-5xl text-white font-medium tracking-tight">
-                  {col.name}
-                </h2>
-              </div>
-              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left" />
-            </Link>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+          {allCollections.map((col, i) => (
+            <motion.div
+              key={col.slug}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className={cn(
+                "group relative overflow-hidden",
+                col.isShopAll && "flex items-center justify-center border border-white/10 hover:border-gold/50 transition-colors duration-500 bg-zinc-900/20"
+              )}
+            >
+              <Link href={col.slug === "all" ? "/shop" : `/collections/${col.slug}`} className="block w-full h-full">
+                {col.isShopAll ? (
+                  <div className="aspect-[4/5] flex flex-col items-center justify-center p-10 text-center">
+                    <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold mb-4">Complete Catalogue</span>
+                    <h2 className="font-display text-2xl md:text-4xl text-white mb-6">Discover All</h2>
+                    <div className="w-12 h-[1px] bg-gold/50 group-hover:w-20 transition-all duration-700" />
+                  </div>
+                ) : (
+                  <div className="relative aspect-[4/5] overflow-hidden">
+                    <RevealImage
+                      src={col.image}
+                      alt={col.name}
+                      className="w-full h-full"
+                      aspectRatio="auto"
+                    />
+                    {/* Subtle Gradient Fade */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-700" />
+
+                    {/* Bottom-Left Editorial Typography */}
+                    <div className="absolute bottom-0 left-0 p-6 md:p-10 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform duration-700">
+                      <span className="font-sans text-[10px] font-bold uppercase tracking-[0.3em] text-gold/90 block mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
+                        Men's Fashion
+                      </span>
+                      <h2 className="font-display text-2xl md:text-4xl text-white font-medium tracking-tight">
+                        {col.name}
+                      </h2>
+                      <div className="mt-4 flex items-center gap-2 text-white/0 group-hover:text-white/70 transition-all duration-700 delay-200">
+                        <span className="font-sans text-[10px] uppercase tracking-widest font-medium">Explore</span>
+                        <div className="w-0 group-hover:w-8 h-[1px] bg-white/30 transition-all duration-700" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </Link>
+            </motion.div>
           ))}
         </div>
       </div>
