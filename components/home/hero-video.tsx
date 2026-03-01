@@ -5,9 +5,12 @@ import { useEffect, useRef } from "react";
 import { Logo } from "@/components/ui/logo";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import Link from "next/link";
+import { useStoreInfo } from "@/hooks/use-store-info";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { storeInfoQuery } = useStoreInfo();
+  const { data: storeInfo } = storeInfoQuery;
 
   useEffect(() => {
     if (videoRef.current) {
@@ -20,22 +23,23 @@ export function HeroVideo() {
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
+          key={storeInfo?.hero_video}
           ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
           className="h-full w-full object-cover opacity-60 grayscale-[0.3]"
-          poster="https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000"
+          poster={storeInfo?.hero_image || "https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000"}
         >
-          <source 
-            src="https://videos.pexels.com/video-files/6765484/6765484-hd_1280_720_25fps.mp4" 
-            type="video/mp4" 
-          />
-          <source 
-            src="https://videos.pexels.com/video-files/6765484/6765484-sd_960_540_25fps.mp4" 
-            type="video/mp4" 
-          />
+          {storeInfo?.hero_video ? (
+            <source src={storeInfo.hero_video} type="video/mp4" />
+          ) : (
+            <>
+              <source src="https://videos.pexels.com/video-files/6765484/6765484-hd_1280_720_25fps.mp4" type="video/mp4" />
+              <source src="https://videos.pexels.com/video-files/6765484/6765484-sd_960_540_25fps.mp4" type="video/mp4" />
+            </>
+          )}
           Your browser does not support the video tag.
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
@@ -58,7 +62,7 @@ export function HeroVideo() {
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
           className="font-display text-4xl md:text-5xl lg:text-7xl text-white font-medium mb-12 max-w-3xl mx-auto italic leading-[1.1] tracking-tight"
         >
-          The Art of <br className="md:hidden" /> Modern Masculinity.
+          {storeInfo?.tagline || "The Art of Modern Masculinity."}
         </motion.h1>
 
         <motion.div
@@ -69,7 +73,7 @@ export function HeroVideo() {
         >
           <MagneticElement>
             <Link
-              href="/collections"
+              href="/shop"
               className="group relative inline-block overflow-hidden border border-white/20 px-12 py-5 transition-all duration-500 hover:border-white"
             >
               <span className="relative z-10 font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-white">
@@ -77,7 +81,7 @@ export function HeroVideo() {
               </span>
               <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full" />
               <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full">
-                 <span className="absolute inset-0 flex items-center justify-center font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-black opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="absolute inset-0 flex items-center justify-center font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-black opacity-0 group-hover:opacity-100 transition-opacity">
                   Explore Collection
                 </span>
               </div>
@@ -88,7 +92,7 @@ export function HeroVideo() {
             {['Denim', 'Shirts', 'Shoes'].map((cat, i) => (
               <Link
                 key={cat}
-                href={`/collections/${cat.toLowerCase()}`}
+                href={`/shop?category=${cat.toLowerCase()}`}
                 className="group flex flex-col items-center gap-2"
               >
                 <span className="font-sans text-[10px] uppercase tracking-[0.5em] text-white/40 group-hover:text-gold transition-colors duration-500">
@@ -102,10 +106,10 @@ export function HeroVideo() {
 
         {/* Scroll Indicator */}
         <motion.div
-           initial={{ opacity: 0 }}
-           animate={{ opacity: 0.3 }}
-           transition={{ delay: 2 }}
-           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.3 }}
+          transition={{ delay: 2 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
         >
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold/50 to-transparent" />
           <span className="text-[9px] uppercase tracking-[0.4em] text-white/50">Scroll to Explore Story</span>

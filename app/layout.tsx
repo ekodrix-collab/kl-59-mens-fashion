@@ -43,25 +43,32 @@ export const metadata: Metadata = {
   },
 }
 
+
 import { SmoothScroll } from '@/components/layout/smooth-scroll'
 import { NavbarWrapper } from '@/components/layout/navbar-wrapper'
+import { CustomCursor } from '@/components/ui/custom-cursor'
+import { QueryProvider } from '@/components/providers/query-provider'
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+function BodyWithCursor({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable}`}>
-      <body className="font-body antialiased bg-rich-black text-white">
+    <body className="font-body antialiased bg-rich-black text-white cursor-auto">
+      <QueryProvider>
         <SmoothScroll>
           <NavbarWrapper>
             {children}
           </NavbarWrapper>
         </SmoothScroll>
-      </body>
+      </QueryProvider>
+    </body>
+  );
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable}`}>
+      <BodyWithCursor>{children}</BodyWithCursor>
     </html>
-  )
+  );
 }
 
 
