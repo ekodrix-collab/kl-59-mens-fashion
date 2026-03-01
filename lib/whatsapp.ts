@@ -20,22 +20,24 @@ export function generateWhatsAppURL(
 
     if (!product) {
         return `${base}?text=${encodeURIComponent(
-            "Hi KL-59! 👋\n\nI'm browsing your website and would like to know more about your products."
+            "Hello KL-59! 👋\n\nI am exploring your exquisite collection on your website and would appreciate more information regarding your products. Could you please assist me?"
         )}`;
     }
 
-    const msg = `Hi KL-59! 👋
+    const msg = `Hi KL-59! ✨
 
-I'd like to order:
+I would like to place an order for the following item from your collection:
 
-🛍️ *${product.name}*
-💰 ₹${product.selling_price.toLocaleString("en-IN")} (MRP ₹${product.mrp.toLocaleString("en-IN")} — ${product.discount_percent}% OFF)
-📏 Size: ${selectedSize || "Not selected"}
-🎨 Color: ${selectedColor || "Not selected"}
+� *${product.name.toUpperCase()}*
+──────────────────
+💰 Price: ₹${product.selling_price.toLocaleString("en-IN")}
+📏 Size: ${selectedSize || "Default"}
+🎨 Color: ${selectedColor || "As shown"}
+📦 Availability: Please confirm
 
-Please confirm availability!
+Item Details: ${SITE_URL}/product/${product.slug}
 
-🔗 ${SITE_URL}/product/${product.slug}`;
+Looking forward to your response! 🙏`;
 
     return `${base}?text=${encodeURIComponent(msg)}`;
 }
