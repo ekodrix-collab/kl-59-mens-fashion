@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Eye, EyeOff, Lock, Mail, ArrowRight, Shield } from 'lucide-react'
 import { Logo } from '@/components/ui/logo'
+import { createClient } from '@/lib/supabase/client'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -32,20 +33,23 @@ export default function AdminLoginPage() {
     }
 
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const supabase = createClient()
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       })
 
-      const data = await response.json()
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+        return
+      }
 
-      if (response.ok && data.success) {
+      if (data.user) {
+        // We can still set this for any legacy code, but middleware will now use the cookie
         localStorage.setItem('kl59_admin_auth', 'true')
         router.push('/admin/dashboard')
-      } else {
-        setError(data.error || 'Invalid credentials. Please try again.')
-        setLoading(false)
+        router.refresh() // Ensure server-side navigation knows about the new session
       }
     } catch (err) {
       setError('Connection failed. Please check your internet.')

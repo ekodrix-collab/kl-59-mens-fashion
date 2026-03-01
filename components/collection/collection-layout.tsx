@@ -11,11 +11,13 @@ import { AnimatePresence, motion } from "framer-motion";
 export function CollectionLayout({
     initialProducts,
     heroData,
-    initialCategory
+    initialCategory,
+    allCategories
 }: {
     initialProducts: any[];
     heroData: { name: string; tagline: string; image: string };
     initialCategory?: string;
+    allCategories?: any[];
 }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [filters, setFilters] = useState<FilterState>({
@@ -35,6 +37,34 @@ export function CollectionLayout({
 
     // Extract available categories
     const availableCategories = useMemo(() => {
+        // If allCategories is provided from DB, use it as the base
+        if (allCategories) {
+            const categoriesWithCounts = allCategories.map(cat => {
+                const count = initialProducts.filter(p =>
+                    p.product_categories?.some((pc: any) => pc.category?.slug === cat.slug)
+                ).length;
+                return { name: cat.name, slug: cat.slug, count };
+            });
+
+            // Check if there are any products not matching any of the DB categories
+            const dbCategorySlugs = allCategories.map(c => c.slug);
+            const uncategorizedProducts = initialProducts.filter(p => {
+                const productSlugs = p.product_categories?.map((pc: any) => pc.category?.slug) || [];
+                return productSlugs.length === 0 || !productSlugs.some((s: string) => dbCategorySlugs.includes(s));
+            });
+
+            if (uncategorizedProducts.length > 0) {
+                categoriesWithCounts.push({
+                    name: 'Uncategorized',
+                    slug: 'uncategorized',
+                    count: uncategorizedProducts.length
+                });
+            }
+
+            return categoriesWithCounts;
+        }
+
+        // Fallback: derive from products
         const cats = new Map<string, { name: string, count: number }>();
         initialProducts.forEach(p => {
             if (p.collection) {
@@ -47,7 +77,7 @@ export function CollectionLayout({
             }
         });
         return Array.from(cats.entries()).map(([slug, data]) => ({ slug, ...data }));
-    }, [initialProducts]);
+    }, [initialProducts, allCategories]);
 
     // Apply filters and search
     const filteredProducts = useMemo(() => {
@@ -63,8 +93,12 @@ export function CollectionLayout({
             }
 
             // Category filter
-            if (filters.categories.length > 0 && (!p.collection || !filters.categories.includes(p.collection.slug))) {
-                return false;
+            if (filters.categories.length > 0) {
+                const productCategorySlugs = p.product_categories?.map((pc: any) => pc.category?.slug) || [];
+                const matchesCategory = filters.categories.some(slug =>
+                    productCategorySlugs.includes(slug) || p.collection?.slug === slug
+                );
+                if (!matchesCategory) return false;
             }
 
             // Price filter
@@ -138,7 +172,7 @@ export function CollectionLayout({
                             </div>
 
                             {filteredProducts.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-x-10 md:gap-y-16">
+                                <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
                                     {filteredProducts.map(product => (
                                         <ModernProductCard key={product.id} product={product} />
                                     ))}
