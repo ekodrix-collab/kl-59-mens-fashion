@@ -11,27 +11,42 @@ export function StoryView() {
       {/* Cinematic Hero */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <motion.div 
-          initial={{ scale: 1.2, opacity: 0 }}
+          className="absolute inset-0"
+          initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 2, ease: "easeOut" }}
-          className="absolute inset-0"
         >
-          <Image 
-            src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1920&q=80" 
-            alt="KL-59 Heritage" 
-            fill
-            priority
-            className="object-cover grayscale-[0.2] opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+          <motion.div
+            style={{ 
+              y: '-10%',
+            }}
+            whileInView={{ y: '0%' }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="h-[120%] w-full relative"
+          >
+            <Image 
+              src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1920&q=80" 
+              alt="KL-59 Heritage" 
+              fill
+              priority
+              className="object-cover grayscale-[0.3] opacity-60"
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
         </motion.div>
         
         <div className="relative z-10 text-center px-10">
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: 60 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="w-px bg-gold/40 mx-auto mb-8"
+          />
           <motion.span 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="font-sans text-[10px] uppercase tracking-[0.6em] text-gold font-bold mb-8 block"
+            className="font-sans text-[10px] uppercase tracking-[0.8em] text-gold font-bold mb-8 block"
           >
             ESTABLISHED IN EXCELLENCE
           </motion.span>
@@ -39,9 +54,9 @@ export function StoryView() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.2, duration: 1 }}
-            className="font-display text-6xl md:text-8xl text-white leading-none"
+            className="font-display text-7xl md:text-[120px] text-white leading-none tracking-tighter"
           >
-            The <span className="italic">Heritage</span>
+            The <span className="italic font-serif font-light text-white/90">Heritage</span>
           </motion.h1>
         </div>
 
@@ -68,8 +83,8 @@ export function StoryView() {
 
             <div className="max-w-xl">
               <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-8 block">THE CRAFT</span>
-              <h2 className="font-display text-4xl md:text-6xl text-white mb-12 leading-tight">
-                Style that speaks <br /><span className="italic font-medium text-white/80">before you do.</span>
+              <h2 className="font-display text-5xl md:text-7xl text-white mb-12 leading-[1.1] tracking-tight">
+                Style that speaks <br /><span className="italic font-serif font-light text-gold/90">before you do.</span>
               </h2>
               <p className="font-body text-lg text-muted leading-relaxed opacity-80 mb-12">
                 KL-59 was established with a singular vision: to define the modern masculine silhouette through uncompromising craftsmanship and timeless design. We believe that true luxury lies in the details—the precision of a stitch, the hand-feel of pima cotton, and the character of raw denim.
@@ -94,7 +109,7 @@ export function StoryView() {
         <div className="max-w-[1400px] mx-auto px-10 relative z-10">
           <div className="mb-24">
             <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-6 block">OUR PHILOSOPHY</span>
-            <h2 className="font-display text-4xl md:text-6xl text-white">The Core <span className="italic">Tenets</span></h2>
+            <h2 className="font-display text-5xl md:text-7xl text-white">The Core <span className="italic font-serif font-light text-gold/80">Tenets</span></h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
@@ -111,8 +126,8 @@ export function StoryView() {
                 transition={{ delay: i * 0.2, duration: 0.8 }}
                 className="group border-l border-white/10 pl-10 hover:border-gold transition-colors duration-500"
               >
-                <h3 className="font-display text-2xl mb-6 group-hover:text-gold transition-colors">{v.title}</h3>
-                <p className="font-body text-sm text-muted leading-relaxed group-hover:text-white/80 transition-colors">{v.desc}</p>
+                <h3 className="font-display text-2xl mb-6 group-hover:text-gold transition-colors duration-500">{v.title}</h3>
+                <p className="font-body text-[13px] text-muted leading-relaxed group-hover:text-white/70 transition-colors duration-500">{v.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -123,7 +138,7 @@ export function StoryView() {
       <section className="py-40 text-center">
         <ScrollRevealText
           text="Begin Your Journey"
-          className="font-display text-5xl md:text-7xl text-white mb-16 leading-tight"
+          className="font-display text-6xl md:text-9xl text-white mb-16 leading-none tracking-tighter"
         />
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
           <a href="/shop" className="px-12 py-5 bg-white text-black font-sans text-[10px] uppercase tracking-[0.4em] font-bold hover:bg-gold hover:text-black transition-all duration-500 min-w-[240px]">
