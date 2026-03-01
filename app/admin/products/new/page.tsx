@@ -133,8 +133,8 @@ export default function NewProductPage() {
                 key={c.id}
                 onClick={() => toggleCategory(c.id)}
                 className={`flex items-center justify-between px-4 py-3 border text-[11px] font-sans uppercase tracking-wider transition-all cursor-pointer ${selectedCategoryIds.includes(c.id)
-                    ? 'border-gold bg-gold/5 text-gold'
-                    : 'border-white/10 text-white/40 hover:border-white/30'
+                  ? 'border-gold bg-gold/5 text-gold'
+                  : 'border-white/10 text-white/40 hover:border-white/30'
                   }`}
               >
                 <span>{c.name}</span>
