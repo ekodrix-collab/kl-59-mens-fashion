@@ -37,7 +37,7 @@ export function ModernProductCard({ product, fullWidth }: { product: any; fullWi
             <div className="flex flex-col gap-3 mt-2">
                 <div className="flex justify-between items-start gap-4">
                     <Link href={`/product/${product.slug}`} className="flex flex-col gap-1.5 flex-1">
-                        <h3 className="font-sans text-base md:text-lg text-white font-medium group-hover:text-gold transition-colors line-clamp-1">
+                        <h3 className="font-sans text-[14px] md:text-lg text-white font-medium group-hover:text-gold transition-colors line-clamp-1">
                             {product.name}
                         </h3>
                         <p className="font-sans text-[10px] md:text-[11px] text-muted uppercase tracking-wider">
@@ -45,7 +45,7 @@ export function ModernProductCard({ product, fullWidth }: { product: any; fullWi
                         </p>
                     </Link>
                     <div className="flex flex-col items-end gap-1 shrink-0">
-                        <span className="font-body text-base md:text-lg text-white font-medium">
+                        <span className="font-body text-[14px] md:text-lg text-white font-medium">
                             {formatPrice(product.selling_price)}
                         </span>
                         {product.mrp > product.selling_price && (
