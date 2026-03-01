@@ -86,10 +86,10 @@ export function NewArrivals() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.1 }}
-              className="min-w-[300px] md:min-w-[380px] snap-start group"
+              className="min-w-[280px] md:min-w-[380px] snap-start group"
             >
               <Link href={`/shop/${product.slug}`}>
-                <div className="mb-6 relative overflow-hidden bg-[#F5F5F0] aspect-[2/3]">
+                <div className="mb-6 relative overflow-hidden bg-rich-black aspect-[3/4]">
                   {product.images?.[0] && (
                     <Image
                       src={product.images[0]}
