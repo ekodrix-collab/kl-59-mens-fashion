@@ -60,9 +60,7 @@ export function ProductInfo({ product }: { product: any }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleOrderClick = () => {
-    console.log("Order click triggered, size:", selectedSize);
     if (!selectedSize && product.sizes?.length > 0) {
-      console.log("Showing size selection toast");
       toast.error("Please select a size", {
         icon: String.fromCodePoint(0x1F4CF),
         duration: 4000,
