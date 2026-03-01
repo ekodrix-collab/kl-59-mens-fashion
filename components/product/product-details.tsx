@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { cn, formatPrice } from "@/lib/utils";
+import { cn, formatPrice, optimizeImageUrl } from "@/lib/utils";
 import { generateWhatsAppURL } from "@/lib/whatsapp";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import { MessageSquare } from "lucide-react";
@@ -26,11 +26,12 @@ export function ProductGallery({ images }: { images: string[] }) {
             className="absolute inset-0"
           >
             <Image
-              src={images[activeImage]}
+              src={optimizeImageUrl(images[activeImage])}
               alt="Product Image"
               fill
               className="object-cover"
               priority
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </motion.div>
         </AnimatePresence>
@@ -46,7 +47,13 @@ export function ProductGallery({ images }: { images: string[] }) {
               activeImage === i ? "border-gold" : "border-transparent"
             )}
           >
-            <Image src={img} alt={`Thumb ${i}`} fill className="object-cover" />
+            <Image 
+              src={optimizeImageUrl(img)} 
+              alt={`Thumb ${i}`} 
+              fill 
+              className="object-cover" 
+              sizes="80px"
+            />
           </button>
         ))}
       </div>
