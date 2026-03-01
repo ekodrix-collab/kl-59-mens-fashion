@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut, AlertTriangle, X, Image as ImageIcon, Menu } from 'lucide-react'
 import { Logo } from '@/components/ui/logo'
+import { createClient } from '@/lib/supabase/client'
 
 const navItems = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -27,9 +28,12 @@ export default function AdminLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
-  const confirmSignOut = () => {
+  const confirmSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
     localStorage.removeItem('kl59_admin_auth')
     router.push('/admin/login')
+    router.refresh()
   }
 
   // Robust Auth Guard
@@ -83,11 +87,10 @@ export default function AdminLayout({
               key={item.href}
               href={item.href}
               onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-4 px-4 py-3 text-sm transition-all duration-300 ${
-                isActive 
-                  ? 'text-gold bg-white/5 border-l-2 border-gold font-medium' 
-                  : 'text-white/50 hover:text-white hover:bg-white/5 font-light'
-              }`}
+              className={`flex items-center gap-4 px-4 py-3 text-sm transition-all duration-300 ${isActive
+                ? 'text-gold bg-white/5 border-l-2 border-gold font-medium'
+                : 'text-white/50 hover:text-white hover:bg-white/5 font-light'
+                }`}
             >
               <item.icon size={16} strokeWidth={isActive ? 2 : 1.5} />
               <span className="font-sans uppercase tracking-widest text-[10px]">{item.label}</span>
@@ -147,7 +150,7 @@ export default function AdminLayout({
         {/* Admin Header */}
         <header className="bg-rich-black/50 backdrop-blur-md border-b border-white/10 px-6 lg:px-8 py-5 flex items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               className="lg:hidden text-white/70 hover:text-white transition-colors"
               onClick={() => setMobileMenuOpen(true)}
             >

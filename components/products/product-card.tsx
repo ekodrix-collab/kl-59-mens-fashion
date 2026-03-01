@@ -24,10 +24,10 @@ export default function ProductCard({ product }: ProductCardProps) {
             className="aspect-[3/4.5]"
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
-          
+
           {/* Subtle Overlay on hover */}
           <div className="absolute inset-0 bg-brand-black/0 group-hover:bg-brand-black/10 transition-colors duration-500" />
-          
+
           {/* Floating Badges */}
           <div className="absolute top-4 left-4 flex flex-col gap-2">
             {product.is_new_arrival && (
@@ -35,10 +35,15 @@ export default function ProductCard({ product }: ProductCardProps) {
                 New Arrival
               </span>
             )}
-            {product.discount_percent > 0 && (
-              <span className="bg-accent text-brand-black px-3 py-1 text-[9px] uppercase tracking-[0.2em] font-bold">
-                -{product.discount_percent}%
-              </span>
+            {product.active_offer && product.active_offer.offer_type === 'product_offer' && (
+              <div className="bg-gold/90 backdrop-blur-md text-black px-3 py-1.5 flex flex-col items-center">
+                <span className="text-[8px] uppercase tracking-[0.2em] font-bold leading-none">Special Offer</span>
+                <span className="text-[10px] font-bold uppercase tracking-tight">
+                  {product.active_offer.discount_type === 'percentage'
+                    ? `${product.active_offer.discount_value}% OFF`
+                    : `₹${product.active_offer.discount_value} OFF`}
+                </span>
+              </div>
             )}
           </div>
         </div>
@@ -51,7 +56,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 className="font-montserrat text-sm font-medium text-text-primary tracking-tight mb-2 group-hover:text-accent transition-colors duration-300">
             {product.name}
           </h3>
-          
+
           <div className="flex items-center gap-3">
             {product.mrp > product.selling_price && (
               <span className="font-inter text-xs line-through text-text-subtle">
@@ -62,7 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               {formatPrice(product.selling_price)}
             </span>
           </div>
-          
+
           {/* Quick Info - reveal on hover */}
           <div className="mt-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500">
             <span className="font-montserrat text-[10px] uppercase tracking-[0.1em] text-accent">
