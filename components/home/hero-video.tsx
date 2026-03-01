@@ -42,7 +42,7 @@ export function HeroVideo() {
           )}
           Your browser does not support the video tag.
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
       </div>
 
       {/* Content */}
@@ -75,17 +75,12 @@ export function HeroVideo() {
             <MagneticElement>
               <Link
                 href="/shop"
-                className="group relative inline-block overflow-hidden border border-white/10 px-14 py-6 transition-all duration-700 hover:border-gold/50"
+                className="group relative inline-block overflow-hidden border border-white/20 px-14 py-6 transition-all duration-700 hover:border-white"
               >
-                <span className="relative z-10 font-sans text-[10px] font-medium uppercase tracking-[0.4em] text-white">
-                  Enter The Archive
+                <span className="relative z-10 font-sans text-[10px] font-semibold uppercase tracking-[0.4em] text-white group-hover:text-black transition-colors duration-500">
+                  Explore Collection
                 </span>
-                <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full" />
-                <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 group-hover:h-full">
-                  <span className="absolute inset-0 flex items-center justify-center font-sans text-[10px] font-medium uppercase tracking-[0.4em] text-black opacity-0 group-hover:opacity-100 transition-opacity">
-                    Enter The Archive
-                  </span>
-                </div>
+                <div className="absolute inset-x-0 bottom-0 h-0 bg-white transition-all duration-500 ease-out group-hover:h-full" />
               </Link>
             </MagneticElement>
 
@@ -100,7 +95,7 @@ export function HeroVideo() {
                   href={`/collections/${cat.slug}`}
                   className="group flex flex-col items-center gap-3"
                 >
-                  <span className="font-sans text-[9px] uppercase tracking-[0.6em] text-white/30 group-hover:text-gold transition-colors duration-700">
+                  <span className="font-sans text-[11px] font-bold uppercase tracking-[0.4em] text-white/70 md:text-white/40 group-hover:text-gold transition-colors duration-700">
                     {cat.label}
                   </span>
                   <div className="w-0 h-[1px] bg-gold/50 transition-all duration-700 group-hover:w-8" />
@@ -113,7 +108,7 @@ export function HeroVideo() {
         {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
+          animate={{ opacity: 0.6 }}
           transition={{ delay: 2 }}
           className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
         >
