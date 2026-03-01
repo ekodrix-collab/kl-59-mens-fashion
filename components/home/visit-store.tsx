@@ -5,8 +5,12 @@ import { STORE_IMAGE } from "@/lib/data";
 import Image from "next/image";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import { generateWhatsAppURL } from "@/lib/whatsapp";
+import { useStoreInfo } from "@/hooks/use-store-info";
 
 export function VisitStore() {
+  const { storeInfoQuery } = useStoreInfo();
+  const { data: storeInfo } = storeInfoQuery;
+
   return (
     <section className="relative h-[70vh] md:h-[80vh] w-full flex items-center justify-center overflow-hidden">
       <Image
@@ -27,7 +31,7 @@ export function VisitStore() {
         >
           Visit Us
         </motion.span>
-        
+
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -35,7 +39,7 @@ export function VisitStore() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="font-display text-4xl md:text-6xl text-white font-medium mb-12"
         >
-          Experience KL-59 <br /> <span className="italic font-medium">In Person</span>
+          Experience {storeInfo?.store_name || 'KL-59'} <br /> <span className="italic font-medium">In Person</span>
         </motion.h2>
 
         <motion.div
@@ -47,11 +51,11 @@ export function VisitStore() {
         >
           <div className="flex items-center justify-center gap-2">
             <span>📍</span>
-            <span>Opposite New Bus Stand, Kozhikode, Kerala</span>
+            <span>{storeInfo?.address || 'Opposite New Bus Stand, Kozhikode, Kerala'}</span>
           </div>
           <div className="flex items-center justify-center gap-2">
             <span>🕐</span>
-            <span>Mon-Sat 10AM-9PM</span>
+            <span>{storeInfo?.working_hours || 'Mon-Sat 10AM-9PM'}</span>
           </div>
         </motion.div>
 
@@ -64,7 +68,7 @@ export function VisitStore() {
         >
           <MagneticElement>
             <a
-              href="https://maps.google.com"
+              href={storeInfo?.google_maps_url || "https://maps.google.com"}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block border border-white px-10 py-4 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-white hover:bg-white/5 transition-colors"
@@ -75,7 +79,7 @@ export function VisitStore() {
 
           <MagneticElement>
             <a
-              href={generateWhatsAppURL()}
+              href={generateWhatsAppURL(undefined, undefined, undefined, storeInfo?.whatsapp)}
               className="inline-block border border-white px-10 py-4 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-white hover:bg-white/5 transition-colors"
             >
               WhatsApp Us

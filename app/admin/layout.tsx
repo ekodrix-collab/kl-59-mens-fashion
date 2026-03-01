@@ -1,15 +1,17 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut, AlertTriangle, X } from 'lucide-react'
 import { Logo } from '@/components/ui/logo'
 
 const navItems = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
   { label: 'Products', href: '/admin/products', icon: Package },
   { label: 'Offers', href: '/admin/offers', icon: Tag },
-  { label: 'Categories', href: '/admin/categories', icon: Grid3X3 },
+  { label: 'Collections', href: '/admin/categories', icon: Grid3X3 },
   { label: 'Settings', href: '/admin/settings', icon: Settings },
 ]
 
@@ -19,6 +21,13 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const [showSignOutModal, setShowSignOutModal] = useState(false)
+
+  const confirmSignOut = () => {
+    localStorage.removeItem('kl59_admin_auth')
+    router.push('/admin/login')
+  }
 
   // Don't show sidebar on login page
   if (pathname === '/admin/login') {
@@ -31,7 +40,7 @@ export default function AdminLayout({
       <aside className="hidden lg:flex flex-col w-64 bg-rich-black border-r border-white/10 text-white fixed inset-y-0 left-0 z-40">
         <div className="p-8 flex flex-col items-start border-b border-white/5">
           <Logo size="small" />
-          <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/40 mt-6">Workspace</p>
+          <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/40 mt-6">Control Panel</p>
         </div>
 
         <nav className="flex-1 px-4 py-8 space-y-2">
@@ -55,9 +64,12 @@ export default function AdminLayout({
         </nav>
 
         <div className="p-4 border-t border-white/5">
-          <button className="flex items-center gap-4 px-4 py-3 text-white/50 hover:text-white hover:bg-white/5 w-full transition-colors text-left uppercase tracking-widest text-[10px] font-sans">
+          <button
+            onClick={() => setShowSignOutModal(true)}
+            className="flex items-center gap-4 px-4 py-3 text-white/50 hover:text-red-400 hover:bg-red-500/5 w-full transition-colors text-left uppercase tracking-widest text-[10px] font-sans"
+          >
             <LogOut size={16} strokeWidth={1.5} />
-            Secure Logout
+            Sign Out
           </button>
         </div>
       </aside>
@@ -78,6 +90,80 @@ export default function AdminLayout({
           {children}
         </main>
       </div>
+
+      {/* Sign Out Confirmation Modal */}
+      <AnimatePresence>
+        {showSignOutModal && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSignOutModal(false)}
+            />
+
+            {/* Modal */}
+            <motion.div
+              className="fixed inset-0 z-[101] flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="relative bg-rich-black/95 backdrop-blur-xl border border-white/10 rounded-lg w-full max-w-sm overflow-hidden shadow-2xl"
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              >
+                {/* Top accent */}
+                <div className="h-[2px] bg-gradient-to-r from-transparent via-red-500 to-transparent" />
+
+                {/* Close button */}
+                <button
+                  onClick={() => setShowSignOutModal(false)}
+                  className="absolute top-4 right-4 text-white/30 hover:text-white transition-colors"
+                >
+                  <X size={16} />
+                </button>
+
+                <div className="p-8 flex flex-col items-center text-center">
+                  {/* Icon */}
+                  <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-6">
+                    <AlertTriangle size={24} className="text-red-400" />
+                  </div>
+
+                  <h3 className="font-sans text-sm font-medium uppercase tracking-[0.2em] text-white mb-2">
+                    Sign Out
+                  </h3>
+                  <p className="font-sans text-xs text-white/40 leading-relaxed mb-8">
+                    Are you sure you want to end your admin session? You will need to log in again to access the panel.
+                  </p>
+
+                  {/* Actions */}
+                  <div className="flex gap-3 w-full">
+                    <button
+                      onClick={() => setShowSignOutModal(false)}
+                      className="flex-1 py-3 border border-white/10 text-white/60 hover:text-white hover:border-white/20 font-sans text-[10px] uppercase tracking-[0.2em] transition-all rounded"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={confirmSignOut}
+                      className="flex-1 py-3 bg-red-500/90 hover:bg-red-500 text-white font-sans text-[10px] uppercase tracking-[0.2em] transition-all rounded flex items-center justify-center gap-2"
+                    >
+                      <LogOut size={12} />
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

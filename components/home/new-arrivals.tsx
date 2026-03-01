@@ -1,15 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PLACEHOLDER_PRODUCTS } from "@/lib/data";
-import { RevealImage } from "@/components/ui/reveal-image";
 import Link from "next/link";
+import Image from "next/image";
 import { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { useProducts } from "@/hooks/use-products";
 
 export function NewArrivals() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const arrivals = PLACEHOLDER_PRODUCTS.filter(p => p.is_new_arrival);
+  const { productsQuery } = useProducts();
+  const { data: products, isLoading } = productsQuery;
+
+  const arrivals = products?.filter(p => p.is_new_arrival) || [];
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -18,6 +21,8 @@ export function NewArrivals() {
       scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
     }
   };
+
+  if (isLoading) return null;
 
   return (
     <section className="bg-dark py-32 md:py-40 overflow-hidden">
@@ -72,47 +77,54 @@ export function NewArrivals() {
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto hide-scrollbar px-6 lg:px-10 snap-x snap-mandatory"
       >
-        {arrivals.map((product, i) => (
-          <motion.div
-            key={product.id}
-            initial={{ opacity: 0, x: 100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: i * 0.1 }}
-            className="min-w-[300px] md:min-w-[380px] snap-start group"
-          >
-            <Link href={`/product/${product.slug}`}>
-              <div className="mb-6 relative overflow-hidden bg-[#F5F5F0] aspect-[2/3]">
-                <Image
-                  src={product.images[0]}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="font-sans text-sm md:text-base text-white font-medium group-hover:text-gold transition-colors">
-                  {product.name}
-                </h3>
-                <p className="font-sans text-[11px] text-muted uppercase tracking-wider">
-                  {product.collection.name}
-                </p>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="font-body text-base text-white">
-                    ₹{product.selling_price.toLocaleString("en-IN")}
-                  </span>
-                  <span className="font-body text-xs text-subtle line-through">
-                    ₹{product.mrp.toLocaleString("en-IN")}
-                  </span>
+        {arrivals.map((product, i) => {
+          const primaryCat = product.product_categories?.find(pc => pc.is_primary)?.category?.name
+          return (
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, x: 100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.1 }}
+              className="min-w-[300px] md:min-w-[380px] snap-start group"
+            >
+              <Link href={`/shop/${product.slug}`}>
+                <div className="mb-6 relative overflow-hidden bg-[#F5F5F0] aspect-[2/3]">
+                  {product.images?.[0] && (
+                    <Image
+                      src={product.images[0]}
+                      alt={product.name}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
                 </div>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
+                <div className="flex flex-col gap-1">
+                  <h3 className="font-sans text-sm md:text-base text-white font-medium group-hover:text-gold transition-colors">
+                    {product.name}
+                  </h3>
+                  <p className="font-sans text-[11px] text-muted uppercase tracking-wider">
+                    {primaryCat || (product.product_categories?.[0]?.category?.name) || 'Collection'}
+                  </p>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="font-body text-base text-white">
+                      ₹{product.selling_price.toLocaleString("en-IN")}
+                    </span>
+                    {product.mrp > product.selling_price && (
+                      <span className="font-body text-xs text-subtle line-through">
+                        ₹{product.mrp.toLocaleString("en-IN")}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          )
+        })}
 
         <div className="min-w-[200px] flex items-center justify-center">
           <Link
-            href="/collections"
+            href="/shop"
             className="font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-gold hover:text-white transition-colors flex items-center gap-2"
           >
             View All <ChevronRight size={14} />
@@ -122,6 +134,3 @@ export function NewArrivals() {
     </section>
   );
 }
-
-// Inline Image component for convenience, usually I'd use next/image
-import Image from "next/image";

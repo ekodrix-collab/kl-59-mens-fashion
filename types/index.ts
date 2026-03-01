@@ -16,8 +16,6 @@ export interface Product {
     name: string;
     slug: string;
     description: string | null;
-    category_id: string | null;
-    category?: Category;
     mrp: number;
     selling_price: number;
     discount_percent: number;
@@ -31,22 +29,51 @@ export interface Product {
     is_published: boolean;
     created_at: string;
     updated_at: string;
+
+    // Virtual fields for joined data
+    product_categories?: ProductCategory[];
+    categories?: Category[];
 }
+
+export interface ProductCategory {
+    product_id: string;
+    category_id: string;
+    is_primary: boolean;
+    category?: Category;
+}
+
+export type OfferType = 'product_offer' | 'combo';
+export type DiscountType = 'percentage' | 'flat';
 
 export interface Offer {
     id: string;
+    offer_type: OfferType;
     title: string;
     description: string | null;
     banner_image: string | null;
-    discount_type: 'percentage' | 'flat';
+    discount_type: DiscountType;
     discount_value: number | null;
-    category_id: string | null;
-    category?: Category;
+    combo_price: number | null;
+    product_id: string | null;
     start_date: string | null;
     end_date: string | null;
     is_active: boolean;
     created_at: string;
+
+    // Joined data
+    product?: Product;
+    combo_items?: ComboItem[];
 }
+
+export interface ComboItem {
+    id: string;
+    offer_id: string;
+    product_id: string;
+    quantity: number;
+    display_order: number;
+    product?: Product;
+}
+
 
 export interface StoreInfo {
     id: string;
