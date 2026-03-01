@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { STORE_IMAGE } from "@/lib/data";
-import Image from "next/image";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import { generateWhatsAppURL } from "@/lib/whatsapp";
 import { useStoreInfo } from "@/hooks/use-store-info";
+
+const FALLBACK_STORE_IMAGE = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80";
 
 export function VisitStore() {
   const { storeInfoQuery } = useStoreInfo();
@@ -13,11 +13,10 @@ export function VisitStore() {
 
   return (
     <section className="relative h-[70vh] md:h-[80vh] w-full flex items-center justify-center overflow-hidden">
-      <Image
-        src={STORE_IMAGE}
-        alt="Store Background"
-        fill
-        className="object-cover transition-transform duration-[10s] ease-linear scale-110 group-hover:scale-100"
+      <img
+        src={storeInfo?.store_image || FALLBACK_STORE_IMAGE}
+        alt="KL-59 Store"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] ease-linear scale-110"
       />
       <div className="absolute inset-0 bg-black/70" />
 

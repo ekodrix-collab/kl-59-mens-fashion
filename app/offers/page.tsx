@@ -108,8 +108,12 @@ export default function OffersPage() {
             </div>
           ))
         ) : (
-          <div className="text-center py-40">
-            <p className="font-sans text-[10px] uppercase tracking-[0.5em] text-white/30">No active campaigns at this moment.</p>
+          <div className="text-center py-40 border border-dashed border-white/5 flex flex-col items-center justify-center">
+            <div className="w-16 h-16 rounded-full border border-white/5 flex items-center justify-center mb-6">
+              <span className="text-white/10 text-2xl">%</span>
+            </div>
+            <h3 className="font-display text-2xl text-white/20">No Active <span className="italic">Campaigns</span></h3>
+            <p className="font-sans text-[9px] uppercase tracking-widest text-white/10 mt-2">Check back later for seasonal offers and exclusive propositions.</p>
           </div>
         )}
       </div>

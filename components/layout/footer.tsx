@@ -37,7 +37,7 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row justify-between w-full pt-8 border-t border-white/5 gap-4">
           <p className="font-body text-[11px] text-subtle uppercase tracking-wider">
-            © 2025 KL-59 Men&apos;s Fashion
+            © {new Date().getFullYear()} KL-59 Men&apos;s Fashion
           </p>
           <p className="font-body text-[11px] text-subtle uppercase tracking-wider">
             Crafted by <a href="https://ekodrix.com" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-gold transition-colors">Ekodrix</a>
