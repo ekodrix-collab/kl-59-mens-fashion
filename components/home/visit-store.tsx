@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { STORE_IMAGE } from "@/lib/data";
-import Image from "next/image";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import { generateWhatsAppURL } from "@/lib/whatsapp";
 import { useStoreInfo } from "@/hooks/use-store-info";
+
+const FALLBACK_STORE_IMAGE = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&q=80";
 
 export function VisitStore() {
   const { storeInfoQuery } = useStoreInfo();
@@ -13,11 +13,10 @@ export function VisitStore() {
 
   return (
     <section className="relative h-[70vh] md:h-[80vh] w-full flex items-center justify-center overflow-hidden">
-      <Image
-        src={STORE_IMAGE}
-        alt="Store Background"
-        fill
-        className="object-cover transition-transform duration-[10s] ease-linear scale-110 group-hover:scale-100"
+      <img
+        src={storeInfo?.store_image || FALLBACK_STORE_IMAGE}
+        alt="KL-59 Store"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] ease-linear scale-110"
       />
       <div className="absolute inset-0 bg-black/70" />
 
@@ -37,9 +36,9 @@ export function VisitStore() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="font-display text-4xl md:text-6xl text-white font-medium mb-12"
+          className="font-display text-4xl md:text-6xl text-white font-light mb-12 tracking-tight"
         >
-          Experience {storeInfo?.store_name || 'KL-59'} <br /> <span className="italic font-medium">In Person</span>
+          Explore the <span className="italic font-serif">Flagship</span>
         </motion.h2>
 
         <motion.div
@@ -47,15 +46,15 @@ export function VisitStore() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-col gap-4 text-muted font-body text-sm md:text-base mb-12"
+          className="flex flex-col gap-6 text-white/80 font-sans text-[10px] uppercase tracking-[0.2em] mb-16"
         >
-          <div className="flex items-center justify-center gap-2">
-            <span>📍</span>
-            <span>{storeInfo?.address || 'Opposite New Bus Stand, Kozhikode, Kerala'}</span>
+          <div className="flex flex-col gap-2">
+            <span className="text-gold font-bold text-[10px] tracking-[0.3em]">Location</span>
+            <span className="text-white font-medium">{storeInfo?.address || 'Kozhikode, Kerala'}</span>
           </div>
-          <div className="flex items-center justify-center gap-2">
-            <span>🕐</span>
-            <span>{storeInfo?.working_hours || 'Mon-Sat 10AM-9PM'}</span>
+          <div className="flex flex-col gap-2">
+            <span className="text-gold font-bold text-[10px] tracking-[0.3em]">Inquiry Hours</span>
+            <span className="text-white font-medium">{storeInfo?.working_hours || 'Mon-Sat 10AM-9PM'}</span>
           </div>
         </motion.div>
 

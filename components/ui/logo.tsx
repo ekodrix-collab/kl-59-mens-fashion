@@ -22,7 +22,7 @@ export function Logo({ size = 'default', light = true }: LogoProps) {
         <span className={`${s.dash} h-[1.5px] bg-gold`} />
         <span className={`font-sans font-black ${s.main} ${textColor} tracking-wider`}>59</span>
       </div>
-      <span className={`font-sans font-normal ${s.sub} uppercase ${light ? 'text-muted' : 'text-subtle'}`}>
+      <span className={`font-sans font-normal ${s.sub} uppercase ${light ? 'text-white/60' : 'text-subtle'}`}>
         Men&apos;s Fashion
       </span>
     </div>

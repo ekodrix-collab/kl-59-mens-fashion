@@ -94,6 +94,7 @@ export interface StoreInfo {
     google_maps_embed: string | null;
     logo: string | null;
     hero_image: string | null;
+    store_image: string | null;
     hero_video: string | null;
     stats_customers: string;
     stats_brands: string;

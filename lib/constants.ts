@@ -70,8 +70,8 @@ export const PLACEHOLDER_PRODUCTS = [
         created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
     },
     {
-        id: '6', name: 'Heritage Worker Jacket', slug: 'heritage-worker-jacket',
-        description: 'A tribute to utility. Heavyweight canvas with architectural pocketing and a vintage-wash finish.',
+        id: '6', name: 'Heritage Worker Series', slug: 'heritage-worker-series',
+        description: 'A tribute to utility. Heavyweight canvas with architectural pocketing and a vintage-wash finish tailored for distinct presence.',
         category_id: '1', mrp: 6499, selling_price: 3499, discount_percent: 46,
         sizes: ['M', 'L', 'XL'], colors: ['Burnt Umber', 'Deep Navy'],
         color_images: {}, images: ['https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&q=90&w=1200'], is_featured: true,
@@ -83,8 +83,8 @@ export const PLACEHOLDER_PRODUCTS = [
 export const PLACEHOLDER_CATEGORIES = [
     { id: '1', name: 'Denim', slug: 'denim', image: null, display_order: 1, created_at: '' },
     { id: '2', name: 'Shirts', slug: 'shirts', image: null, display_order: 2, created_at: '' },
-    { id: '3', name: 'Basics', slug: 't-shirts', image: null, display_order: 3, created_at: '' },
-    { id: '4', name: 'Casuals', slug: 'casual-wear', image: null, display_order: 4, created_at: '' },
-    { id: '5', name: 'Formals', slug: 'formals', image: null, display_order: 5, created_at: '' },
+    { id: '3', name: 'Essentials', slug: 't-shirts', image: null, display_order: 3, created_at: '' },
+    { id: '4', name: 'Casual Wear', slug: 'casual-wear', image: null, display_order: 4, created_at: '' },
+    { id: '5', name: 'Formal Wear', slug: 'formals', image: null, display_order: 5, created_at: '' },
     { id: '6', name: 'Series', slug: 'accessories', image: null, display_order: 6, created_at: '' },
 ]

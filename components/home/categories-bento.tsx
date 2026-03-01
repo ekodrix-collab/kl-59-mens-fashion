@@ -41,15 +41,15 @@ export default function CategoriesBento() {
       <div className="max-w-[1600px] mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20">
           <div className="max-w-xl">
-            <span className="font-montserrat text-[10px] uppercase tracking-[0.4em] text-accent font-bold mb-4 block">
-              THE COLLECTIONS
+            <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-4 block">
+              The Architecture
             </span>
-            <h2 className="font-editorial text-4xl md:text-6xl text-text-primary leading-tight">
-              Curated for the Modern <span className="italic">Individual</span>.
+            <h2 className="font-display text-4xl md:text-6xl text-white font-light leading-tight">
+              Defined by <span className="italic font-serif text-gold/80">Intent</span>.
             </h2>
           </div>
-          <Link href="/shop" className="font-montserrat text-xs uppercase tracking-[0.2em] text-text-muted hover:text-text-primary transition-colors border-b border-text-muted/30 pb-1 mt-8 md:mt-0">
-            View All Series
+          <Link href="/shop" className="font-sans text-[10px] uppercase tracking-[0.3em] text-white/40 hover:text-gold transition-all border-b border-white/10 pb-2 mt-8 md:mt-0">
+            View Full Archive
           </Link>
         </div>
 

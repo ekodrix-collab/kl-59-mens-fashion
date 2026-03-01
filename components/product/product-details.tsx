@@ -8,6 +8,7 @@ import { generateWhatsAppURL } from "@/lib/whatsapp";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import { MessageSquare } from "lucide-react";
 import { WhatsAppDrawer } from "./whatsapp-drawer";
+import { toast } from "react-hot-toast";
 
 export function ProductGallery({ images }: { images: string[] }) {
   const [activeImage, setActiveImage] = useState(0);
@@ -56,15 +57,27 @@ export function ProductGallery({ images }: { images: string[] }) {
 export function ProductInfo({ product }: { product: any }) {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  const [error, setError] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleOrderClick = () => {
+    console.log("Order click triggered, size:", selectedSize);
     if (!selectedSize && product.sizes?.length > 0) {
-      setError("Please select a size");
+      console.log("Showing size selection toast");
+      toast.error("Please select a size", {
+        icon: String.fromCodePoint(0x1F4CF),
+        duration: 4000,
+        style: {
+          borderRadius: "0",
+          background: "#111",
+          color: "#fff",
+          border: "1px solid rgba(255,255,255,0.1)",
+          fontSize: "12px",
+          textTransform: "uppercase",
+          letterSpacing: "0.1em"
+        }
+      });
       return;
     }
-    setError("");
     setIsDrawerOpen(true);
   };
 
@@ -148,7 +161,6 @@ export function ProductInfo({ product }: { product: any }) {
               </button>
             ))}
           </div>
-          {error && <span className="text-offer-red text-xs mt-1">{error}</span>}
         </div>
       )}
 

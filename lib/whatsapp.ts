@@ -1,41 +1,53 @@
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919895884796";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://kl59.in";
+const WHATSAPP_NUMBER =
+  process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "919895884796";
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://kl59.in";
 
 interface ProductForWhatsApp {
-    name: string;
-    selling_price: number;
-    mrp: number;
-    discount_percent: number;
-    slug: string;
+  name: string;
+  selling_price: number;
+  mrp: number;
+  discount_percent: number;
+  slug: string;
 }
 
 export function generateWhatsAppURL(
-    product?: ProductForWhatsApp,
-    selectedSize?: string,
-    selectedColor?: string,
-    customNumber?: string | null
+  product?: ProductForWhatsApp,
+  selectedSize?: string,
+  selectedColor?: string,
+  customNumber?: string | null
 ): string {
-    const number = customNumber || WHATSAPP_NUMBER;
-    const base = `https://wa.me/${number}`;
 
-    if (!product) {
-        return `${base}?text=${encodeURIComponent(
-            "Hi KL-59! 👋\n\nI'm browsing your website and would like to know more about your products."
-        )}`;
-    }
+  const number = customNumber || WHATSAPP_NUMBER;
+  const base = `https://api.whatsapp.com/send?phone=${number}`;
 
-    const msg = `Hi KL-59! 👋
+  const msg = product
+    ? `Hi KL-59! ✨
 
-I'd like to order:
+I would like to place an order for the following item from your collection:
 
-🛍️ *${product.name}*
-💰 ₹${product.selling_price.toLocaleString("en-IN")} (MRP ₹${product.mrp.toLocaleString("en-IN")} — ${product.discount_percent}% OFF)
-📏 Size: ${selectedSize || "Not selected"}
-🎨 Color: ${selectedColor || "Not selected"}
+👕 *${product.name.toUpperCase()}*
+------------------
+💰 Price: Rs. ${product.selling_price.toLocaleString("en-IN")}
+📏 Size: ${selectedSize || "Default"}
+🎨 Color: ${selectedColor || "As shown"}
+📦 Availability: Please confirm
 
-Please confirm availability!
+Item Details:
+${SITE_URL}/product/${product.slug}
 
-🔗 ${SITE_URL}/product/${product.slug}`;
+Looking forward to your response! 🙏`
+    : `Hello KL-59! 👋
 
-    return `${base}?text=${encodeURIComponent(msg)}`;
+I am exploring your exquisite collection and would like more details. Please assist me.`;
+
+  // ✅ UTF-8 safe but NOT double encoded
+  const encodedMessage = encodeURIComponent(
+    new TextDecoder().decode(
+      new TextEncoder().encode(msg)
+    )
+  );
+
+  return `${base}&text=${encodedMessage}`;
 }
