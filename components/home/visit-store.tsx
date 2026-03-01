@@ -46,15 +46,15 @@ export function VisitStore() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-col gap-6 text-white/50 font-sans text-[10px] uppercase tracking-[0.2em] mb-16"
+          className="flex flex-col gap-6 text-white/80 font-sans text-[10px] uppercase tracking-[0.2em] mb-16"
         >
           <div className="flex flex-col gap-2">
-            <span className="text-gold/40 text-[9px]">Location</span>
-            <span>{storeInfo?.address || 'Kozhikode, Kerala'}</span>
+            <span className="text-gold font-bold text-[10px] tracking-[0.3em]">Location</span>
+            <span className="text-white font-medium">{storeInfo?.address || 'Kozhikode, Kerala'}</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-gold/40 text-[9px]">Inquiry Hours</span>
-            <span>{storeInfo?.working_hours || 'Mon-Sat 10AM-9PM'}</span>
+            <span className="text-gold font-bold text-[10px] tracking-[0.3em]">Inquiry Hours</span>
+            <span className="text-white font-medium">{storeInfo?.working_hours || 'Mon-Sat 10AM-9PM'}</span>
           </div>
         </motion.div>
 
