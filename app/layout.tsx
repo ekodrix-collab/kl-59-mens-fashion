@@ -32,14 +32,53 @@ const cormorant = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: "KL-59 Men's Fashion | Premium Men's Clothing",
-  description: "Exquisite tailoring and modern fashion for the contemporary man. Shop premium denim, shirts, t-shirts, casuals, and formals at KL-59.",
+  title: {
+    default: "KL-59 Men's Fashion | Luxury Menswear & Premium Clothing",
+    template: "%s | KL-59 Men's Fashion"
+  },
+  description: "Experience the pinnacle of men's luxury fashion at KL-59. Boutique collection of premium denim, tailored shirts, formal wear, and contemporary casuals. Designed for defined living.",
+  keywords: ["Mens Fashion", "Luxury Clothing", "Premium Denim", "Tailored Shirts", "Formal Wear", "Kannur Fashion", "KL-59", "Menswear Kerala"],
+  authors: [{ name: "KL-59 Men's Fashion" }],
+  creator: "Ekodrix",
+  publisher: "KL-59",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://kl59.in'),
   openGraph: {
-    title: "KL-59 Men's Fashion | Premium Men's Clothing",
-    description: "Exquisite tailoring and modern fashion for the contemporary man.",
+    title: "KL-59 Men's Fashion | Luxury Menswear",
+    description: "Exquisite tailoring and modern fashion for the contemporary man. Discover our curated collection.",
     url: 'https://kl59.in',
     siteName: "KL-59 Men's Fashion",
+    images: [
+      {
+        url: '/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: "KL-59 Men's Fashion Gallery",
+      },
+    ],
+    locale: 'en_IN',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "KL-59 Men's Fashion | Luxury Menswear",
+    description: "Exquisite tailoring and modern fashion for the contemporary man.",
+    images: ['/images/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 }
 

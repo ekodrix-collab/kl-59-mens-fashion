@@ -1,0 +1,12 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" fill="black"/>
+  <!-- K -->
+  <path d="M6 8H9V24H6V8Z" fill="white"/>
+  <path d="M12 8L9 16L12 24H15L12 16L15 8H12Z" fill="white"/>
+  <!-- DASH -->
+  <rect x="15.5" y="15.5" width="3" height="1" fill="#C8A97E"/>
+  <!-- 5 -->
+  <path d="M19 8H26V11H22V13.5H26V24H19V21H23V16.5H19V8Z" fill="white" fill-rule="evenodd"/>
+  <!-- 9 (Minimalist style) -->
+  <path d="M26 8V24H23V19H21V8H26Z M24 11H23V13H24V11Z" fill="white" fill-rule="evenodd"/>
+</svg>
