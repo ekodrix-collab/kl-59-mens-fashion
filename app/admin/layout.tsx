@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut, AlertTriangle, X, Image as ImageIcon } from 'lucide-react'
+import { LayoutDashboard, Package, Tag, Grid3X3, Settings, LogOut, AlertTriangle, X, Image as ImageIcon, Menu } from 'lucide-react'
 import { Logo } from '@/components/ui/logo'
 
 const navItems = [
@@ -24,6 +24,7 @@ export default function AdminLayout({
   const pathname = usePathname()
   const router = useRouter()
   const [showSignOutModal, setShowSignOutModal] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const confirmSignOut = () => {
     localStorage.removeItem('kl59_admin_auth')
@@ -35,53 +36,100 @@ export default function AdminLayout({
     return <>{children}</>
   }
 
+  const SidebarContent = () => (
+    <>
+      <div className="p-8 flex items-center justify-between border-b border-white/5">
+        <div>
+          <Logo size="small" />
+          <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/40 mt-6 lg:mt-6 mt-1">Control Panel</p>
+        </div>
+        <button className="lg:hidden text-white/50 hover:text-white" onClick={() => setMobileMenuOpen(false)}>
+          <X size={20} />
+        </button>
+      </div>
+
+      <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
+        {navItems.map((item) => {
+          const isActive = pathname.startsWith(item.href)
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className={`flex items-center gap-4 px-4 py-3 text-sm transition-all duration-300 ${
+                isActive 
+                  ? 'text-gold bg-white/5 border-l-2 border-gold font-medium' 
+                  : 'text-white/50 hover:text-white hover:bg-white/5 font-light'
+              }`}
+            >
+              <item.icon size={16} strokeWidth={isActive ? 2 : 1.5} />
+              <span className="font-sans uppercase tracking-widest text-[10px]">{item.label}</span>
+            </Link>
+          )
+        })}
+      </nav>
+
+      <div className="p-4 border-t border-white/5 mt-auto">
+        <button
+          onClick={() => {
+            setMobileMenuOpen(false)
+            setShowSignOutModal(true)
+          }}
+          className="flex items-center gap-4 px-4 py-3 text-white/50 hover:text-red-400 hover:bg-red-500/5 w-full transition-colors text-left uppercase tracking-widest text-[10px] font-sans"
+        >
+          <LogOut size={16} strokeWidth={1.5} />
+          Sign Out
+        </button>
+      </div>
+    </>
+  )
+
   return (
     <div className="flex min-h-screen bg-black">
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex flex-col w-64 bg-rich-black border-r border-white/10 text-white fixed inset-y-0 left-0 z-40">
-        <div className="p-8 flex flex-col items-start border-b border-white/5">
-          <Logo size="small" />
-          <p className="font-sans text-[9px] tracking-[0.2em] uppercase text-white/40 mt-6">Control Panel</p>
-        </div>
-
-        <nav className="flex-1 px-4 py-8 space-y-2">
-          {navItems.map((item) => {
-            const isActive = pathname.startsWith(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-4 px-4 py-3 text-sm transition-all duration-300 ${
-                  isActive 
-                    ? 'text-gold bg-white/5 border-l-2 border-gold font-medium' 
-                    : 'text-white/50 hover:text-white hover:bg-white/5 font-light'
-                }`}
-              >
-                <item.icon size={16} strokeWidth={isActive ? 2 : 1.5} />
-                <span className="font-sans uppercase tracking-widest text-[10px]">{item.label}</span>
-              </Link>
-            )
-          })}
-        </nav>
-
-        <div className="p-4 border-t border-white/5">
-          <button
-            onClick={() => setShowSignOutModal(true)}
-            className="flex items-center gap-4 px-4 py-3 text-white/50 hover:text-red-400 hover:bg-red-500/5 w-full transition-colors text-left uppercase tracking-widest text-[10px] font-sans"
-          >
-            <LogOut size={16} strokeWidth={1.5} />
-            Sign Out
-          </button>
-        </div>
+        <SidebarContent />
       </aside>
+
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+            />
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-64 bg-rich-black border-r border-white/10 text-white z-50 flex flex-col lg:hidden"
+            >
+              <SidebarContent />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Main content */}
       <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
         {/* Admin Header */}
-        <header className="bg-rich-black/50 backdrop-blur-md border-b border-white/10 px-8 py-5 flex items-center justify-between sticky top-0 z-30">
-          <h2 className="font-sans font-medium uppercase tracking-[0.2em] text-xs text-white">
-            {navItems.find(item => pathname.startsWith(item.href))?.label || 'Administration'}
-          </h2>
+        <header className="bg-rich-black/50 backdrop-blur-md border-b border-white/10 px-6 lg:px-8 py-5 flex items-center justify-between sticky top-0 z-30">
+          <div className="flex items-center gap-4">
+            <button 
+              className="lg:hidden text-white/70 hover:text-white transition-colors"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu size={24} />
+            </button>
+            <h2 className="font-sans font-medium uppercase tracking-[0.2em] text-[10px] sm:text-xs text-white">
+              {navItems.find(item => pathname.startsWith(item.href))?.label || 'Administration'}
+            </h2>
+          </div>
           <span className="text-[10px] font-sans uppercase tracking-widest text-gold border border-gold/30 px-3 py-1 rounded-full bg-gold/5">
             Admin Access
           </span>

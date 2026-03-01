@@ -8,6 +8,7 @@ import { slugify } from '@/lib/utils'
 import { useCategories } from '@/hooks/use-categories'
 import { useProducts } from '@/hooks/use-products'
 import { uploadToCloudinary } from '@/lib/cloudinary-upload'
+import { toast } from 'react-hot-toast'
 
 export default function NewProductPage() {
   const router = useRouter()
@@ -74,7 +75,7 @@ export default function NewProductPage() {
 
   const handlePublish = async (isPublished: boolean = true) => {
     if (!name || selectedCategoryIds.length === 0 || !mrp || !sellingPrice) {
-      alert('Please fill required fields (Name, Category, MRP, Selling Price)')
+      toast.error('Please fill required fields (Name, Category, MRP, Selling Price)')
       return
     }
 
@@ -96,10 +97,11 @@ export default function NewProductPage() {
         category_ids: selectedCategoryIds,
         primary_category_id: primaryCategoryId || selectedCategoryIds[0]
       })
+      toast.success(isPublished ? 'Product published successfully' : 'Draft saved successfully')
       router.push('/admin/products')
     } catch (error) {
       console.error('Failed to create product:', error)
-      alert('Error creating product. See console.')
+      toast.error('Error creating product. Please try again.')
     }
   }
 

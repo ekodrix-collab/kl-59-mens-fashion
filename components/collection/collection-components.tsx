@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PLACEHOLDER_PRODUCTS } from "@/lib/data";
 import { RevealImage } from "@/components/ui/reveal-image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
@@ -57,7 +56,7 @@ function ProductItem({ product, fullWidth }: { product: any; fullWidth?: boolean
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="group"
     >
-      <Link href={`/product/${product.slug}`} className="block">
+      <Link href={`/shop/${product.slug}`} className="block">
         <RevealImage
           src={product.images[0]}
           alt={product.name}

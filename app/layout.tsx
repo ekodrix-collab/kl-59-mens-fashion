@@ -48,6 +48,8 @@ import { NavbarWrapper } from '@/components/layout/navbar-wrapper'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { PreLoader } from '@/components/home/pre-loader'
 
+import { Toaster } from 'react-hot-toast'
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${inter.variable} ${cormorant.variable}`}>
@@ -59,6 +61,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </NavbarWrapper>
           </SmoothScroll>
+          <Toaster 
+            position="bottom-right" 
+            toastOptions={{
+              style: {
+                background: '#1A1A1A',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '0px',
+                fontFamily: 'var(--font-inter)',
+                fontSize: '12px',
+                letterSpacing: '0em',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#C1A162',
+                  secondary: '#000',
+                },
+              }
+            }}
+          />
         </QueryProvider>
       </body>
     </html>

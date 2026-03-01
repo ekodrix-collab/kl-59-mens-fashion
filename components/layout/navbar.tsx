@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 
 const navLinks = [
+  { name: "Catalogue", href: "/shop" },
   { name: "Collections", href: "/collections" },
   { name: "Offers", href: "/offers" },
   { name: "Story", href: "/story" },
@@ -92,7 +93,12 @@ export default function Navbar() {
   );
 }
 
+import { useStoreInfo } from "@/hooks/use-store-info";
+
 function MobileMenu({ onClose }: { onClose: () => void }) {
+  const { storeInfoQuery } = useStoreInfo();
+  const { data: storeInfo } = storeInfoQuery;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -133,9 +139,9 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
         >
           <div className="w-12 h-[1px] bg-gold" />
           <div className="flex flex-col gap-2 text-muted font-body text-[13px] font-light">
-            <span>📱 +91 XXXXXXXXXX</span>
-            <span>📍 Kozhikode, Kerala</span>
-            <span>📷 @kl59fashion</span>
+            <span>📱 {storeInfo?.phone || '+91 9895884796'}</span>
+            <span>📍 {storeInfo?.address ? storeInfo.address.split(',')[0].trim() : 'Kerala, India'}</span>
+            <span>📷 {storeInfo?.instagram || '@kl59fashion'}</span>
           </div>
         </motion.div>
       </div>
