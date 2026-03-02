@@ -42,9 +42,9 @@ export function RevealImage({
   return (
     <div className={cn("relative overflow-hidden group bg-brand-light", aspectClass, className)}>
       <motion.div
-        initial={{ clipPath: "inset(100% 0 0 0)" }}
+        initial={{ clipPath: priority ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }}
         whileInView={{ clipPath: "inset(0% 0 0 0)" }}
-        viewport={{ once }}
+        viewport={{ once, amount: 0.01 }}
         transition={{
           duration: 1.2,
           ease: [0.22, 1, 0.36, 1],

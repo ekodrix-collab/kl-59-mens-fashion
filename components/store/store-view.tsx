@@ -120,6 +120,8 @@ export function StoreView() {
             <RevealImage 
               src={storeInfo?.store_image || "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=90&w=1600"} 
               alt="KL-59 Flagship Store" 
+              priority
+              sizes="(max-width: 1024px) 100vw, 60vw"
               className="h-full min-h-[500px] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
