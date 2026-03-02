@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { CollectionHero } from "./collection-components";
 import { ModernProductCard } from "./modern-product-card";
 import { CollectionSidebar, FilterState } from "./collection-sidebar";
@@ -25,6 +25,16 @@ export function CollectionLayout({
         priceRanges: [],
         sizes: [],
     });
+
+    // Sync categories when initialCategory changes (e.g. navigation from home)
+    useEffect(() => {
+        if (initialCategory) {
+            setFilters(prev => ({
+                ...prev,
+                categories: [initialCategory]
+            }));
+        }
+    }, [initialCategory]);
 
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
