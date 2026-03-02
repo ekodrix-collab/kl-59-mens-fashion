@@ -34,7 +34,7 @@ export default function CollectionPage({ params }: { params: { slug: string } })
   }
 
   // Process products to include offers and ensure collection metadata is attached
-  const processedProducts = allProducts?.map(product => {
+  let processedProducts = allProducts?.map(product => {
     const activeOffer = offers?.find(o => o.offer_type === 'product_offer' && o.product_id === product.id && o.is_active);
 
     // Check if this product belongs to the current category slug
@@ -48,6 +48,42 @@ export default function CollectionPage({ params }: { params: { slug: string } })
       collection: productCategory
     };
   }) || [];
+
+  // Process combo offers into mock product elements
+  const comboOffersAsProducts = offers?.filter(o => o.offer_type === 'combo' && o.is_active).map(offer => {
+    const totalMrp = offer.combo_items?.reduce((sum, item) => sum + ((item.product?.mrp || 0) * item.quantity), 0) || offer.combo_price || 0;
+    const comboPrice = offer.combo_price || 0;
+    const discountPercent = totalMrp > 0 ? Math.round((1 - (comboPrice / totalMrp)) * 100) : 0;
+
+    const defaultImages = offer.combo_items?.filter(ci => ci.product?.images?.[0]).map(ci => ci.product!.images[0]) || [];
+    const images = offer.banner_image ? [offer.banner_image] : defaultImages;
+
+    return {
+      id: offer.id,
+      name: offer.title,
+      slug: `combo/${offer.id}`,
+      description: offer.description,
+      mrp: totalMrp,
+      selling_price: comboPrice,
+      discount_percent: discountPercent,
+      sizes: [],
+      colors: [],
+      color_images: {},
+      images: images,
+      is_featured: false,
+      is_new_arrival: false,
+      is_on_offer: true,
+      is_published: true,
+      created_at: offer.created_at,
+      updated_at: offer.created_at,
+      collection: { name: 'Combo Offers', slug: 'combo', image: null },
+      is_combo: true,
+      combo_items: offer.combo_items,
+      active_offer: undefined,
+    }
+  }) || [];
+
+  processedProducts = [...processedProducts, ...comboOffersAsProducts];
 
   const name = currentCategory?.name || params.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   const image = currentCategory?.image || "/images/collections/placeholder.jpg";
