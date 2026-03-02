@@ -69,8 +69,8 @@ export function useOffers(type?: string) {
 
             if (oError) throw oError
 
-            // 2. Insert bundle items if applicable
-            if (offerData.offer_type === 'combo' && combo_items && combo_items.length > 0) {
+            // 2. Insert bundle items if applicable (for combo and bogo)
+            if ((offerData.offer_type === 'combo' || offerData.offer_type === 'bogo') && combo_items && combo_items.length > 0) {
                 const items = combo_items.map((item: any, idx: number) => ({
                     offer_id: offer.id,
                     product_id: item.product_id,
@@ -103,7 +103,7 @@ export function useOffers(type?: string) {
             if (error) throw error
 
             // 2. Update combo items if provided
-            if (offerData.offer_type === 'combo' && combo_items) {
+            if ((offerData.offer_type === 'combo' || offerData.offer_type === 'bogo') && combo_items) {
                 // Delete old items
                 await supabase.from('combo_items').delete().eq('offer_id', id)
 

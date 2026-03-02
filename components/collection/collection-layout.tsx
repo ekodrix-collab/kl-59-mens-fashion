@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { CollectionHero } from "./collection-components";
 import { ModernProductCard } from "./modern-product-card";
 import { CollectionSidebar, FilterState } from "./collection-sidebar";
@@ -19,12 +20,25 @@ export function CollectionLayout({
     initialCategory?: string;
     allCategories?: any[];
 }) {
+    const searchParams = useSearchParams();
+    const offerId = searchParams.get("offer");
+
     const [searchQuery, setSearchQuery] = useState("");
     const [filters, setFilters] = useState<FilterState>({
         categories: initialCategory ? [initialCategory] : [],
         priceRanges: [],
         sizes: [],
     });
+
+    // Handle offer query param
+    useEffect(() => {
+        if (offerId) {
+            const targetOffer = initialProducts.find(p => p.id === offerId);
+            if (targetOffer) {
+                setSearchQuery(targetOffer.name);
+            }
+        }
+    }, [offerId, initialProducts]);
 
     // Sync categories when initialCategory changes (e.g. navigation from home)
     useEffect(() => {

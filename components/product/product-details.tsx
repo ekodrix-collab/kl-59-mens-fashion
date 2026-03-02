@@ -33,6 +33,9 @@ export function ProductGallery({ images }: { images: string[] }) {
               priority
               sizes="(max-width: 768px) 100vw, 50vw"
             />
+            {/* Discount Tag could be added here if product data was available, 
+                but ProductGallery only receives images. 
+                I will skip adding it here for now as it's a sub-component. */}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -92,12 +95,12 @@ export function ProductInfo({ product }: { product: any }) {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6 uppercase">
       <div>
-        <span className="font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-gold block mb-4">
-          {product.collection.name}
+        <span className="font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-gold block mb-3">
+          {product.collection?.name}
         </span>
-        <h1 className="font-display text-4xl md:text-5xl text-white font-medium mb-6">
+        <h1 className="font-display text-4xl md:text-5xl text-white font-medium mb-4 uppercase">
           {product.name}
         </h1>
         <div className="flex items-center gap-4">
@@ -119,7 +122,7 @@ export function ProductInfo({ product }: { product: any }) {
 
       <div className="w-full h-[1px] bg-white/5" />
 
-      <p className="font-body text-muted text-base font-light leading-relaxed">
+      <p className="font-body text-muted text-base font-light leading-relaxed mb-2 uppercase">
         {product.description}
       </p>
 
@@ -192,7 +195,7 @@ export function ProductInfo({ product }: { product: any }) {
         </button>
       </div>
 
-      <WhatsAppDrawer 
+      <WhatsAppDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         onConfirm={confirmWhatsAppOrder}

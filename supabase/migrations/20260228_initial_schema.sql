@@ -94,15 +94,16 @@ create policy "Admin manage product_categories"
 
 -- ============================================================
 -- 4. OFFERS
---    Three types controlled by offer_type:
+--    Four types controlled by offer_type:
 --    • campaign     → editorial banner, sitewide or category deal
 --    • product_offer → discount on one specific product
 --    • combo        → bundle of 2+ products at one price
+--    • bogo         → buy one get one free (uses combo_items)
 -- ============================================================
 create table if not exists public.offers (
   id             uuid          primary key default gen_random_uuid(),
   offer_type     text          not null default 'campaign'
-                                 check (offer_type in ('campaign', 'product_offer', 'combo')),
+                                 check (offer_type in ('campaign', 'product_offer', 'combo', 'bogo')),
   title          text          not null,
   description    text,
   banner_image   text,                          -- Cloudinary URL (campaign & combo)
@@ -288,8 +289,6 @@ create index if not exists idx_outfit_looks_is_active   on public.outfit_looks(i
 -- ============================================================
 -- END OF MIGRATION
 -- ============================================================
-<<<<<<< HEAD
-
 
 -- Allow all operations for testing. (You can restrict these to authenticated users later)
 
@@ -312,6 +311,3 @@ CREATE POLICY "Enable all for anyone" ON offers FOR ALL USING (true) WITH CHECK 
 -- Store Info
 DROP POLICY IF EXISTS "Enable all for anyone" ON store_info;
 CREATE POLICY "Enable all for anyone" ON store_info FOR ALL USING (true) WITH CHECK (true);
-
-=======
->>>>>>> dev

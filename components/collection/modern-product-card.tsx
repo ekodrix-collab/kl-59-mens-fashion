@@ -15,7 +15,7 @@ export function ModernProductCard({ product, fullWidth }: { product: any; fullWi
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="group relative flex flex-col gap-4"
         >
-            <Link href={`/product/${product.slug}`} className="block relative overflow-hidden bg-dark-soft">
+            <Link href={`/shop/${product.slug}`} className="block relative overflow-hidden bg-dark-soft">
                 <RevealImage
                     src={product.images[0]}
                     alt={product.name}
@@ -36,7 +36,7 @@ export function ModernProductCard({ product, fullWidth }: { product: any; fullWi
 
             <div className="flex flex-col gap-3 mt-2">
                 <div className="flex justify-between items-start gap-4">
-                    <Link href={`/product/${product.slug}`} className="flex flex-col gap-1.5 flex-1">
+                    <Link href={`/shop/${product.slug}`} className="flex flex-col gap-1.5 flex-1">
                         <h3 className="font-sans text-[14px] md:text-lg text-white font-medium group-hover:text-gold transition-colors line-clamp-1">
                             {product.name}
                         </h3>

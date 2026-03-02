@@ -2,12 +2,16 @@
 
 import { motion } from 'framer-motion'
 import { RevealImage } from '@/components/ui/reveal-image'
-import { Loader2 } from 'lucide-react'
+import { Plus, Loader2 } from 'lucide-react'
 import { useOffers } from '@/hooks/use-offers'
+import { useRouter } from 'next/navigation'
+import { BogoCardCompact, BogoCardWide } from '@/components/offers/bogo-card'
+import ComboCard from '@/components/products/combo-card'
 
 export function OffersView() {
   const { offersQuery } = useOffers()
   const { data: offers, isPending } = offersQuery
+  const router = useRouter()
 
   const activeOffers = offers?.filter(o => o.is_active) || []
 
@@ -19,38 +23,134 @@ export function OffersView() {
     )
   }
 
-  return (
-    <main className="pt-24 bg-black min-h-screen text-white">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-24">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-sans text-[10px] uppercase tracking-[0.5em] text-gold font-bold mb-6 block"
-        >
-          SEASONAL CAMPAIGNS
-        </motion.span>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="font-display text-5xl md:text-8xl text-white leading-tight"
-        >
-          Exclusive <span className="italic font-medium">Propositions</span>
-        </motion.h1>
-      </div>
+  const bogoOffers = activeOffers.filter(o => o.offer_type === 'bogo')
+  const comboOffers = activeOffers.filter(o => o.offer_type === 'combo')
+  const otherOffers = activeOffers.filter(o => o.offer_type !== 'bogo' && o.offer_type !== 'combo')
 
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 space-y-40 pb-40">
-        {activeOffers.length > 0 ? (
-          activeOffers.map((offer, i) => (
+  return (
+    <section className="bg-black py-32 md:py-40">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+        <div className="space-y-40">
+          {bogoOffers.length > 0 && (
+            <div className="space-y-16">
+              <div className="flex items-center gap-4 mb-8">
+                <h2 className="font-sans text-[10px] uppercase tracking-[0.5em] text-gold font-medium">Buy One Get One Free</h2>
+                <div className="flex-1 h-px bg-gold/20" />
+              </div>
+
+              <div className="grid grid-cols-1 gap-16">
+                {bogoOffers.map((offer, idx) => {
+                  const items = offer.combo_items || []
+                  const buyItem = items[0]
+                  const getItem = items[1] || items[0]
+
+                  const buyProduct = buyItem?.product
+                  const getProduct = getItem?.product
+
+                  const cardProps = {
+                    name: offer.title,
+                    buyProduct: {
+                      name: buyProduct?.name || 'Product',
+                      image: buyProduct?.images?.[0] || ''
+                    },
+                    getProduct: {
+                      name: getProduct?.name || 'Product',
+                      image: getProduct?.images?.[0] || ''
+                    },
+                    savingsValue: offer.discount_value || 0,
+                    description: offer.description || undefined,
+                    bannerImage: offer.banner_image,
+                    onShopNow: () => router.push(`/offers/${offer.id}`)
+                  }
+
+                  // Even index (0, 2, 4...) -> Wide Banner
+                  if (idx % 2 === 0) {
+                    return <BogoCardWide key={offer.id} {...cardProps} />
+                  }
+
+                  // Odd index (1, 3, 5...) -> Compact Card
+                  return (
+                    <motion.div
+                      key={offer.id}
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      className="grid grid-cols-1 md:grid-cols-2 gap-12"
+                    >
+                      <BogoCardCompact {...cardProps} />
+                      <div className="hidden md:flex items-center justify-center border border-white/5 bg-white/[0.02] p-12 text-center">
+                        <div className="max-w-xs space-y-4">
+                          <p className="font-serif text-2xl text-white/80 italic">Elevate your style with our premium BOGO selection.</p>
+                          <div className="w-12 h-px bg-gold/40 mx-auto" />
+                          <p className="font-sans text-[10px] uppercase tracking-widest text-gold/60">Limited Time Offer</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {comboOffers.length > 0 && (
+            <div className="space-y-16">
+              <div className="flex items-center gap-4 mb-8">
+                <h2 className="font-sans text-[10px] uppercase tracking-[0.5em] text-gold font-medium">Combo Collections</h2>
+                <div className="flex-1 h-px bg-gold/20" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                {comboOffers.map((offer) => (
+                  <ComboCard key={offer.id} offer={offer} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ── Product Offers (existing magazine layout) ── */}
+          {otherOffers.length > 0 && otherOffers.map((offer, i) => (
             <div key={offer.id} className={`flex flex-col ${i % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-16 lg:gap-32 items-center`}>
               <div className="lg:w-[60%] relative aspect-[16/9] w-full bg-white/5">
                 {offer.banner_image ? (
-                  <RevealImage
-                    src={offer.banner_image}
-                    alt={offer.title}
-                    className="w-full h-full"
-                    aspectRatio="landscape"
-                  />
+                  <div
+                    className="w-full h-full cursor-pointer"
+                    onClick={() => router.push(offer.product_id ? `/product/${offer.product_id}` : `/offers/${offer.id}`)}
+                  >
+                    <RevealImage
+                      src={offer.banner_image}
+                      alt={offer.title}
+                      className="w-full h-full"
+                      aspectRatio="landscape"
+                    />
+                  </div>
+                ) : offer.offer_type === 'combo' && offer.combo_items && offer.combo_items.length > 0 ? (
+                  <div
+                    className="w-full h-full flex items-center justify-center bg-zinc-950 p-6 md:p-10 gap-2 md:gap-4 overflow-hidden border border-white/5 cursor-pointer"
+                    onClick={() => router.push(`/offers/${offer.id}`)}
+                  >
+                    {offer.combo_items.slice(0, 3).map((item, idx, arr) => (
+                      <div key={item.id} className="flex items-center w-full h-full">
+                        <div className="relative w-full h-full aspect-[3/4] overflow-hidden bg-zinc-900 border border-white/10 shrink">
+                          {item.product?.images?.[0] ? (
+                            <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white/20 text-[10px] uppercase">No Img</div>
+                          )}
+                        </div>
+                        {idx < arr.length - 1 && (
+                          <div className="flex items-center justify-center px-2 md:px-4 shrink-0">
+                            <Plus className="text-gold opacity-50 w-4 h-4 md:w-6 md:h-6" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : offer.offer_type === 'product_offer' && offer.product?.images?.[0] ? (
+                  <div
+                    className="w-full h-full cursor-pointer"
+                    onClick={() => router.push(`/product/${offer.product_id}`)}
+                  >
+                    <img src={offer.product.images[0]} alt={offer.product.name} className="w-full h-full object-cover" />
+                  </div>
                 ) : (
                   <div className="w-full h-full flex items-center justify-center border border-white/5 uppercase tracking-widest text-[10px] text-white/20">
                     No Preview Available
@@ -69,53 +169,40 @@ export function OffersView() {
                 <motion.span
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-6 block"
+                  className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold mb-4 block"
                 >
-                  {offer.offer_type.replace('_', ' ')} / SEASON {new Date().getFullYear()}
+                  {offer.offer_type === 'combo' ? 'Combo Deal' : 'Special Offer'}
                 </motion.span>
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
                   transition={{ delay: 0.1 }}
-                  className="font-display text-4xl md:text-5xl text-white mb-8 leading-tight"
+                  className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-8 leading-tight italic"
                 >
                   {offer.title}
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
-                  className="font-body text-base text-muted leading-relaxed mb-12 max-w-sm"
+                  className="font-sans text-white/40 text-sm mb-12 max-w-md leading-relaxed tracking-wide"
                 >
-                  {offer.description || "Limited time offer. Premium fits, unbeatable value."}
+                  {offer.description || "Discover premium collections at exceptional value. Each piece is curated to offer both timeless elegance and contemporary flair."}
                 </motion.p>
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
                   transition={{ delay: 0.3 }}
+                  onClick={() => router.push(offer.product_id ? `/product/${offer.product_id}` : `/offers/${offer.id}`)}
+                  className="px-12 py-5 border border-white/20 text-white font-sans text-[10px] uppercase tracking-[0.3em] hover:bg-white hover:text-black hover:border-white transition-all duration-700"
                 >
-                  <a href="/shop" className="group flex items-center gap-4 font-sans text-[10px] uppercase tracking-[0.5em] font-bold text-white hover:text-gold transition-colors">
-                    Explore Proposition
-                    <span className="inline-block transform group-hover:translate-x-2 transition-transform">→</span>
-                  </a>
-                </motion.div>
+                  BUY NOW
+                </motion.button>
               </div>
             </div>
-          ))
-        ) : (
-          <div className="text-center py-40 border border-dashed border-white/5 flex flex-col items-center justify-center">
-            <div className="w-16 h-16 rounded-full border border-white/5 flex items-center justify-center mb-6">
-              <span className="text-white/10 text-2xl">%</span>
-            </div>
-            <h3 className="font-display text-2xl text-white/20">No Active <span className="italic">Campaigns</span></h3>
-            <p className="font-sans text-[9px] uppercase tracking-widest text-white/10 mt-2">Check back later for seasonal offers and exclusive propositions.</p>
-          </div>
-        )}
+          ))}
+        </div>
       </div>
-    </main>
+    </section>
   )
 }
