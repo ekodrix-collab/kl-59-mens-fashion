@@ -28,7 +28,7 @@ async function getProduct(slug: string) {
 async function getRelatedProducts(product: any) {
   const supabase = await createClient()
   const primaryCat = product.product_categories?.find((pc: any) => pc.is_primary)?.category_id
-  
+
   if (!primaryCat) return []
 
   const { data } = await supabase

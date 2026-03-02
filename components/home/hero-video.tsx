@@ -87,8 +87,8 @@ export function HeroVideo() {
             <div className="flex gap-10 md:gap-20 items-center">
               {[
                 { label: 'Denim', slug: 'denim' },
-                { label: 'Tailoring', slug: 'formals' },
-                { label: 'Essentials', slug: 't-shirts' }
+                { label: 'Shirts', slug: 'shirts' },
+                { label: 'T-Shirts', slug: 't-shirts' }
               ].map((cat, i) => (
                 <Link
                   key={cat.slug}

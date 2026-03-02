@@ -52,8 +52,8 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
   const categoryName = primaryCat?.name || product.product_categories?.[0]?.category?.name || 'Collection'
 
   return (
-    <main className="min-h-screen bg-black text-white pt-24 md:pt-32">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-10">
+    <main className="min-h-screen bg-black text-white pt-20 md:pt-24 uppercase">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10 mb-6">
         <div className="flex items-center gap-3">
           <Link href="/shop" className="flex items-center gap-2 text-white/30 hover:text-gold transition-colors">
             <ChevronLeft size={14} />
@@ -64,14 +64,14 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 pb-24">
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-          <div className="w-full lg:w-[58%]">
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-10 pb-24">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 lg:h-[850px] lg:items-stretch">
+          <div className="w-full lg:w-[58%] h-full">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="relative aspect-[3/4] w-full overflow-hidden bg-rich-black mb-4"
+              className="relative aspect-[3/4] lg:aspect-auto lg:h-full w-full overflow-hidden bg-rich-black mb-4"
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -83,13 +83,20 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
                   className="absolute inset-0"
                 >
                   {images[activeImage] ? (
-                    <Image
-                      src={images[activeImage]}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                      priority
-                    />
+                    <>
+                      <Image
+                        src={images[activeImage]}
+                        alt={product.name}
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                      {product.discount_percent > 0 && (
+                        <div className="absolute top-4 left-4 bg-offer-red text-white text-[10px] font-bold uppercase tracking-widest py-1 px-3 z-10 flex items-center gap-1">
+                          {product.discount_percent}% Off
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div className="w-full h-full bg-white/5 flex items-center justify-center">
                       <span className="text-white/20 font-sans text-xs uppercase tracking-widest">No Image</span>
@@ -100,14 +107,13 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
             </motion.div>
 
             {images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto hide-scrollbar">
+              <div className="flex gap-3 overflow-x-auto hide-scrollbar lg:max-h-[80px]">
                 {images.map((img: string, i: number) => (
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`relative aspect-[3/4] w-20 flex-shrink-0 overflow-hidden border-2 transition-all duration-300 ${
-                      activeImage === i ? 'border-gold' : 'border-transparent opacity-50 hover:opacity-80'
-                    }`}
+                    className={`relative aspect-[3/4] w-20 flex-shrink-0 overflow-hidden border-2 transition-all duration-300 ${activeImage === i ? 'border-gold' : 'border-transparent opacity-50 hover:opacity-80'
+                      }`}
                   >
                     <Image src={img} alt={`View ${i + 1}`} fill className="object-cover" />
                   </button>
@@ -120,13 +126,13 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="w-full lg:w-[42%] flex flex-col"
+            className="w-full lg:w-[42%] flex flex-col h-full lg:overflow-y-auto lg:pr-6 custom-scrollbar"
           >
-            <div className="mb-8">
-              <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-4 block">
+            <div className="mb-6">
+              <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-3 block">
                 {categoryName}
               </span>
-              <h1 className="font-display text-4xl md:text-5xl text-white font-medium leading-tight mb-6">
+              <h1 className="font-display text-4xl md:text-5xl text-white font-medium leading-tight mb-4 uppercase">
                 {product.name}
               </h1>
               <div className="flex items-center gap-4">
@@ -146,17 +152,17 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
               </div>
             </div>
 
-            <div className="w-full h-[1px] bg-white/5 mb-8" />
+            <div className="w-full h-[1px] bg-white/5 mb-6" />
 
             {product.description && (
-              <p className="font-body text-base text-white/60 leading-relaxed mb-10">
+              <p className="font-body text-base text-white/60 leading-relaxed mb-6 uppercase">
                 {product.description}
               </p>
             )}
 
             {product.colors && product.colors.length > 0 && (
-              <div className="mb-8">
-                <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 block mb-4">
+              <div className="mb-6">
+                <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 block mb-3">
                   Color — {selectedColor || 'Select'}
                 </span>
                 <div className="flex gap-3">
@@ -164,11 +170,10 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`px-5 py-2.5 border font-sans text-[10px] uppercase tracking-wider transition-all duration-300 ${
-                        selectedColor === color
-                          ? 'border-gold text-gold bg-gold/5'
-                          : 'border-white/10 text-white/60 hover:border-white/30'
-                      }`}
+                      className={`px-5 py-2.5 border font-sans text-[10px] uppercase tracking-wider transition-all duration-300 ${selectedColor === color
+                        ? 'border-gold text-gold bg-gold/5'
+                        : 'border-white/10 text-white/60 hover:border-white/30'
+                        }`}
                     >
                       {color}
                     </button>
@@ -178,8 +183,8 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
             )}
 
             {product.sizes && product.sizes.length > 0 && (
-              <div className="mb-10">
-                <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 block mb-4">
+              <div className="mb-8">
+                <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 block mb-3">
                   Size
                 </span>
                 <div className="flex flex-wrap gap-3">
@@ -187,11 +192,10 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`w-14 h-14 flex items-center justify-center border font-sans text-xs uppercase tracking-wider transition-all duration-300 ${
-                        selectedSize === size
-                          ? 'bg-white text-black border-white'
-                          : 'border-white/10 text-white/60 hover:border-white/30'
-                      }`}
+                      className={`w-14 h-14 flex items-center justify-center border font-sans text-xs uppercase tracking-wider transition-all duration-300 ${selectedSize === size
+                        ? 'bg-white text-black border-white'
+                        : 'border-white/10 text-white/60 hover:border-white/30'
+                        }`}
                     >
                       {size}
                     </button>
@@ -250,14 +254,14 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {related.map((p: any) => (
                 <Link key={p.id} href={`/shop/${p.slug}`} className="group">
-                    <div className="aspect-[3/4] bg-rich-black overflow-hidden mb-4 relative">
-                      {p.images?.[0] ? (
-                        <Image
-                          src={p.images[0]}
-                          alt={p.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-700"
-                        />
+                  <div className="aspect-[3/4] bg-rich-black overflow-hidden mb-4 relative">
+                    {p.images?.[0] ? (
+                      <Image
+                        src={p.images[0]}
+                        alt={p.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
                     ) : (
                       <div className="w-full h-full bg-white/5" />
                     )}

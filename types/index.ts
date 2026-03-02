@@ -43,7 +43,7 @@ export interface ProductCategory {
     category?: Category;
 }
 
-export type OfferType = 'product_offer' | 'combo';
+export type OfferType = 'product_offer' | 'combo' | 'bogo';
 export type DiscountType = 'percentage' | 'flat';
 
 export interface Offer {

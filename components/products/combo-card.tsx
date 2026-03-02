@@ -33,9 +33,9 @@ export default function ComboCard({ offer }: ComboCardProps) {
             </div>
 
             {/* Visual Representation */}
-            <div className="relative aspect-[16/10] mt-24 mb-6 px-10 flex items-center justify-center gap-4">
+            <Link href={`/offers/${offer.id}`} className="relative aspect-[16/10] mt-24 mb-6 px-10 flex items-center justify-center gap-4 cursor-pointer">
                 {items.slice(0, 2).map((item, idx) => (
-                    <div key={item.id} className="relative flex-1 aspect-[3/4] overflow-hidden bg-white/5 border border-white/10 group-hover:scale-105 transition-transform duration-700 delay-[idx * 100]">
+                    <div key={item.id} className="relative flex-1 aspect-[3/4] overflow-hidden bg-white/5 border border-white/10 group-hover:scale-105 transition-transform duration-700">
                         {item.product?.images?.[0] ? (
                             <img
                                 src={item.product.images[0]}
@@ -60,7 +60,7 @@ export default function ComboCard({ offer }: ComboCardProps) {
                         <Plus size={20} strokeWidth={3} />
                     </div>
                 </div>
-            </div>
+            </Link>
 
             {/* Footer Info */}
             <div className="px-8 pb-8 flex flex-col items-center text-center">
@@ -72,7 +72,7 @@ export default function ComboCard({ offer }: ComboCardProps) {
                     href={`/offers/${offer.id}`}
                     className="group/link flex items-center gap-4 font-sans text-[9px] uppercase tracking-[0.4em] font-bold text-white hover:text-gold transition-colors"
                 >
-                    CLAIM PROPOSITION
+                    BUY NOW
                     <span className="inline-block transform group-hover/link:translate-x-2 transition-transform">→</span>
                 </Link>
             </div>
