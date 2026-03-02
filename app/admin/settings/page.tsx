@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Loader2, Check, Upload, Image as ImageIcon, X } from 'lucide-react'
+import { Loader2, Check, Upload, Image as ImageIcon, X, AlertTriangle } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import toast from 'react-hot-toast'
 import { useStoreInfo } from '@/hooks/use-store-info'
 
 export default function AdminSettingsPage() {
@@ -12,11 +14,16 @@ export default function AdminSettingsPage() {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle')
   const [isUploading, setIsUploading] = useState(false)
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file')
+  const [previewVideo, setPreviewVideo] = useState<string | null>(null)
+  const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean, videoUrl: string | null }>({ isOpen: false, videoUrl: null })
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (storeInfo) {
       setFormData(storeInfo)
+      if (storeInfo.hero_video) {
+        setPreviewVideo(storeInfo.hero_video)
+      }
     }
   }, [storeInfo])
 
@@ -37,11 +44,11 @@ export default function AdminSettingsPage() {
 
       const uploadData = new FormData()
       uploadData.append('file', file)
-      uploadData.append('api_key', '175967811318335') 
+      uploadData.append('api_key', '175967811318335')
       uploadData.append('timestamp', timestamp.toString())
       uploadData.append('signature', signature)
 
-      const cloudName = 'du6cwjfyw' 
+      const cloudName = 'du6cwjfyw'
       const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${type}/upload`, {
         method: 'POST',
         body: uploadData
@@ -53,17 +60,82 @@ export default function AdminSettingsPage() {
         if (type === 'image') {
           finalUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
         }
-        
-        setFormData((prev: any) => ({ ...prev, [field]: finalUrl }));
-        await updateStoreInfo.mutateAsync({ ...formData, [field]: finalUrl });
+
+        setFormData((prev: any) => {
+          const newData = { ...prev };
+          if (field === 'hero_video_library') {
+            const currentLibrary = Array.isArray(prev.hero_video_library) ? prev.hero_video_library : [];
+            newData.hero_video_library = [...currentLibrary, finalUrl];
+            setPreviewVideo(finalUrl);
+          } else {
+            newData[field] = finalUrl;
+          }
+
+          // Persistence: Update database immediately with the fresher data
+          updateStoreInfo.mutate(newData);
+          return newData;
+        });
+
         setSaveStatus('saved');
         setTimeout(() => setSaveStatus('idle'), 3000);
       }
     } catch (err) {
       console.error('Upload failed:', err)
-      alert(`${type.charAt(0).toUpperCase() + type.slice(1)} upload failed.`)
+      toast.error(`${type.charAt(0).toUpperCase() + type.slice(1)} upload failed.`)
     } finally {
       setIsUploading(false)
+    }
+  }
+
+  const handleDeleteVideo = async () => {
+    if (!deleteModal.videoUrl) return;
+    const videoUrl = deleteModal.videoUrl;
+
+    try {
+      setIsUploading(true);
+      setDeleteModal({ isOpen: false, videoUrl: null });
+
+      const parts = videoUrl.split('/');
+      const publicIdWithFolder = parts.slice(parts.indexOf('upload') + 2).join('/');
+      const publicIdMatch = publicIdWithFolder.match(/(?:v\d+\/)?(.+)\.[^.]+$/);
+      const publicId = publicIdMatch ? publicIdMatch[1] : parts[parts.length - 1].split('.')[0];
+
+      const res = await fetch('/api/admin/cloudinary-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ public_id: publicId, resource_type: 'video' })
+      });
+
+      if (!res.ok) throw new Error('Failed to delete from storage');
+
+      setFormData((prev: any) => {
+        const updatedLibrary = (prev.hero_video_library || []).filter((v: string) => v !== videoUrl);
+        let updatedHeroVideo = prev.hero_video;
+
+        if (videoUrl === prev.hero_video) {
+          updatedHeroVideo = updatedLibrary.length > 0 ? updatedLibrary[0] : '';
+        }
+
+        const newData = {
+          ...prev,
+          hero_video_library: updatedLibrary,
+          hero_video: updatedHeroVideo
+        };
+
+        if (videoUrl === previewVideo) {
+          setPreviewVideo(updatedHeroVideo || null);
+        }
+
+        updateStoreInfo.mutate(newData);
+        return newData;
+      });
+
+      toast.success('Video deleted successfully.');
+    } catch (err) {
+      console.error('Deletion failed:', err);
+      toast.error('Failed to delete video.');
+    } finally {
+      setIsUploading(false);
     }
   }
 
@@ -76,7 +148,7 @@ export default function AdminSettingsPage() {
       setTimeout(() => setSaveStatus('idle'), 3000)
     } catch (error) {
       console.error('Failed to save settings:', error)
-      alert('Error saving settings')
+      toast.error('Error saving settings')
       setSaveStatus('idle')
     }
   }
@@ -136,13 +208,13 @@ export default function AdminSettingsPage() {
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70">Store Visuals</h2>
             <div className="flex gap-4">
-              <button 
+              <button
                 onClick={() => setUploadMode('file')}
                 className={`text-[9px] uppercase tracking-widest ${uploadMode === 'file' ? 'text-gold' : 'text-white/30'}`}
               >
                 Upload File
               </button>
-              <button 
+              <button
                 onClick={() => setUploadMode('url')}
                 className={`text-[9px] uppercase tracking-widest ${uploadMode === 'url' ? 'text-gold' : 'text-white/30'}`}
               >
@@ -153,15 +225,15 @@ export default function AdminSettingsPage() {
 
           <div className="space-y-6">
             <label className={labelClass}>Interior / Boutique Shot</label>
-            
+
             {uploadMode === 'url' ? (
               <div className="space-y-4">
-                <input 
-                  id="store_image" 
-                  value={formData.store_image || ''} 
-                  onChange={handleChange} 
-                  placeholder="Paste URL from Gallery here..." 
-                  className={inputClass} 
+                <input
+                  id="store_image"
+                  value={formData.store_image || ''}
+                  onChange={handleChange}
+                  placeholder="Paste URL from Gallery here..."
+                  className={inputClass}
                 />
                 <p className="text-[8px] uppercase tracking-widest text-white/20 italic">
                   💡 Hint: Copy a URL from the "Gallery" tab and paste it here.
@@ -177,13 +249,13 @@ export default function AdminSettingsPage() {
                 <div className="aspect-[21/9] w-full bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center overflow-hidden relative group-hover:border-gold/30 transition-colors duration-500">
                   {formData.store_image ? (
                     <>
-                      <img 
-                        src={formData.store_image} 
-                        alt="Store Preview" 
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" 
+                      <img
+                        src={formData.store_image}
+                        alt="Store Preview"
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700"
                       />
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                        <button 
+                        <button
                           onClick={() => fileInputRef.current?.click()}
                           className="px-6 py-3 bg-white/10 backdrop-blur-md rounded border border-white/20 text-white font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all"
                         >
@@ -192,7 +264,7 @@ export default function AdminSettingsPage() {
                       </div>
                     </>
                   ) : (
-                    <button 
+                    <button
                       onClick={() => fileInputRef.current?.click()}
                       disabled={isUploading}
                       className="flex flex-col items-center gap-4 text-white/30 hover:text-gold transition-colors p-12 w-full h-full"
@@ -209,12 +281,12 @@ export default function AdminSettingsPage() {
                     </button>
                   )}
                 </div>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  onChange={(e) => handleAssetUpload(e, 'store_image', 'image')} 
-                  className="hidden" 
-                  accept="image/*" 
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={(e) => handleAssetUpload(e, 'store_image', 'image')}
+                  className="hidden"
+                  accept="image/*"
                 />
               </div>
             )}
@@ -226,13 +298,13 @@ export default function AdminSettingsPage() {
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70">Catalog / Shop Visuals</h2>
             <div className="flex gap-4">
-              <button 
+              <button
                 onClick={() => setUploadMode('file')}
                 className={`text-[9px] uppercase tracking-widest ${uploadMode === 'file' ? 'text-gold' : 'text-white/30'}`}
               >
                 Upload File
               </button>
-              <button 
+              <button
                 onClick={() => setUploadMode('url')}
                 className={`text-[9px] uppercase tracking-widest ${uploadMode === 'url' ? 'text-gold' : 'text-white/30'}`}
               >
@@ -243,15 +315,15 @@ export default function AdminSettingsPage() {
 
           <div className="space-y-6">
             <label className={labelClass}>Catalog Hero Image</label>
-            
+
             {uploadMode === 'url' ? (
               <div className="space-y-4">
-                <input 
-                  id="hero_image" 
-                  value={formData.hero_image || ''} 
-                  onChange={handleChange} 
-                  placeholder="Paste URL from Gallery here..." 
-                  className={inputClass} 
+                <input
+                  id="hero_image"
+                  value={formData.hero_image || ''}
+                  onChange={handleChange}
+                  placeholder="Paste URL from Gallery here..."
+                  className={inputClass}
                 />
                 {formData.hero_image && (
                   <div className="aspect-[21/9] w-full border border-white/10 overflow-hidden">
@@ -264,13 +336,13 @@ export default function AdminSettingsPage() {
                 <div className="aspect-[21/9] w-full bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center overflow-hidden relative group-hover:border-gold/30 transition-colors duration-500">
                   {formData.hero_image ? (
                     <>
-                      <img 
-                        src={formData.hero_image} 
-                        alt="Catalog Hero Preview" 
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" 
+                      <img
+                        src={formData.hero_image}
+                        alt="Catalog Hero Preview"
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700"
                       />
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                        <button 
+                        <button
                           onClick={() => {
                             const input = document.createElement('input');
                             input.type = 'file';
@@ -285,7 +357,7 @@ export default function AdminSettingsPage() {
                       </div>
                     </>
                   ) : (
-                    <button 
+                    <button
                       onClick={() => {
                         const input = document.createElement('input');
                         input.type = 'file';
@@ -327,55 +399,113 @@ export default function AdminSettingsPage() {
                 <input id="hero_tagline" value={formData.hero_tagline} onChange={handleChange} className={inputClass} />
               </div>
             </div>
-            
-            <div className="space-y-4">
-              <label className={labelClass}>Hero Video (Cinema Background)</label>
-              <div className="flex gap-4 mb-4">
-                <button 
-                  onClick={() => setUploadMode('file')}
-                  className={`text-[9px] uppercase tracking-widest ${uploadMode === 'file' ? 'text-gold' : 'text-white/30'}`}
-                >
-                  Upload MP4
-                </button>
-                <button 
-                  onClick={() => setUploadMode('url')}
-                  className={`text-[9px] uppercase tracking-widest ${uploadMode === 'url' ? 'text-gold' : 'text-white/30'}`}
-                >
-                  Paste Video Link
-                </button>
+
+            {/* Video Management Library */}
+            <div className="space-y-6 pt-4">
+              <label className={labelClass}>Hero Video Library (Max 5 Cinematics)</label>
+
+              {/* Large Preview Player */}
+              <div className="relative aspect-video w-full bg-rich-black/50 border border-white/10 overflow-hidden group">
+                {previewVideo ? (
+                  <>
+                    <video
+                      key={previewVideo}
+                      src={previewVideo}
+                      className="w-full h-full object-cover"
+                      muted
+                      loop
+                      autoPlay
+                      playsInline
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                      {previewVideo !== formData.hero_video && (
+                        <button
+                          onClick={() => {
+                            const newData = { ...formData, hero_video: previewVideo };
+                            setFormData(newData);
+                            updateStoreInfo.mutate(newData);
+                          }}
+                          className="px-6 py-3 bg-gold text-white font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all"
+                        >
+                          Set as Hero
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setDeleteModal({ isOpen: true, videoUrl: previewVideo })}
+                        className="px-6 py-3 bg-red-500/20 backdrop-blur-md border border-red-500/50 text-white font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-red-500 transition-all"
+                      >
+                        Delete Permanently
+                      </button>
+                    </div>
+                    {previewVideo === formData.hero_video && (
+                      <div className="absolute top-4 left-4 px-3 py-1 bg-gold text-black font-sans text-[8px] uppercase tracking-widest font-bold">
+                        Active Hero
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white/20">
+                    <span className="font-sans text-[10px] uppercase tracking-widest italic">Select a video to preview</span>
+                  </div>
+                )}
               </div>
 
-              {uploadMode === 'url' ? (
-                <input 
-                  id="hero_video" 
-                  value={formData.hero_video || ''} 
-                  onChange={handleChange} 
-                  placeholder="https://.../video.mp4" 
-                  className={inputClass} 
-                />
-              ) : (
-                <div 
-                  onClick={() => {
-                    const input = document.createElement('input');
-                    input.type = 'file';
-                    input.accept = 'video/mp4,video/webm';
-                    input.onchange = (e: any) => handleAssetUpload(e, 'hero_video', 'video');
-                    input.click();
-                  }}
-                  className="aspect-video w-full bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold/30 transition-all group overflow-hidden"
-                >
-                  {formData.hero_video ? (
-                    <video src={formData.hero_video} className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" muted loop autoPlay />
-                  ) : (
-                    <div className="text-center p-6">
-                      <Upload className="mx-auto mb-4 text-white/20 group-hover:text-gold transition-colors" size={32} />
-                      <span className="font-sans text-[10px] uppercase tracking-widest text-white/40">
-                        {isUploading ? 'Uploading Cinematic...' : 'Upload Hero Video (MP4)'}
-                      </span>
+              {/* Grid Gallery */}
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
+                {(() => {
+                  const library = Array.isArray(formData.hero_video_library) ? formData.hero_video_library : [];
+                  // Ensure the active hero is at least visible in the library if it exists
+                  const allVideos = [...library];
+                  if (formData.hero_video && !allVideos.includes(formData.hero_video)) {
+                    allVideos.unshift(formData.hero_video);
+                  }
+
+                  return allVideos.map((vid: string, index: number) => (
+                    <div
+                      key={vid + index}
+                      className={`relative aspect-square border cursor-pointer overflow-hidden group transition-all duration-500 ${previewVideo === vid ? 'border-gold ring-1 ring-gold/20' : 'border-white/10 hover:border-white/30'}`}
+                      onClick={() => setPreviewVideo(vid)}
+                    >
+                      <video src={vid} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" muted />
+                      {vid === formData.hero_video && (
+                        <div className="absolute top-1 right-1 bg-gold text-black rounded-full p-0.5 shadow-lg">
+                          <Check size={8} />
+                        </div>
+                      )}
+                      <div className="absolute inset-x-0 bottom-0 py-1.5 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity text-center">
+                        <span className="text-[7px] uppercase tracking-tighter text-white font-medium">Preview</span>
+                      </div>
                     </div>
-                  )}
-                </div>
-              )}
+                  ));
+                })()}
+
+                {/* Upload Placeholder */}
+                {(!formData.hero_video_library || formData.hero_video_library.length < 5) && (
+                  <button
+                    onClick={() => {
+                      const input = document.createElement('input');
+                      input.type = 'file';
+                      input.accept = 'video/mp4,video/webm';
+                      input.onchange = (e: any) => handleAssetUpload(e, 'hero_video_library', 'video');
+                      input.click();
+                    }}
+                    disabled={isUploading}
+                    className="aspect-square border border-dashed border-white/10 flex flex-col items-center justify-center hover:border-gold/30 hover:bg-white/5 transition-all group"
+                  >
+                    {isUploading ? (
+                      <Loader2 size={16} className="animate-spin text-gold" />
+                    ) : (
+                      <>
+                        <Upload size={16} className="text-white/20 group-hover:text-gold transition-colors mb-2" />
+                        <span className="text-[7px] uppercase tracking-widest text-white/40">New Cinematic</span>
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
+              <p className="text-[9px] uppercase tracking-[0.1em] text-white/30 italic">
+                * Maximum 5 videos allowed. Setting a hero video will update your background cinematic instantly.
+              </p>
             </div>
           </div>
         </div>
@@ -394,7 +524,7 @@ export default function AdminSettingsPage() {
                 <input id="story_hero_subtitle" value={formData.story_hero_subtitle} onChange={handleChange} className={inputClass} />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className={labelClass}>Main Section Title</label>
@@ -414,7 +544,7 @@ export default function AdminSettingsPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <label className={labelClass}>Story Hero Background</label>
-                <div 
+                <div
                   onClick={() => {
                     const input = document.createElement('input');
                     input.type = 'file';
@@ -429,7 +559,7 @@ export default function AdminSettingsPage() {
               </div>
               <div className="space-y-4">
                 <label className={labelClass}>Editorial Craft Image</label>
-                <div 
+                <div
                   onClick={() => {
                     const input = document.createElement('input');
                     input.type = 'file';
@@ -493,6 +623,56 @@ export default function AdminSettingsPage() {
           </div>
         </div>
       </div>
+      {/* Custom Delete Confirmation Modal */}
+      <AnimatePresence>
+        {deleteModal.isOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setDeleteModal({ isOpen: false, videoUrl: null })}
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-rich-black border border-white/10 p-8 shadow-2xl overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
+
+              <div className="flex flex-col items-center text-center space-y-6">
+                <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-500">
+                  <AlertTriangle size={32} />
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="font-sans text-lg uppercase tracking-[0.2em] text-white">Confirm Deletion</h3>
+                  <p className="font-sans text-[11px] text-white/40 uppercase tracking-widest leading-relaxed">
+                    This action will permanently remove the cinematic from Cloudinary storage and your library. This cannot be undone.
+                  </p>
+                </div>
+
+                <div className="flex flex-col w-full gap-3 pt-4">
+                  <button
+                    onClick={handleDeleteVideo}
+                    className="w-full py-4 bg-red-500 text-white font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-red-600 transition-all font-bold"
+                  >
+                    Confirm Permanent Delete
+                  </button>
+                  <button
+                    onClick={() => setDeleteModal({ isOpen: false, videoUrl: null })}
+                    className="w-full py-4 bg-white/5 text-white/60 font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 hover:text-white transition-all"
+                  >
+                    Cancel Action
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

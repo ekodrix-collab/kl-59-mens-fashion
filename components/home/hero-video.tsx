@@ -6,7 +6,7 @@ import { Logo } from "@/components/ui/logo";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import Link from "next/link";
 import { useStoreInfo } from "@/hooks/use-store-info";
-import { optimizeVideoUrl } from "@/lib/utils";
+import { optimizeVideoUrl, optimizeImageUrl } from "@/lib/utils";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,6 +14,7 @@ export function HeroVideo() {
   const { data: storeInfo } = storeInfoQuery;
 
   const videoUrl = optimizeVideoUrl(storeInfo?.hero_video || "https://res.cloudinary.com/dnd76mj4h/video/upload/v1740810842/kl59/hero-cinematic_p8j9v7.mp4");
+  const posterUrl = optimizeImageUrl(storeInfo?.hero_image || "https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000");
 
   useEffect(() => {
     if (videoRef.current) {
@@ -33,7 +34,7 @@ export function HeroVideo() {
           loop
           playsInline
           className="h-full w-full object-cover opacity-60 grayscale-[0.3]"
-          poster={storeInfo?.hero_image || "https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000"}
+          poster={posterUrl}
         >
           {storeInfo?.hero_video ? (
             <source src={videoUrl} type="video/mp4" />
