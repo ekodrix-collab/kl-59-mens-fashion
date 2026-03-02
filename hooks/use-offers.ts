@@ -16,8 +16,8 @@ export function useOffers(type?: string) {
                 .from('offers')
                 .select(`
           *,
-          product:products (*),
-          combo_items (*, product:products (*))
+          product:products!product_id (*),
+          combo_items (*, product:products!product_id (*))
         `)
                 .order('created_at', { ascending: false })
 
@@ -42,8 +42,8 @@ export function useOffers(type?: string) {
                 .from('offers')
                 .select(`
           *,
-          product:products (*),
-          combo_items (*, product:products (*))
+          product:products!product_id (*),
+          combo_items (*, product:products!product_id (*))
         `)
                 .eq('id', id)
                 .single()
