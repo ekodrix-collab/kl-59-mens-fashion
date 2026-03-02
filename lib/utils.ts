@@ -57,7 +57,7 @@ export function optimizeImageUrl(url: string | null | undefined): string {
         optimized = optimized.replace(/\/f_auto\//g, '/');
 
         // Inject new optimization parameters after '/upload/'
-        return optimized.replace('/upload/', '/upload/f_auto,q_auto:best/');
+        return optimized.replace('/upload/', '/upload/f_auto,q_auto/');
     }
 
     return url;
@@ -75,7 +75,7 @@ export function optimizeVideoUrl(url: string | null | undefined): string {
         const match = url.match(/\/(upload|video)\//);
         if (match) {
             const type = match[1];
-            return url.replace(`/${type}/`, `/${type}/f_auto,q_auto:best/`);
+            return url.replace(`/${type}/`, `/${type}/f_auto,q_auto/`);
         }
     }
 
