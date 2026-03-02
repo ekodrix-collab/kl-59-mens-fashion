@@ -221,6 +221,98 @@ export default function AdminSettingsPage() {
           </div>
         </div>
 
+        {/* Catalog Visuals */}
+        <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70">Catalog / Shop Visuals</h2>
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setUploadMode('file')}
+                className={`text-[9px] uppercase tracking-widest ${uploadMode === 'file' ? 'text-gold' : 'text-white/30'}`}
+              >
+                Upload File
+              </button>
+              <button 
+                onClick={() => setUploadMode('url')}
+                className={`text-[9px] uppercase tracking-widest ${uploadMode === 'url' ? 'text-gold' : 'text-white/30'}`}
+              >
+                Paste Link
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <label className={labelClass}>Catalog Hero Image</label>
+            
+            {uploadMode === 'url' ? (
+              <div className="space-y-4">
+                <input 
+                  id="hero_image" 
+                  value={formData.hero_image || ''} 
+                  onChange={handleChange} 
+                  placeholder="Paste URL from Gallery here..." 
+                  className={inputClass} 
+                />
+                {formData.hero_image && (
+                  <div className="aspect-[21/9] w-full border border-white/10 overflow-hidden">
+                    <img src={formData.hero_image} alt="Catalog Hero Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="relative group">
+                <div className="aspect-[21/9] w-full bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center overflow-hidden relative group-hover:border-gold/30 transition-colors duration-500">
+                  {formData.hero_image ? (
+                    <>
+                      <img 
+                        src={formData.hero_image} 
+                        alt="Catalog Hero Preview" 
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" 
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                        <button 
+                          onClick={() => {
+                            const input = document.createElement('input');
+                            input.type = 'file';
+                            input.accept = 'image/*';
+                            input.onchange = (e: any) => handleAssetUpload(e, 'hero_image', 'image');
+                            input.click();
+                          }}
+                          className="px-6 py-3 bg-white/10 backdrop-blur-md rounded border border-white/20 text-white font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all"
+                        >
+                          Change Catalog Hero
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <button 
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.onchange = (e: any) => handleAssetUpload(e, 'hero_image', 'image');
+                        input.click();
+                      }}
+                      disabled={isUploading}
+                      className="flex flex-col items-center gap-4 text-white/30 hover:text-gold transition-colors p-12 w-full h-full"
+                    >
+                      <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:scale-110 transition-transform duration-500">
+                        {isUploading ? <Loader2 className="animate-spin text-gold" size={24} /> : <ImageIcon size={24} />}
+                      </div>
+                      <div className="text-center">
+                        <span className="font-sans text-[10px] uppercase tracking-widest block mb-1">
+                          {isUploading ? 'Processing Asset...' : 'Upload Catalog Hero'}
+                        </span>
+                        <span className="font-sans text-[8px] uppercase tracking-widest opacity-40">High-Resolution recommended</span>
+                      </div>
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Homepage Banner */}
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Homepage Banner</h2>
