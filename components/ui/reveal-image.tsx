@@ -40,10 +40,10 @@ export function RevealImage({
   const optimizedUrl = optimizeImageUrl(src);
 
   return (
-    <div className={cn("relative overflow-hidden group bg-brand-light", aspectClass, className)}>
+    <div className={cn("relative overflow-hidden group bg-white/5", aspectClass, className)}>
       <motion.div
-        initial={{ clipPath: priority ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }}
-        whileInView={{ clipPath: "inset(0% 0 0 0)" }}
+        initial={{ opacity: 0, scale: 1.05 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once, amount: 0.01 }}
         transition={{
           duration: 1.2,
