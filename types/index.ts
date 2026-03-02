@@ -109,6 +109,7 @@ export interface StoreInfo {
     story_hero_image: string;
     story_main_image: string;
     philosophy_json: any[];
+    hero_video_library: string[];
 }
 
 export interface OutfitLook {
