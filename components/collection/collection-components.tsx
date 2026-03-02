@@ -5,10 +5,10 @@ import { RevealImage } from "@/components/ui/reveal-image";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
 
-export function CollectionHero({ name, tagline, image }: { name: string; tagline: string; image: string }) {
+export function CollectionHero({ name, tagline, image, priority = true }: { name: string; tagline: string; image: string; priority?: boolean }) {
   return (
     <section className="relative h-[60vh] w-full flex items-center justify-center overflow-hidden">
-      <RevealImage src={image} alt={name} className="absolute inset-0" aspectRatio="auto" />
+      <RevealImage src={image} alt={name} className="absolute inset-0" aspectRatio="auto" priority={priority} />
       <div className="absolute inset-0 bg-black/50" />
       
       <div className="relative z-10 text-center px-6">

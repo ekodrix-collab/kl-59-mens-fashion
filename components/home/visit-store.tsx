@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
+import { cn, optimizeImageUrl } from "@/lib/utils";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import { generateWhatsAppURL } from "@/lib/whatsapp";
 import { useStoreInfo } from "@/hooks/use-store-info";
@@ -13,11 +15,26 @@ export function VisitStore() {
 
   return (
     <section className="relative h-[70vh] md:h-[80vh] w-full flex items-center justify-center overflow-hidden">
-      <img
-        src={storeInfo?.store_image || FALLBACK_STORE_IMAGE}
-        alt="KL-59 Store"
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-[10s] ease-linear scale-110"
-      />
+      <motion.div 
+        className="absolute inset-0 w-full h-full"
+        initial={{ scale: 1 }}
+        animate={{ scale: 1.1 }}
+        transition={{ 
+          duration: 20, 
+          ease: "linear",
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      >
+        <Image
+          src={optimizeImageUrl(storeInfo?.store_image || FALLBACK_STORE_IMAGE)}
+          alt="KL-59 Store"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      </motion.div>
       <div className="absolute inset-0 bg-black/70" />
 
       <div className="relative z-10 text-center px-6">

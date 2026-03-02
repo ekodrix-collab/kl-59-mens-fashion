@@ -20,13 +20,12 @@ export default function AdminSettingsPage() {
     }
   }, [storeInfo])
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAssetUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string = 'store_image', type: 'image' | 'video' = 'image') => {
     const file = e.target.files?.[0]
     if (!file || !formData?.id) return
 
     setIsUploading(true)
     try {
-      // 1. Get Signature from our secure API
       const timestamp = Math.round(new Date().getTime() / 1000)
       const paramsToSign = { timestamp }
       const signRes = await fetch('/api/admin/cloudinary-sign', {
@@ -36,35 +35,33 @@ export default function AdminSettingsPage() {
       })
       const { signature } = await signRes.json()
 
-      // 2. Upload directly to Cloudinary using the signature
       const uploadData = new FormData()
       uploadData.append('file', file)
-      uploadData.append('api_key', '175967811318335') // From .env.local
+      uploadData.append('api_key', '175967811318335') 
       uploadData.append('timestamp', timestamp.toString())
       uploadData.append('signature', signature)
 
-      const cloudName = 'du6cwjfyw' // From .env.local
-      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+      const cloudName = 'du6cwjfyw' 
+      const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/${type}/upload`, {
         method: 'POST',
         body: uploadData
       })
       const data = await uploadRes.json()
 
       if (data.secure_url) {
-        // Ensure we use auto-format and auto-quality for better browser support (fixes HEIC issues)
-        const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+        let finalUrl = data.secure_url;
+        if (type === 'image') {
+          finalUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
+        }
         
-        // 3. Update local state and DB instantly
-        // Using a functional update to ensure we have the latest formData
-        setFormData((prev: any) => ({ ...prev, store_image: optimizedUrl }));
-        
-        await updateStoreInfo.mutateAsync({ ...formData, store_image: optimizedUrl });
+        setFormData((prev: any) => ({ ...prev, [field]: finalUrl }));
+        await updateStoreInfo.mutateAsync({ ...formData, [field]: finalUrl });
         setSaveStatus('saved');
         setTimeout(() => setSaveStatus('idle'), 3000);
       }
     } catch (err) {
       console.error('Upload failed:', err)
-      alert('Asset upload failed. Please try again.')
+      alert(`${type.charAt(0).toUpperCase() + type.slice(1)} upload failed.`)
     } finally {
       setIsUploading(false)
     }
@@ -215,10 +212,102 @@ export default function AdminSettingsPage() {
                 <input 
                   type="file" 
                   ref={fileInputRef} 
-                  onChange={handleImageUpload} 
+                  onChange={(e) => handleAssetUpload(e, 'store_image', 'image')} 
                   className="hidden" 
                   accept="image/*" 
                 />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Catalog Visuals */}
+        <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70">Catalog / Shop Visuals</h2>
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setUploadMode('file')}
+                className={`text-[9px] uppercase tracking-widest ${uploadMode === 'file' ? 'text-gold' : 'text-white/30'}`}
+              >
+                Upload File
+              </button>
+              <button 
+                onClick={() => setUploadMode('url')}
+                className={`text-[9px] uppercase tracking-widest ${uploadMode === 'url' ? 'text-gold' : 'text-white/30'}`}
+              >
+                Paste Link
+              </button>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <label className={labelClass}>Catalog Hero Image</label>
+            
+            {uploadMode === 'url' ? (
+              <div className="space-y-4">
+                <input 
+                  id="hero_image" 
+                  value={formData.hero_image || ''} 
+                  onChange={handleChange} 
+                  placeholder="Paste URL from Gallery here..." 
+                  className={inputClass} 
+                />
+                {formData.hero_image && (
+                  <div className="aspect-[21/9] w-full border border-white/10 overflow-hidden">
+                    <img src={formData.hero_image} alt="Catalog Hero Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="relative group">
+                <div className="aspect-[21/9] w-full bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center overflow-hidden relative group-hover:border-gold/30 transition-colors duration-500">
+                  {formData.hero_image ? (
+                    <>
+                      <img 
+                        src={formData.hero_image} 
+                        alt="Catalog Hero Preview" 
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" 
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                        <button 
+                          onClick={() => {
+                            const input = document.createElement('input');
+                            input.type = 'file';
+                            input.accept = 'image/*';
+                            input.onchange = (e: any) => handleAssetUpload(e, 'hero_image', 'image');
+                            input.click();
+                          }}
+                          className="px-6 py-3 bg-white/10 backdrop-blur-md rounded border border-white/20 text-white font-sans text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all"
+                        >
+                          Change Catalog Hero
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <button 
+                      onClick={() => {
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = 'image/*';
+                        input.onchange = (e: any) => handleAssetUpload(e, 'hero_image', 'image');
+                        input.click();
+                      }}
+                      disabled={isUploading}
+                      className="flex flex-col items-center gap-4 text-white/30 hover:text-gold transition-colors p-12 w-full h-full"
+                    >
+                      <div className="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center bg-white/5 group-hover:scale-110 transition-transform duration-500">
+                        {isUploading ? <Loader2 className="animate-spin text-gold" size={24} /> : <ImageIcon size={24} />}
+                      </div>
+                      <div className="text-center">
+                        <span className="font-sans text-[10px] uppercase tracking-widest block mb-1">
+                          {isUploading ? 'Processing Asset...' : 'Upload Catalog Hero'}
+                        </span>
+                        <span className="font-sans text-[8px] uppercase tracking-widest opacity-40">High-Resolution recommended</span>
+                      </div>
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -228,13 +317,131 @@ export default function AdminSettingsPage() {
         <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
           <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Homepage Banner</h2>
           <div className="space-y-6">
-            <div>
-              <label className={labelClass}>Main Headline</label>
-              <input id="hero_tagline" value={formData.hero_tagline} onChange={handleChange} className={inputClass} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className={labelClass}>Main Headline (Italic)</label>
+                <input id="tagline" value={formData.tagline} onChange={handleChange} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Secondary Headline</label>
+                <input id="hero_tagline" value={formData.hero_tagline} onChange={handleChange} className={inputClass} />
+              </div>
             </div>
+            
+            <div className="space-y-4">
+              <label className={labelClass}>Hero Video (Cinema Background)</label>
+              <div className="flex gap-4 mb-4">
+                <button 
+                  onClick={() => setUploadMode('file')}
+                  className={`text-[9px] uppercase tracking-widest ${uploadMode === 'file' ? 'text-gold' : 'text-white/30'}`}
+                >
+                  Upload MP4
+                </button>
+                <button 
+                  onClick={() => setUploadMode('url')}
+                  className={`text-[9px] uppercase tracking-widest ${uploadMode === 'url' ? 'text-gold' : 'text-white/30'}`}
+                >
+                  Paste Video Link
+                </button>
+              </div>
+
+              {uploadMode === 'url' ? (
+                <input 
+                  id="hero_video" 
+                  value={formData.hero_video || ''} 
+                  onChange={handleChange} 
+                  placeholder="https://.../video.mp4" 
+                  className={inputClass} 
+                />
+              ) : (
+                <div 
+                  onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'video/mp4,video/webm';
+                    input.onchange = (e: any) => handleAssetUpload(e, 'hero_video', 'video');
+                    input.click();
+                  }}
+                  className="aspect-video w-full bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:border-gold/30 transition-all group overflow-hidden"
+                >
+                  {formData.hero_video ? (
+                    <video src={formData.hero_video} className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" muted loop autoPlay />
+                  ) : (
+                    <div className="text-center p-6">
+                      <Upload className="mx-auto mb-4 text-white/20 group-hover:text-gold transition-colors" size={32} />
+                      <span className="font-sans text-[10px] uppercase tracking-widest text-white/40">
+                        {isUploading ? 'Uploading Cinematic...' : 'Upload Hero Video (MP4)'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Story Section Management */}
+        <div className="bg-rich-black/30 p-8 border border-white/5 space-y-8">
+          <h2 className="font-sans text-sm uppercase tracking-[0.2em] text-white/70 border-b border-white/10 pb-4">Story Page Content</h2>
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className={labelClass}>Hero Title</label>
+                <input id="story_hero_title" value={formData.story_hero_title} onChange={handleChange} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Hero Subtitle (Gold)</label>
+                <input id="story_hero_subtitle" value={formData.story_hero_subtitle} onChange={handleChange} className={inputClass} />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className={labelClass}>Main Section Title</label>
+                <input id="story_main_title" value={formData.story_main_title} onChange={handleChange} className={inputClass} />
+              </div>
+              <div>
+                <label className={labelClass}>Section Subtitle (Small Gold)</label>
+                <input id="story_main_subtitle" value={formData.story_main_subtitle} onChange={handleChange} className={inputClass} />
+              </div>
+            </div>
+
             <div>
-              <label className={labelClass}>Subheadline</label>
-              <input id="hero_subtitle" value={formData.hero_subtitle} onChange={handleChange} className={inputClass} />
+              <label className={labelClass}>Brand Narrative (Long Paragraph)</label>
+              <textarea id="story_main_content" value={formData.story_main_content} onChange={handleChange} rows={6} className={inputClass} />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <label className={labelClass}>Story Hero Background</label>
+                <div 
+                  onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'image/*';
+                    input.onchange = (e: any) => handleAssetUpload(e, 'story_hero_image', 'image');
+                    input.click();
+                  }}
+                  className="aspect-video w-full bg-white/5 border border-dashed border-white/10 flex items-center justify-center cursor-pointer hover:border-gold/30 transition-all group overflow-hidden"
+                >
+                  <img src={formData.story_hero_image} className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" alt="Story Hero" />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <label className={labelClass}>Editorial Craft Image</label>
+                <div 
+                  onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'image/*';
+                    input.onchange = (e: any) => handleAssetUpload(e, 'story_main_image', 'image');
+                    input.click();
+                  }}
+                  className="aspect-video w-full bg-white/5 border border-dashed border-white/10 flex items-center justify-center cursor-pointer hover:border-gold/30 transition-all group overflow-hidden"
+                >
+                  <img src={formData.story_main_image} className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-700" alt="Story Main" />
+                </div>
+              </div>
             </div>
           </div>
         </div>

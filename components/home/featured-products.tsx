@@ -86,7 +86,12 @@ function ProductCard({ product, className, index }: { product: any; className?: 
       className={className}
     >
       <Link href={`/shop/${product.slug}`} className="group block">
-        <RevealImage src={product.images[0]} alt={product.name} aspectRatio="portrait" />
+        <RevealImage 
+          src={product.images[0]} 
+          alt={product.name} 
+          aspectRatio="portrait" 
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
         <div className="mt-6 flex justify-between items-start">
           <div className="flex flex-col gap-1">
             <h3 className="font-sans text-sm md:text-base text-white font-medium group-hover:text-gold transition-colors">

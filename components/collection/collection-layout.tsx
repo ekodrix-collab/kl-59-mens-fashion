@@ -40,6 +40,16 @@ export function CollectionLayout({
         }
     }, [offerId, initialProducts]);
 
+    // Sync categories when initialCategory changes (e.g. navigation from home)
+    useEffect(() => {
+        if (initialCategory) {
+            setFilters(prev => ({
+                ...prev,
+                categories: [initialCategory]
+            }));
+        }
+    }, [initialCategory]);
+
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     // Extract available sizes from products
