@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createBrowserClient } from '@supabase/supabase-js'
 import { Metadata } from 'next'
 import { ProductDetailView } from '@/components/product/product-detail-view'
 import { notFound } from 'next/navigation'
@@ -50,10 +51,14 @@ async function getRelatedProducts(product: any) {
   return data || []
 }
 
-// Generate static paths for ISR — makes product pages load instantly
+// Generate static paths — uses a plain (no-cookies) Supabase client
+// to avoid the "static-to-dynamic at runtime" error caused by cookies()
 export async function generateStaticParams() {
   try {
-    const supabase = await createClient()
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
     const { data: products } = await supabase
       .from('products')
       .select('slug')
