@@ -1,4 +1,4 @@
-import { PreLoader } from "@/components/home/pre-loader";
+import { Metadata } from 'next'
 import { HeroVideo } from "@/components/home/hero-video";
 import { CollectionShowcase } from "@/components/home/collection-showcase";
 import { NewArrivals } from "@/components/home/new-arrivals";
@@ -7,11 +7,19 @@ import { OfferHighlight } from "@/components/home/offer-highlight";
 import { BrandStatement } from "@/components/home/brand-statement";
 import { FeaturedProducts } from "@/components/home/featured-products";
 import { VisitStore } from "@/components/home/visit-store";
+import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/json-ld';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+}
 
 export default function Home() {
   return (
-    <main className="relative bg-black">
-      <PreLoader />
+    <div className="relative bg-black">
+      <OrganizationJsonLd />
+      <WebsiteJsonLd />
       
       <HeroVideo />
       
@@ -24,6 +32,6 @@ export default function Home() {
         <FeaturedProducts />
         <VisitStore />
       </div>
-    </main>
+    </div>
   );
 }

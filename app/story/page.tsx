@@ -6,6 +6,9 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion
 export const metadata: Metadata = {
   title: "Our Story | The Heritage of KL-59",
   description: "Discover the heritage of KL-59. A legacy of uncompromising craftsmanship, modern silhouettes, and the pursuit of sartorial excellence since inception.",
+  alternates: {
+    canonical: '/story',
+  },
   openGraph: {
     title: "The KL-59 Story | Artisanal Menswear Heritage",
     description: "Defining the modern masculine silhouette through craftsmanship and timeless design.",
