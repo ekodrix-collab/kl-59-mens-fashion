@@ -6,6 +6,9 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion
 export const metadata: Metadata = {
   title: "Exclusive Offers | KL-59 Seasonal Campaigns",
   description: "Explore exclusive propositions and seasonal campaigns at KL-59. Premium curation, uncompromising style, and exceptional value for the modern man.",
+  alternates: {
+    canonical: '/offers',
+  },
   openGraph: {
     title: "KL-59 Exclusive Propositions | Seasonal Campaigns",
     description: "Limited-time offers on premium menswear. Experience luxury fashion with exceptional value.",
