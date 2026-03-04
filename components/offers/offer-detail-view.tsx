@@ -158,6 +158,7 @@ export function OfferDetailView({ offer }: OfferDetailViewProps) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="w-full lg:w-[42%] flex flex-col h-full lg:overflow-y-auto lg:pr-6 custom-scrollbar"
+                        data-lenis-prevent
                     >
                         <div className="mb-10 lg:mb-12">
                             <motion.div
