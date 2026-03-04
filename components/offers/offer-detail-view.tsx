@@ -15,15 +15,15 @@ interface OfferDetailViewProps {
 export function OfferDetailView({ offer }: OfferDetailViewProps) {
     const [activeImage, setActiveImage] = useState(0)
 
-    // Calculate total original MRP for Combo/BOGO
-    const totalMrp = offer.offer_type === 'combo'
-        ? (offer.combo_items?.reduce((sum, item) => sum + ((item.product?.mrp || 0) * item.quantity), 0) || offer.combo_price || 0)
+    // Calculate total original price (using selling_price)
+    const totalOriginalPrice = offer.offer_type === 'combo'
+        ? (offer.combo_items?.reduce((sum, item) => sum + ((item.product?.selling_price || 0) * item.quantity), 0) || 0)
         : offer.offer_type === 'bogo'
-            ? (offer.combo_items?.reduce((sum, item) => sum + (item.product?.mrp || 0), 0) || 0)
-            : (offer.product?.mrp || 0);
+            ? (offer.combo_items?.[0]?.product?.selling_price || 0)
+            : (offer.product?.selling_price || 0);
 
-    const sellingPrice = offer.offer_type === 'combo'
-        ? (offer.combo_price || 0)
+    const sellingPriceValue = offer.offer_type === 'combo'
+        ? (offer.combo_price || totalOriginalPrice)
         : offer.offer_type === 'bogo'
             ? (offer.combo_items?.[0]?.product?.selling_price || 0)
             : (offer.product?.selling_price || 0);
@@ -190,22 +190,22 @@ export function OfferDetailView({ offer }: OfferDetailViewProps) {
                                 <div className="space-y-1">
                                     <span className="block font-sans text-[9px] uppercase tracking-widest text-white/30 truncate">Proposition Value</span>
                                     <span className="block font-serif text-3xl text-white">
-                                        {offer.offer_type === 'combo' ? formatPrice(offer.combo_price || 0) : formatPrice(sellingPrice)}
+                                        {formatPrice(sellingPriceValue)}
                                     </span>
                                 </div>
 
-                                {totalMrp > sellingPrice && (
+                                {totalOriginalPrice > sellingPriceValue && (
                                     <>
                                         <div className="h-10 w-px bg-white/10" />
                                         <div className="space-y-1">
-                                            <span className="block font-sans text-[9px] uppercase tracking-widest text-white/30">Original MRP</span>
+                                            <span className="block font-sans text-[9px] uppercase tracking-widest text-white/30">Total Value</span>
                                             <span className="block font-body text-xl text-white/30 line-through">
-                                                {formatPrice(totalMrp)}
+                                                {formatPrice(totalOriginalPrice)}
                                             </span>
                                         </div>
                                         <div className="bg-gold/10 px-4 py-2 border border-gold/20">
                                             <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
-                                                Save {formatPrice(totalMrp - (offer.offer_type === 'combo' ? (offer.combo_price || 0) : sellingPrice))}
+                                                Save {formatPrice(totalOriginalPrice - sellingPriceValue)}
                                             </span>
                                         </div>
                                     </>

@@ -57,10 +57,12 @@ export default function AdminOffersPage() {
                 <td className="px-8 py-6">
                   <span className="bg-white/5 border border-white/20 text-white text-[10px] uppercase tracking-[0.2em] px-4 py-1.5">
                     {offer.offer_type === 'combo'
-                      ? `₹${offer.combo_price}`
+                      ? (offer.combo_price ? `₹${offer.combo_price} COMBO` : 'Combo Deal')
                       : offer.offer_type === 'bogo'
-                        ? `₹${offer.discount_value} SAVINGS`
-                        : `${offer.discount_value}${offer.discount_type === 'percentage' ? '%' : '₹'} OFF`}
+                        ? (offer.discount_value ? `₹${offer.discount_value} SAVINGS` : 'BOGO FREE')
+                        : offer.discount_value
+                          ? `${offer.discount_value}${offer.discount_type === 'percentage' ? '%' : '₹'} OFF`
+                          : 'Active Offer'}
                   </span>
                 </td>
                 <td className="px-8 py-6 text-[11px] font-sans uppercase tracking-[0.1em] text-white/50">{offer.offer_type}</td>

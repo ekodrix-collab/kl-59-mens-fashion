@@ -17,11 +17,18 @@ const navLinks = [
   { name: "Store", href: "/store" },
 ];
 
+import { useStoreInfo } from "@/hooks/use-store-info";
+import { useOffers } from "@/hooks/use-offers";
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+
+  const { offersQuery } = useOffers();
+  const { data: offers } = offersQuery;
+  const hasActiveOffers = offers?.some(o => o.is_active);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +38,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Filter links based on offer availability
+  const activeNavLinks = navLinks.filter(link =>
+    link.name !== "Offers" || hasActiveOffers
+  );
+
   // Hide nav on home hero
   const showNav = !isHome || scrolled;
 
@@ -38,9 +50,9 @@ export default function Navbar() {
     <>
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
-        animate={{ 
-          y: showNav ? 0 : -100, 
-          opacity: showNav ? 1 : 0 
+        animate={{
+          y: showNav ? 0 : -100,
+          opacity: showNav ? 1 : 0
         }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={cn(
@@ -55,7 +67,7 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-10">
-            {navLinks.map((link) => (
+            {activeNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -86,16 +98,17 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <MobileMenu onClose={() => setMobileMenuOpen(false)} />
+          <MobileMenu
+            onClose={() => setMobileMenuOpen(false)}
+            activeLinks={activeNavLinks}
+          />
         )}
       </AnimatePresence>
     </>
   );
 }
 
-import { useStoreInfo } from "@/hooks/use-store-info";
-
-function MobileMenu({ onClose }: { onClose: () => void }) {
+function MobileMenu({ onClose, activeLinks }: { onClose: () => void, activeLinks: typeof navLinks }) {
   const { storeInfoQuery } = useStoreInfo();
   const { data: storeInfo } = storeInfoQuery;
 
@@ -117,7 +130,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className="flex-1 flex flex-col justify-center gap-10 pl-6">
-        {navLinks.map((link, i) => (
+        {activeLinks.map((link, i) => (
           <motion.div
             key={link.href}
             initial={{ x: -20, opacity: 0 }}

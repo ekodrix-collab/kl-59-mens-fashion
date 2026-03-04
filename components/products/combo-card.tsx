@@ -27,10 +27,20 @@ export default function ComboCard({ offer }: ComboCardProps) {
                         {offer.title}
                     </h3>
                 </div>
-                <div className="bg-gold/10 backdrop-blur-md border border-gold/20 px-4 py-2">
+                <div className="bg-gold/10 backdrop-blur-md border border-gold/20 px-4 py-2 flex flex-col items-end">
                     <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
-                        COMBO PRICE: {formatPrice(offer.combo_price || 0)}
+                        {formatPrice(offer.combo_price || 0)}
                     </span>
+                    {(() => {
+                        const total = (offer.combo_items || []).reduce((acc, item) =>
+                            acc + (item.product?.selling_price || 0) * (item.quantity || 1), 0);
+                        const savings = total - (offer.combo_price || 0);
+                        return savings > 0 ? (
+                            <span className="text-[8px] text-gold/60 uppercase tracking-widest mt-0.5">
+                                Save {formatPrice(savings)}
+                            </span>
+                        ) : null;
+                    })()}
                 </div>
             </div>
 

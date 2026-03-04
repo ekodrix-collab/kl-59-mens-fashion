@@ -136,9 +136,16 @@ export function OffersView() {
                 )}
                 <div className="absolute top-8 left-8 z-10">
                   <span className="bg-white text-black px-6 py-2 font-sans text-[10px] uppercase tracking-[0.3em] font-bold">
-                    {offer.offer_type === 'combo'
-                      ? `₹${offer.combo_price}`
-                      : `${offer.discount_value}${offer.discount_type === 'percentage' ? '%' : '₹'} OFF`}
+                    {offer.offer_type === 'combo' ? (() => {
+                      const totalOriginal = (offer.combo_items || []).reduce((acc, item) =>
+                        acc + (item.product?.selling_price || 0) * (item.quantity || 1), 0);
+                      const savings = totalOriginal - (offer.combo_price || 0);
+                      return `Save ₹${savings}`;
+                    })() : offer.offer_type === 'bogo'
+                      ? `Save ₹${offer.discount_value || 0}`
+                      : offer.discount_value
+                        ? `${offer.discount_value}${offer.discount_type === 'percentage' ? '%' : '₹'} OFF`
+                        : 'Special Offer'}
                   </span>
                 </div>
               </div>
