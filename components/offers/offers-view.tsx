@@ -1,12 +1,12 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { RevealImage } from '@/components/ui/reveal-image'
 import { Plus, Loader2 } from 'lucide-react'
 import { useOffers } from '@/hooks/use-offers'
 import { useRouter } from 'next/navigation'
-import { BogoCardCompact, BogoCardWide } from '@/components/offers/bogo-card'
+import { BogoCardWide } from '@/components/offers/bogo-card'
 import ComboCard from '@/components/products/combo-card'
+import { motion } from 'framer-motion'
 
 export function OffersView() {
   const { offersQuery } = useOffers()
@@ -39,7 +39,7 @@ export function OffersView() {
               </div>
 
               <div className="grid grid-cols-1 gap-16">
-                {bogoOffers.map((offer, idx) => {
+                {bogoOffers.map((offer) => {
                   const items = offer.combo_items || []
                   const buyItem = items[0]
                   const getItem = items[1] || items[0]
@@ -63,29 +63,7 @@ export function OffersView() {
                     onShopNow: () => router.push(`/offers/${offer.id}`)
                   }
 
-                  // Even index (0, 2, 4...) -> Wide Banner
-                  if (idx % 2 === 0) {
-                    return <BogoCardWide key={offer.id} {...cardProps} />
-                  }
-
-                  // Odd index (1, 3, 5...) -> Compact Card
-                  return (
-                    <motion.div
-                      key={offer.id}
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-12"
-                    >
-                      <BogoCardCompact {...cardProps} />
-                      <div className="hidden md:flex items-center justify-center border border-white/5 bg-white/[0.02] p-12 text-center">
-                        <div className="max-w-xs space-y-4">
-                          <p className="font-serif text-2xl text-white/80 italic">Elevate your style with our premium BOGO selection.</p>
-                          <div className="w-12 h-px bg-gold/40 mx-auto" />
-                          <p className="font-sans text-[10px] uppercase tracking-widest text-gold/60">Limited Time Offer</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )
+                  return <BogoCardWide key={offer.id} {...cardProps} />
                 })}
               </div>
             </div>

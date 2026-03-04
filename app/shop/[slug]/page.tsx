@@ -157,21 +157,6 @@ export default async function ShopProductPage({ params }: PageProps) {
         ]}
       />
 
-      <div className="pt-20">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <Breadcrumb
-            items={[
-              { label: 'Home', href: '/' },
-              {
-                label: category?.name || 'Collections',
-                href: `/collections/${category?.slug || ''}`,
-              },
-              { label: product.name },
-            ]}
-          />
-        </div>
-      </div>
-
       <ProductDetailView product={product} related={related} />
     </>
   )
