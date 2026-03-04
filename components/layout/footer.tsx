@@ -1,10 +1,14 @@
 import { Logo } from "@/components/ui/logo";
 import Link from "next/link";
 import { useStoreInfo } from "@/hooks/use-store-info";
+import { useOffers } from "@/hooks/use-offers";
 
 export default function Footer() {
   const { storeInfoQuery } = useStoreInfo();
   const { data: storeInfo } = storeInfoQuery;
+  const { offersQuery } = useOffers();
+  const { data: offers } = offersQuery;
+  const hasActiveOffers = offers?.some(o => o.is_active);
 
   return (
     <footer className="bg-black py-20 border-t border-white/5">
@@ -20,15 +24,16 @@ export default function Footer() {
             { name: "Offers", href: "/offers" },
             { name: "Story", href: "/story" },
             { name: "Store", href: "/store" }
-          ].map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted hover:text-white transition-colors"
-            >
-              {item.name}
-            </Link>
-          ))}
+          ].filter(item => item.name !== "Offers" || hasActiveOffers)
+            .map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="font-sans text-[11px] uppercase tracking-[0.2em] text-muted hover:text-white transition-colors"
+              >
+                {item.name}
+              </Link>
+            ))}
         </nav>
 
         <div className="w-12 h-[1px] bg-gold mb-12" />

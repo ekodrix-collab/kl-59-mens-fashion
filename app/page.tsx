@@ -20,14 +20,15 @@ export default function Home() {
     <div className="relative bg-black">
       <OrganizationJsonLd />
       <WebsiteJsonLd />
-      
+
       <HeroVideo />
-      
+
       <div className="relative z-10">
         <CollectionShowcase />
+        <OfferHighlight priorityType="bogo" />
         <NewArrivals />
         <DenimEditorial />
-        <OfferHighlight />
+        <OfferHighlight priorityType="combo" />
         <BrandStatement />
         <FeaturedProducts />
         <VisitStore />

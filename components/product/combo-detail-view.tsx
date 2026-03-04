@@ -22,8 +22,9 @@ export function ComboDetailView({ offer }: ComboDetailViewProps) {
         window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank')
     }
 
-    // Calculate total original MRP
-    const totalMrp = offer.combo_items?.reduce((sum, item) => sum + ((item.product?.mrp || 0) * item.quantity), 0) || offer.combo_price || 0;
+    // Calculate total original selling price sum
+    const totalOriginalPrice = offer.combo_items?.reduce((sum, item) => sum + ((item.product?.selling_price || 0) * item.quantity), 0) || 0;
+    const finalComboPrice = offer.combo_price || totalOriginalPrice;
 
     // Collect images from banner or items
     const itemImages = offer.combo_items?.filter(ci => ci.product?.images?.[0]).map(ci => ci.product!.images[0]) || [];
@@ -69,9 +70,9 @@ export function ComboDetailView({ offer }: ComboDetailViewProps) {
                                                 className="object-cover"
                                                 priority
                                             />
-                                            {totalMrp > (offer.combo_price || 0) && (
+                                            {totalOriginalPrice > finalComboPrice && (
                                                 <div className="absolute top-4 left-4 bg-offer-red text-white text-[10px] font-bold uppercase tracking-widest py-1 px-3 z-10 flex items-center gap-1">
-                                                    {Math.round((1 - (offer.combo_price || 0) / totalMrp) * 100)}% Off
+                                                    {Math.round((1 - finalComboPrice / totalOriginalPrice) * 100)}% Off
                                                 </div>
                                             )}
                                         </>
@@ -105,6 +106,7 @@ export function ComboDetailView({ offer }: ComboDetailViewProps) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                         className="w-full lg:w-[42%] flex flex-col h-full lg:overflow-y-auto lg:pr-6 custom-scrollbar"
+                        data-lenis-prevent
                     >
                         <div className="mb-6">
                             <span className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold font-bold mb-3 block">
@@ -115,15 +117,15 @@ export function ComboDetailView({ offer }: ComboDetailViewProps) {
                             </h1>
                             <div className="flex items-center gap-4">
                                 <span className="font-body text-2xl text-white">
-                                    {formatPrice(offer.combo_price || 0)}
+                                    {formatPrice(finalComboPrice)}
                                 </span>
-                                {totalMrp > (offer.combo_price || 0) && (
+                                {totalOriginalPrice > finalComboPrice && (
                                     <>
                                         <span className="font-body text-lg text-white/30 line-through">
-                                            {formatPrice(totalMrp)}
+                                            {formatPrice(totalOriginalPrice)}
                                         </span>
                                         <span className="font-sans text-[10px] uppercase tracking-wider text-gold bg-gold/10 px-3 py-1">
-                                            Save {formatPrice(totalMrp - (offer.combo_price || 0))}
+                                            Save {formatPrice(totalOriginalPrice - finalComboPrice)}
                                         </span>
                                     </>
                                 )}

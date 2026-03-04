@@ -80,6 +80,11 @@ export default function NewOfferPage() {
                 is_active: status,
             }
 
+            // Force flat discount for BOGO and Combo
+            if (offerType === 'bogo' || offerType === 'combo') {
+                payload.discount_type = 'flat'
+            }
+
             if (offerType === 'product_offer') {
                 payload.product_id = selectedProductId
             } else if (offerType === 'combo') {
@@ -230,10 +235,10 @@ export default function NewOfferPage() {
                                 </div>
                                 <div>
                                     <label className={labelClass}>Discount Value</label>
-                                    <input type="number" value={discountValue} onChange={(e) => setDiscountValue(e.target.value)} className={inputClass} placeholder={discountType === 'percentage' ? 'e.g. 20' : 'e.g. 500'} />
+                                    <input type="number" value={discountValue} onChange={(e) => setDiscountValue(e.target.value)} className={inputClass} placeholder={discountType === 'percentage' ? 'e.g. 20' : 'e.g. 500'} required />
                                 </div>
                             </div>
-                            <ProductPicker label="Select Product" selectedId={selectedProductId} onSelect={setSelectedProductId} />
+                            <ProductPicker label="Select Product *" selectedId={selectedProductId} onSelect={setSelectedProductId} />
                         </>
                     )}
 

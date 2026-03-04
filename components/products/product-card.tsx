@@ -17,7 +17,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="relative overflow-hidden bg-brand-light">
         {/* Image Container */}
         <div className="relative overflow-hidden">
-          <RevealImage 
+          <RevealImage
             src={primaryImage}
             alt={product.name}
             aspectRatio="portrait"
@@ -40,8 +40,14 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <span className="text-[8px] uppercase tracking-[0.2em] font-bold leading-none">Special Offer</span>
                 <span className="text-[10px] font-bold uppercase tracking-tight">
                   {product.active_offer.discount_type === 'percentage'
-                    ? `${product.active_offer.discount_value}% OFF`
-                    : `₹${product.active_offer.discount_value} OFF`}
+                    ? product.active_offer.discount_value
+                      ? `${product.active_offer.discount_value}% OFF`
+                      : `${product.discount_percent}% OFF`
+                    : product.active_offer.discount_value
+                      ? `₹${product.active_offer.discount_value} OFF`
+                      : product.mrp > product.selling_price
+                        ? `₹${product.mrp - product.selling_price} OFF`
+                        : "Special Offer"}
                 </span>
               </div>
             )}

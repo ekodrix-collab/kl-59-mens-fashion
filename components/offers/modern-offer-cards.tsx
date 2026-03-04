@@ -284,7 +284,7 @@ export function ComboCard({ offer, onShopNow }: ModernOfferCardProps) {
   const items = offer.combo_items || [];
   const products = items.map(i => i.product).filter(Boolean) as Product[];
 
-  const individualTotal = products.reduce((s, p) => s + (p?.mrp || 0), 0);
+  const individualTotal = products.reduce((s, p) => s + (p?.selling_price || 0), 0);
   const comboPrice = offer.combo_price || individualTotal;
   const saving = individualTotal - comboPrice;
   const discountPct = individualTotal > 0 ? Math.round((saving / individualTotal) * 100) : 0;
