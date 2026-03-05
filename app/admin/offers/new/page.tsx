@@ -11,7 +11,6 @@ import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 
 const OFFER_TYPES: { value: OfferType; label: string; desc: string }[] = [
-    { value: 'product_offer', label: 'Product Offer', desc: 'Single product discount' },
     { value: 'combo', label: 'Combo Deal', desc: 'Bundle at a fixed price' },
     { value: 'bogo', label: 'Buy One Get One', desc: 'Free product with purchase' },
 ]
@@ -22,7 +21,7 @@ export default function NewOfferPage() {
     const { productsQuery } = useProducts()
     const { data: products } = productsQuery
 
-    const [offerType, setOfferType] = useState<OfferType>('product_offer')
+    const [offerType, setOfferType] = useState<OfferType>('combo')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [discountType, setDiscountType] = useState<DiscountType>('percentage')
@@ -172,7 +171,7 @@ export default function NewOfferPage() {
                 {/* ── Type Selection ── */}
                 <div className="bg-rich-black/30 p-8 border border-white/5">
                     <label className={labelClass}>Offer Type</label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {OFFER_TYPES.map(({ value, label, desc }) => (
                             <button
                                 key={value}
