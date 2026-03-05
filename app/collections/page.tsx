@@ -1,21 +1,40 @@
 "use client";
 import { RevealImage } from "@/components/ui/reveal-image";
-import { COLLECTION_IMAGES } from "@/lib/data";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useCategories } from "@/hooks/use-categories";
+import { Loader2 } from "lucide-react";
 
-const collectionsList = [
-  { name: "Denim", slug: "denim", image: COLLECTION_IMAGES.denim, isShopAll: false },
-  { name: "Shirts", slug: "shirts", image: COLLECTION_IMAGES.shirts, isShopAll: false },
-  { name: "T-Shirts", slug: "t-shirts", image: COLLECTION_IMAGES.tshirts, isShopAll: false },
-  { name: "Casual Wear", slug: "casual-wear", image: COLLECTION_IMAGES.casual, isShopAll: false },
-  { name: "Formals", slug: "formals", image: COLLECTION_IMAGES.formals, isShopAll: false },
-];
+const FALLBACK_COLLECTION_IMAGE = "/images/collections/placeholder.jpg";
 
 export default function CollectionsPage() {
+  const { categoriesQuery } = useCategories();
+  const { data: categories, isLoading: categoriesLoading } = categoriesQuery;
+
+  if (categoriesLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <Loader2 className="animate-spin text-gold" size={32} />
+      </div>
+    );
+  }
+
+  const dbCollections = (categories || [])
+    .filter((cat) => {
+      const slug = (cat.slug || "").trim().toLowerCase();
+      const name = (cat.name || "").trim().toLowerCase();
+      return slug !== "uncategorized" && name !== "uncategorized";
+    })
+    .map((cat) => ({
+      name: cat.name,
+      slug: cat.slug,
+      image: cat.image || FALLBACK_COLLECTION_IMAGE,
+      isShopAll: false,
+    }));
+
   const allCollections = [
-    ...collectionsList,
+    ...dbCollections,
     { name: "Shop All", slug: "all", image: "", isShopAll: true }
   ];
 
