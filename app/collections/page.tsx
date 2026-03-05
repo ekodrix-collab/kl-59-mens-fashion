@@ -26,12 +26,23 @@ export default function CollectionsPage() {
       const name = (cat.name || "").trim().toLowerCase();
       return slug !== "uncategorized" && name !== "uncategorized";
     })
-    .map((cat) => ({
-      name: cat.name,
-      slug: cat.slug,
-      image: cat.image || FALLBACK_COLLECTION_IMAGE,
-      isShopAll: false,
-    }));
+    .map((cat) => {
+      let image = cat.image;
+      if (!image) {
+        if (cat.slug === "formals") {
+          image = "/images/collections/formals.jpg";
+        } else {
+          image = "/og-image.jpg";
+        }
+      }
+
+      return {
+        name: cat.name,
+        slug: cat.slug,
+        image: image,
+        isShopAll: false,
+      };
+    });
 
   const allCollections = [
     ...dbCollections,

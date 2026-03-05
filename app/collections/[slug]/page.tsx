@@ -86,7 +86,18 @@ export default function CollectionPage({ params }: { params: { slug: string } })
   processedProducts = [...processedProducts, ...comboOffersAsProducts];
 
   const name = currentCategory?.name || params.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-  const image = currentCategory?.image || "/images/collections/placeholder.jpg";
+  
+  // High-end fallback logic for hero images
+  let image = currentCategory?.image;
+  
+  if (!image) {
+    if (params.slug === "formals") {
+      image = "/images/collections/formals.jpg";
+    } else {
+      image = "/og-image.jpg"; // Use branding if nothing else
+    }
+  }
+
   const tagline = "Premium Selection";
 
   return (
