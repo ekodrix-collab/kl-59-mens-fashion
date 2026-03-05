@@ -8,10 +8,12 @@ interface BogoCardProps {
     buyProduct: {
         name: string
         image: string
+        count?: number
     }
     getProduct: {
         name: string
         image: string
+        count?: number
     }
     savingsValue: string | number
     description?: string
@@ -72,8 +74,13 @@ export function BogoCardCompact({
                             {/* Mini Product Thumb */}
                             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-12 h-16 border border-white/10 overflow-hidden bg-white/5 group-hover:border-gold/30 transition-colors">
                                 <img src={getProduct.image} alt="" className="w-full h-full object-cover opacity-60" />
-                                <div className="absolute inset-0 bg-gold/10 pointer-events-none" />
-                                <div className="absolute top-0 left-0 w-full bg-gold/20 py-0.5 text-[6px] uppercase tracking-tighter text-white font-bold text-center">Free</div>
+                                <img src={buyProduct.image} alt="" className="w-full h-full object-cover" />
+                                <div className="absolute top-0 left-0 w-full bg-black/40 py-0.5 text-[6px] uppercase tracking-tighter text-white font-bold text-center">
+                                    {buyProduct.count && buyProduct.count > 1 ? `x${buyProduct.count}` : 'Buy'}
+                                </div>
+                                <div className="absolute bottom-0 left-0 w-full bg-gold/20 py-0.5 text-[6px] uppercase tracking-tighter text-white font-bold text-center">
+                                    {getProduct.count && getProduct.count > 1 ? `+${getProduct.count}` : 'Free'}
+                                </div>
                             </div>
                         </div>
                     </div>

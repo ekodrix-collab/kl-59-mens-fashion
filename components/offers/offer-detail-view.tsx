@@ -15,17 +15,20 @@ interface OfferDetailViewProps {
 export function OfferDetailView({ offer }: OfferDetailViewProps) {
     const [activeImage, setActiveImage] = useState(0)
 
+    const buyItemsCount = offer.offer_type === 'bogo' ? (offer.combo_price ? Number(offer.combo_price) : 1) : 0;
+    const buyItems = offer.offer_type === 'bogo' ? offer.combo_items?.slice(0, buyItemsCount) || [] : [];
+    const freeItems = offer.offer_type === 'bogo' ? offer.combo_items?.slice(buyItemsCount) || [] : [];
+
     // Calculate total original price (using selling_price)
-    const totalOriginalPrice = offer.offer_type === 'combo'
+    // For BOGO: Buy X Get Y Free -> Total original price is sum of all items in combo_items
+    const totalOriginalPrice = (offer.offer_type === 'combo' || offer.offer_type === 'bogo')
         ? (offer.combo_items?.reduce((sum, item) => sum + ((item.product?.selling_price || 0) * item.quantity), 0) || 0)
-        : offer.offer_type === 'bogo'
-            ? (offer.combo_items?.[0]?.product?.selling_price || 0)
-            : (offer.product?.selling_price || 0);
+        : (offer.product?.selling_price || 0);
 
     const sellingPriceValue = offer.offer_type === 'combo'
         ? (offer.combo_price || totalOriginalPrice)
         : offer.offer_type === 'bogo'
-            ? (offer.combo_items?.[0]?.product?.selling_price || 0)
+            ? (buyItems.reduce((sum, item) => sum + ((item.product?.selling_price || 0) * item.quantity), 0) || 0)
             : (offer.product?.selling_price || 0);
 
     // Collect images based on offer type
@@ -54,10 +57,10 @@ export function OfferDetailView({ offer }: OfferDetailViewProps) {
             msg += `📦 Includes: ${offer.combo_items?.map(i => `${i.product?.name} (x${i.quantity})`).join(', ')}\n`;
         } else if (offer.offer_type === 'bogo') {
             msg += `🔥 *BOGO: ${offer.title.toUpperCase()}*\n`;
-            const buyItem = offer.combo_items?.[0]?.product?.name || 'Item 1';
-            const freeItem = offer.combo_items?.[1]?.product?.name || 'Item 2';
-            msg += `🛒 Buy: ${buyItem}\n`;
-            msg += `✨ Get Free: ${freeItem}\n`;
+            const buyItemsText = buyItems.map(i => `${i.product?.name}${i.quantity > 1 ? ` (x${i.quantity})` : ''}`).join(', ') || 'Item';
+            const freeItemsText = freeItems.map(i => `${i.product?.name}${i.quantity > 1 ? ` (x${i.quantity})` : ''}`).join(', ') || 'Free Item';
+            msg += `🛒 Buy: ${buyItemsText}\n`;
+            msg += `✨ Get Free: ${freeItemsText}\n`;
         } else {
             msg += `🏷️ *OFFER: ${offer.title.toUpperCase()}*\n`;
             msg += `👕 Product: ${offer.product?.name}\n`;
@@ -262,23 +265,33 @@ export function OfferDetailView({ offer }: OfferDetailViewProps) {
                                 <div className="space-y-6">
                                     <h3 className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold border-b border-gold/10 pb-4">The Proposition</h3>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {/* Buy Part */}
+                                        {/* Buy Part(s) */}
                                         <div className="p-6 bg-white/[0.03] border border-white/5 space-y-4">
                                             <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-white/40">Acquisition</span>
-                                            <div className="flex flex-col gap-2">
-                                                <h4 className="font-sans text-lg text-white uppercase">{offer.combo_items?.[0]?.product?.name || 'Primary Piece'}</h4>
-                                                <span className="font-sans text-[10px] text-gold uppercase tracking-widest">Buy One</span>
+                                            <div className="flex flex-col gap-3">
+                                                {buyItems.map((item, idx) => (
+                                                    <div key={item.id} className="flex flex-col gap-1">
+                                                        <h4 className="font-sans text-sm md:text-md text-white uppercase line-clamp-1">{item.product?.name || 'Primary Piece'}</h4>
+                                                        {item.quantity > 1 && <span className="text-[10px] text-white/40">Quantity: {item.quantity}</span>}
+                                                    </div>
+                                                ))}
+                                                <span className="font-sans text-[10px] text-gold uppercase tracking-widest mt-2">{buyItemsCount > 1 ? 'Buy These' : 'Buy One'}</span>
                                             </div>
                                         </div>
-                                        {/* Free Part */}
+                                        {/* Free Part(s) */}
                                         <div className="p-6 bg-gold/5 border border-gold/10 space-y-4 relative overflow-hidden">
                                             <div className="absolute top-0 right-0 p-2 opacity-10">
                                                 <Award size={40} className="text-gold" />
                                             </div>
                                             <span className="font-sans text-[9px] uppercase tracking-[0.3em] text-gold/60">Complementary</span>
-                                            <div className="flex flex-col gap-2">
-                                                <h4 className="font-sans text-lg text-white uppercase">{offer.combo_items?.[1]?.product?.name || 'Secondary Piece'}</h4>
-                                                <span className="font-sans text-[11px] text-gold uppercase tracking-widest font-bold">Get One Free</span>
+                                            <div className="flex flex-col gap-3">
+                                                {freeItems.map((item, idx) => (
+                                                    <div key={item.id} className="flex flex-col gap-1">
+                                                        <h4 className="font-sans text-sm md:text-md text-white uppercase line-clamp-1">{item.product?.name || 'Secondary Piece'}</h4>
+                                                        {item.quantity > 1 && <span className="text-[10px] text-white/40">Quantity: {item.quantity}</span>}
+                                                    </div>
+                                                ))}
+                                                <span className="font-sans text-[11px] text-gold uppercase tracking-widest font-bold mt-2">Get Free</span>
                                             </div>
                                         </div>
                                     </div>

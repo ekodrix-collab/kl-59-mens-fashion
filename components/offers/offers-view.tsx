@@ -41,8 +41,12 @@ export function OffersView() {
               <div className="grid grid-cols-1 gap-16">
                 {bogoOffers.map((offer) => {
                   const items = offer.combo_items || []
-                  const buyItem = items[0]
-                  const getItem = items[1] || items[0]
+                  const buyItemsCount = offer.combo_price ? Number(offer.combo_price) : 1;
+                  const buyItems = items.slice(0, buyItemsCount);
+                  const freeItems = items.slice(buyItemsCount);
+
+                  const buyItem = buyItems[0]
+                  const getItem = freeItems[0] || buyItems[0]
 
                   const buyProduct = buyItem?.product
                   const getProduct = getItem?.product
@@ -51,11 +55,13 @@ export function OffersView() {
                     name: offer.title,
                     buyProduct: {
                       name: buyProduct?.name || 'Product',
-                      image: buyProduct?.images?.[0] || ''
+                      image: buyProduct?.images?.[0] || '',
+                      count: buyItems.length > 1 ? buyItems.reduce((acc, i) => acc + i.quantity, 0) : undefined
                     },
                     getProduct: {
                       name: getProduct?.name || 'Product',
-                      image: getProduct?.images?.[0] || ''
+                      image: getProduct?.images?.[0] || '',
+                      count: freeItems.length > 1 ? freeItems.reduce((acc, i) => acc + i.quantity, 0) : undefined
                     },
                     savingsValue: offer.discount_value || 0,
                     description: offer.description || undefined,
