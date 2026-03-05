@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Upload, X, Loader2, Check, ArrowLeft } from 'lucide-react'
 import { useOffers } from '@/hooks/use-offers'
