@@ -242,6 +242,7 @@ export function CollectionLayout({
                             exit={{ x: "100%" }}
                             transition={{ type: "tween", duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                             className="fixed top-0 right-0 h-full w-[85vw] sm:w-[380px] bg-rich-black z-50 overflow-y-auto border-l border-dark-border lg:hidden flex flex-col"
+                            data-lenis-prevent
                         >
                             <div className="p-6 md:p-8 flex justify-between items-center border-b border-dark-border bg-rich-black sticky top-0 z-10">
                                 <h3 className="font-sans text-sm font-semibold uppercase tracking-widest text-white">Filters</h3>
@@ -250,7 +251,7 @@ export function CollectionLayout({
                                 </button>
                             </div>
 
-                            <div className="p-6 md:p-8 flex-1 overflow-y-auto hide-scrollbar">
+                            <div className="p-6 md:p-8 flex-1 overflow-y-auto hide-scrollbar" data-lenis-prevent>
                                 <CollectionSidebar
                                     filters={filters}
                                     setFilters={setFilters}

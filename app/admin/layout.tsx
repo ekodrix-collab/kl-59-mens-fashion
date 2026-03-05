@@ -79,7 +79,7 @@ export default function AdminLayout({
         </button>
       </div>
 
-      <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
+      <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto" data-lenis-prevent>
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href)
           return (

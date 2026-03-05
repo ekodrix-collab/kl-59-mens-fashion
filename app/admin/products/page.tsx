@@ -60,7 +60,7 @@ export default function AdminProductsPage() {
 
       {/* Premium Table */}
       <div className="bg-rich-black/50 backdrop-blur-sm border border-white/5 overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" data-lenis-prevent>
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/10 bg-black/40">

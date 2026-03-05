@@ -72,7 +72,7 @@ export default function AdminDashboard() {
             View All <ArrowUpRight size={12} />
           </Link>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" data-lenis-prevent>
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/5">
