@@ -48,7 +48,7 @@ export function WhatsAppDrawer({
               <span className="font-sans text-[11px] font-medium uppercase tracking-[0.3em] text-white/70">
                 Order Review
               </span>
-              <button 
+              <button
                 onClick={onClose}
                 className="w-10 h-10 flex items-center justify-center border border-white/10 hover:border-white transition-colors text-white/50 hover:text-white"
               >
@@ -57,8 +57,8 @@ export function WhatsAppDrawer({
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-y-auto p-8 flex flex-col gap-10">
-              
+            <div className="flex-1 overflow-y-auto p-8 flex flex-col gap-10" data-lenis-prevent>
+
               {/* Product Summary */}
               <div className="flex gap-6">
                 <div className="relative w-24 aspect-[2/3] bg-white/5 border border-white/10">
@@ -90,7 +90,7 @@ export function WhatsAppDrawer({
               {/* Trust Indicators */}
               <div className="space-y-6 flex-1">
                 <h4 className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/50 mb-6 border-b border-white/10 pb-2">Bespoke Delivery Process</h4>
-                
+
                 <div className="flex gap-4 items-start pb-4">
                   <ShieldCheck size={20} strokeWidth={1.5} className="text-gold mt-1 shrink-0" />
                   <div>

@@ -121,7 +121,7 @@ export default function NewOfferPage() {
     }) => (
         <div>
             <label className={labelClass}>{label}</label>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[260px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[260px] overflow-y-auto pr-2 custom-scrollbar" data-lenis-prevent>
                 {products?.map(p => (
                     <div
                         key={p.id}
@@ -254,7 +254,7 @@ export default function NewOfferPage() {
                             </div>
                             <div>
                                 <label className={labelClass}>Select Products for Combo</label>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar" data-lenis-prevent>
                                     {products?.map(p => {
                                         const item = comboItems.find(i => i.product_id === p.id)
                                         return (

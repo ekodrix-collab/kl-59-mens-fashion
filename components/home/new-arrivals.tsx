@@ -76,6 +76,7 @@ export function NewArrivals() {
       <div
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto hide-scrollbar px-6 lg:px-10 snap-x snap-mandatory"
+        data-lenis-prevent
       >
         {arrivals.map((product, i) => {
           const primaryCat = product.product_categories?.find(pc => pc.is_primary)?.category?.name
