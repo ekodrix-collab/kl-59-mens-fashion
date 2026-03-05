@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/logo";
 import { MagneticElement } from "@/components/ui/magnetic-element";
 import Link from "next/link";
@@ -13,39 +13,45 @@ export function HeroVideo() {
   const { storeInfoQuery } = useStoreInfo();
   const { data: storeInfo } = storeInfoQuery;
 
-  const videoUrl = optimizeVideoUrl(storeInfo?.hero_video || "https://res.cloudinary.com/dnd76mj4h/video/upload/v1740810842/kl59/hero-cinematic_p8j9v7.mp4");
-  const posterUrl = optimizeImageUrl(storeInfo?.hero_image || "https://images.unsplash.com/photo-1441984908747-d44f85a44111?auto=format&fit=crop&q=90&w=2000");
+  const [mounted, setMounted] = useState(false);
+
+  const videoUrl = storeInfo?.hero_video ? optimizeVideoUrl(storeInfo.hero_video) : null;
+  const posterUrl = storeInfo?.hero_image ? optimizeImageUrl(storeInfo.hero_image) : null;
 
   useEffect(() => {
+    setMounted(true);
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.8;
     }
   }, [videoUrl]);
 
+  // Determine what to show — only after mount to avoid hydration mismatch
+  const showVideo = mounted && videoUrl;
+  const showPoster = mounted && !videoUrl && posterUrl;
+
   return (
     <section className="relative h-screen min-h-[660px] md:min-h-0 h-[100dvh] w-full overflow-hidden bg-black">
-      {/* Background Video */}
+      {/* Background */}
       <div className="absolute inset-0 z-0">
-        <video
-          key={videoUrl}
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="h-full w-full object-cover opacity-60 grayscale-[0.3]"
-          poster={posterUrl}
-        >
-          {storeInfo?.hero_video ? (
+        {showVideo ? (
+          <video
+            key={videoUrl}
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover opacity-60 grayscale-[0.3]"
+            poster={posterUrl || undefined}
+          >
             <source src={videoUrl} type="video/mp4" />
-          ) : (
-            <>
-              <source src="https://videos.pexels.com/video-files/6765484/6765484-hd_1280_720_25fps.mp4" type="video/mp4" />
-              <source src="https://videos.pexels.com/video-files/6765484/6765484-sd_960_540_25fps.mp4" type="video/mp4" />
-            </>
-          )}
-          Your browser does not support the video tag.
-        </video>
+            Your browser does not support the video tag.
+          </video>
+        ) : showPoster ? (
+          <img src={posterUrl} alt="" className="h-full w-full object-cover opacity-40" />
+        ) : (
+          <div className="h-full w-full bg-gradient-to-br from-zinc-900 via-black to-zinc-800" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
       </div>
 
