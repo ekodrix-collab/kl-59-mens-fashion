@@ -44,9 +44,20 @@ export default function EditOfferPage() {
     const [comboItems, setComboItems] = useState<{ product_id: string; quantity: number }[]>([])
 
     // BOGO
-    const [bogoProductId, setBogoProductId] = useState<string | null>(null)
-    const [bogoFreeProductId, setBogoFreeProductId] = useState<string | null>(null)
+    const [bogoBuyItems, setBogoBuyItems] = useState<{ product_id: string; quantity: number }[]>([])
+    const [bogoFreeItems, setBogoFreeItems] = useState<{ product_id: string; quantity: number }[]>([])
     const [bogoSavingsValue, setBogoSavingsValue] = useState('')
+
+    // Auto-calculate BOGO savings
+    useEffect(() => {
+        if (offerType === 'bogo') {
+            const total = bogoFreeItems.reduce((sum, item) => {
+                const product = products?.find(p => p.id === item.product_id)
+                return sum + (product?.selling_price || 0) * item.quantity
+            }, 0)
+            setBogoSavingsValue(total > 0 ? total.toString() : '')
+        }
+    }, [bogoFreeItems, offerType, products])
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -69,8 +80,9 @@ export default function EditOfferPage() {
             }
 
             if (offer.offer_type === 'bogo' && offer.combo_items) {
-                setBogoProductId(offer.combo_items[0]?.product_id || null)
-                setBogoFreeProductId(offer.combo_items[1]?.product_id || null)
+                const buyCount = offer.combo_price ? Number(offer.combo_price) : 1
+                setBogoBuyItems(offer.combo_items.slice(0, buyCount).map(i => ({ product_id: i.product_id, quantity: i.quantity })))
+                setBogoFreeItems(offer.combo_items.slice(buyCount).map(i => ({ product_id: i.product_id, quantity: i.quantity })))
                 setBogoSavingsValue(offer.discount_value?.toString() || '')
             }
         }
@@ -106,7 +118,9 @@ export default function EditOfferPage() {
                 discount_value: offerType === 'bogo'
                     ? (bogoSavingsValue ? Number(bogoSavingsValue) : null)
                     : (discountValue ? Number(discountValue) : null),
-                combo_price: comboPrice ? Number(comboPrice) : null,
+                combo_price: offerType === 'bogo'
+                    ? bogoBuyItems.length
+                    : (comboPrice ? Number(comboPrice) : null),
                 start_date: startDate || null,
                 end_date: endDate || null,
                 is_active: status,
@@ -122,9 +136,10 @@ export default function EditOfferPage() {
             } else if (offerType === 'combo') {
                 payload.combo_items = comboItems
             } else if (offerType === 'bogo') {
-                const items = []
-                if (bogoProductId) items.push({ product_id: bogoProductId, quantity: 1 })
-                if (bogoFreeProductId) items.push({ product_id: bogoFreeProductId, quantity: 1 })
+                const items = [
+                    ...bogoBuyItems.map(item => ({ product_id: item.product_id, quantity: item.quantity })),
+                    ...bogoFreeItems.map(item => ({ product_id: item.product_id, quantity: item.quantity }))
+                ]
                 payload.combo_items = items
             }
 
@@ -308,19 +323,77 @@ export default function EditOfferPage() {
                             <div className="border border-gold/20 bg-gold/5 px-5 py-4">
                                 <p className="font-sans text-[10px] text-gold/80 leading-relaxed">
                                     <span className="font-semibold text-gold uppercase tracking-wider block mb-1">BOGO Configuration</span>
-                                    Customer purchases the "Buy" product and receives the "Get (Free)" product at no extra cost.
+                                    Customer purchases the "Buy" product(s) and receives the "Get (Free)" product(s) at no extra cost.
                                 </p>
                             </div>
-                            <ProductPicker label="Buy Product (Customer Purchases)" selectedId={bogoProductId} onSelect={setBogoProductId} />
+
+                            <div>
+                                <label className={labelClass}>Buy Product(s) (Customer Purchases)</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar" data-lenis-prevent>
+                                    {products?.map(p => {
+                                        const item = bogoBuyItems.find(i => i.product_id === p.id)
+                                        return (
+                                            <div key={p.id} className={`flex items-center gap-4 p-4 border transition-all ${item ? 'border-gold bg-gold/5' : 'border-white/5 bg-black/20'}`}>
+                                                <div className="w-10 h-10 bg-white/5 overflow-hidden flex-shrink-0">{p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}</div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[11px] text-white truncate">{p.name}</p>
+                                                    <p className="text-[9px] text-white/40">₹{p.selling_price}</p>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    {item ? (
+                                                        <>
+                                                            <button onClick={() => setBogoBuyItems(prev => prev.map(i => i.product_id === p.id ? { ...i, quantity: Math.max(0, i.quantity - 1) } : i).filter(i => i.quantity > 0))} className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold">-</button>
+                                                            <span className="text-[10px] text-white w-4 text-center">{item.quantity}</span>
+                                                            <button onClick={() => setBogoBuyItems(prev => prev.map(i => i.product_id === p.id ? { ...i, quantity: i.quantity + 1 } : i))} className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold">+</button>
+                                                        </>
+                                                    ) : (
+                                                        <button onClick={() => setBogoBuyItems(prev => [...prev, { product_id: p.id, quantity: 1 }])} className="px-3 py-1 border border-white/10 text-[9px] uppercase tracking-wider text-white/60 hover:border-gold hover:text-gold">Add</button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
                             <div className="flex items-center gap-4">
                                 <div className="flex-1 h-px bg-gold/10" />
                                 <span className="font-accent italic text-gold text-sm px-2">+</span>
                                 <div className="flex-1 h-px bg-gold/10" />
                             </div>
-                            <ProductPicker label="Get (Free) Product — Given at no cost" selectedId={bogoFreeProductId} onSelect={setBogoFreeProductId} />
+
                             <div>
-                                <label className={labelClass}>Savings Value (₹) — shown on card</label>
-                                <input type="number" value={bogoSavingsValue} onChange={(e) => setBogoSavingsValue(e.target.value)} className={inputClass} placeholder="e.g. 799 (price of the free product)" />
+                                <label className={labelClass}>Get (Free) Product(s) — Given at no cost</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar" data-lenis-prevent>
+                                    {products?.map(p => {
+                                        const item = bogoFreeItems.find(i => i.product_id === p.id)
+                                        return (
+                                            <div key={p.id} className={`flex items-center gap-4 p-4 border transition-all ${item ? 'border-gold bg-gold/5' : 'border-white/5 bg-black/20'}`}>
+                                                <div className="w-10 h-10 bg-white/5 overflow-hidden flex-shrink-0">{p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}</div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-[11px] text-white truncate">{p.name}</p>
+                                                    <p className="text-[9px] text-white/40">₹{p.selling_price}</p>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    {item ? (
+                                                        <>
+                                                            <button onClick={() => setBogoFreeItems(prev => prev.map(i => i.product_id === p.id ? { ...i, quantity: Math.max(0, i.quantity - 1) } : i).filter(i => i.quantity > 0))} className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold">-</button>
+                                                            <span className="text-[10px] text-white w-4 text-center">{item.quantity}</span>
+                                                            <button onClick={() => setBogoFreeItems(prev => prev.map(i => i.product_id === p.id ? { ...i, quantity: i.quantity + 1 } : i))} className="w-6 h-6 border border-white/10 flex items-center justify-center text-white hover:border-gold">+</button>
+                                                        </>
+                                                    ) : (
+                                                        <button onClick={() => setBogoFreeItems(prev => [...prev, { product_id: p.id, quantity: 1 }])} className="px-3 py-1 border border-white/10 text-[9px] uppercase tracking-wider text-white/60 hover:border-gold hover:text-gold">Add</button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Savings Value (₹) — Auto-calculated</label>
+                                <input type="number" value={bogoSavingsValue} readOnly className={`${inputClass} opacity-70 cursor-not-allowed`} placeholder="Will be calculated automatically" />
                             </div>
                         </div>
                     )}
