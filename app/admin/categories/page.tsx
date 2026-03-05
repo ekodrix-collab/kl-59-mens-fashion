@@ -7,6 +7,7 @@ import { slugify } from '@/lib/utils'
 import { ConfirmationModal } from '@/components/ui/confirmation-modal'
 import { uploadToCloudinary } from '@/lib/cloudinary-upload'
 import { LoadingScreen } from '@/components/ui/loading-screen'
+import { toast } from 'react-hot-toast'
 
 export default function AdminCategoriesPage() {
   const { categoriesQuery, createCategory, updateCategory, deleteCategory } = useCategories()
@@ -33,10 +34,12 @@ export default function AdminCategoriesPage() {
         image: formData.image,
         display_order: categories ? categories.length : 0
       })
+      toast.success('Category created successfully')
       resetForm()
       setIsAdding(false)
     } catch (error) {
       console.error('Failed to create category:', error)
+      toast.error('Failed to create category. Please try again.')
     }
   }
 
@@ -49,10 +52,12 @@ export default function AdminCategoriesPage() {
         slug: slugify(formData.name),
         image: formData.image
       })
+      toast.success('Category updated successfully')
       setEditingId(null)
       resetForm()
     } catch (error) {
       console.error('Failed to update category:', error)
+      toast.error('Failed to update category. Please try again.')
     }
   }
 
@@ -60,9 +65,11 @@ export default function AdminCategoriesPage() {
     if (!deleteId) return
     try {
       await deleteCategory.mutateAsync(deleteId)
+      toast.success('Category deleted successfully')
       setDeleteId(null)
     } catch (error) {
       console.error('Failed to delete category:', error)
+      toast.error('Failed to delete category. Please try again.')
     }
   }
 
@@ -74,9 +81,10 @@ export default function AdminCategoriesPage() {
     try {
       const url = await uploadToCloudinary(file)
       setFormData(prev => ({ ...prev, image: url }))
+      toast.success('Image uploaded')
     } catch (error) {
       console.error('Upload failed:', error)
-      alert('Image upload failed. Please check your Cloudinary settings.')
+      toast.error('Image upload failed. Please check your settings.')
     } finally {
       setIsUploading(false)
     }

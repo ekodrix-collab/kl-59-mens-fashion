@@ -40,7 +40,7 @@ export function ProductGallery({ images }: { images: string[] }) {
         </AnimatePresence>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto hide-scrollbar">
+      <div className="flex gap-4 overflow-x-auto hide-scrollbar" data-lenis-prevent>
         {images.map((img, i) => (
           <button
             key={i}
@@ -50,11 +50,11 @@ export function ProductGallery({ images }: { images: string[] }) {
               activeImage === i ? "border-gold" : "border-transparent"
             )}
           >
-            <Image 
-              src={optimizeImageUrl(img)} 
-              alt={`Thumb ${i}`} 
-              fill 
-              className="object-cover" 
+            <Image
+              src={optimizeImageUrl(img)}
+              alt={`Thumb ${i}`}
+              fill
+              className="object-cover"
               sizes="80px"
             />
           </button>

@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { createClient } from '@/lib/supabase/client'
+import { slugify } from '@/lib/utils'
 import type { Product, ProductCategory } from '@/types'
 
 const supabase = createClient()
@@ -92,9 +93,38 @@ export function useProducts(options?: { categorySlug?: string; featured?: boolea
         enabled: !!id
     })
 
+    const ensureUniqueSlug = async (name: string, currentId?: string) => {
+        let slug = slugify(name)
+        let uniqueSlug = slug
+        let counter = 1
+
+        while (true) {
+            const query = supabase
+                .from('products')
+                .select('id')
+                .eq('slug', uniqueSlug)
+
+            if (currentId) {
+                query.not('id', 'eq', currentId)
+            }
+
+            const { data, error } = await query.maybeSingle()
+
+            if (error) throw error
+            if (!data) return uniqueSlug
+
+            uniqueSlug = `${slug}-${counter}`
+            counter++
+        }
+    }
+
     const createProduct = useMutation({
         mutationFn: async (newProduct: any & { category_ids?: string[], primary_category_id?: string }) => {
             const { category_ids, primary_category_id, ...productData } = newProduct
+
+            // Ensure unique slug
+            const uniqueSlug = await ensureUniqueSlug(productData.name)
+            productData.slug = uniqueSlug
 
             // 1. Insert product
             const { data: product, error: pError } = await supabase
@@ -131,6 +161,12 @@ export function useProducts(options?: { categorySlug?: string; featured?: boolea
         mutationFn: async (updatedProduct: any & { id: string, category_ids?: string[], primary_category_id?: string }) => {
             const { id, category_ids, primary_category_id, ...productData } = updatedProduct
 
+            // Ensure unique slug if name changed or slug is being updated
+            if (productData.name) {
+                const uniqueSlug = await ensureUniqueSlug(productData.name, id)
+                productData.slug = uniqueSlug
+            }
+
             // 1. Update product
             const { data: product, error: pError } = await supabase
                 .from('products')
@@ -160,9 +196,10 @@ export function useProducts(options?: { categorySlug?: string; featured?: boolea
 
             return product as Product
         },
-        onSuccess: (_, variables) => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['products'] })
-            queryClient.invalidateQueries({ queryKey: ['product', variables.slug] })
+            queryClient.invalidateQueries({ queryKey: ['product', data.id] })
+            queryClient.invalidateQueries({ queryKey: ['product', data.slug] })
         },
     })
 

@@ -58,9 +58,10 @@ export default function NewProductPage() {
       const uploadPromises = Array.from(files).map(file => uploadToCloudinary(file))
       const urls = await Promise.all(uploadPromises)
       setImages(prev => [...prev, ...urls])
+      toast.success('Images uploaded successfully')
     } catch (error) {
       console.error('Upload failed:', error)
-      alert('Failed to upload some images')
+      toast.error('Failed to upload some images. Please try again.')
     } finally {
       setIsUploading(false)
     }
@@ -74,8 +75,14 @@ export default function NewProductPage() {
   }
 
   const handlePublish = async (isPublished: boolean = true) => {
-    if (!name || selectedCategoryIds.length === 0 || !mrp || !sellingPrice) {
-      toast.error('Please fill required fields (Name, Category, MRP, Selling Price)')
+    const missingFields = []
+    if (!name) missingFields.push('Name')
+    if (selectedCategoryIds.length === 0) missingFields.push('Category')
+    if (!mrp) missingFields.push('MRP')
+    if (!sellingPrice) missingFields.push('Selling Price')
+
+    if (missingFields.length > 0) {
+      toast.error(`Please fill required fields: ${missingFields.join(', ')}`)
       return
     }
 
@@ -123,7 +130,7 @@ export default function NewProductPage() {
             className={inputClass}
             placeholder="e.g. Classic Slim Fit Denim"
           />
-          {name && <p className="text-[10px] font-body text-gold mt-2">Slug: {slugify(name)}</p>}
+          {name && <p className="text-[10px] font-body text-gold mt-2 uppercase tracking-wider">Preview Slug: {slugify(name)} <span className="text-white/30 normal-case ml-2">(Will be uniquely adjusted if name exists)</span></p>}
         </div>
 
         {/* Multi-Category Selection */}

@@ -6,6 +6,7 @@ import { useProducts } from '@/hooks/use-products'
 import { useState } from 'react'
 import { ConfirmationModal } from '@/components/ui/confirmation-modal'
 import { LoadingScreen } from '@/components/ui/loading-screen'
+import { toast } from 'react-hot-toast'
 
 export default function AdminProductsPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -17,9 +18,11 @@ export default function AdminProductsPage() {
     if (!deleteId) return
     try {
       await deleteProduct.mutateAsync(deleteId)
+      toast.success('Product deleted successfully')
       setDeleteId(null)
     } catch (error) {
       console.error('Failed to delete product:', error)
+      toast.error('Failed to delete product. Please try again.')
     }
   }
 
@@ -57,7 +60,7 @@ export default function AdminProductsPage() {
 
       {/* Premium Table */}
       <div className="bg-rich-black/50 backdrop-blur-sm border border-white/5 overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" data-lenis-prevent>
           <table className="w-full">
             <thead>
               <tr className="border-b border-white/10 bg-black/40">
@@ -103,13 +106,13 @@ export default function AdminProductsPage() {
                     </td>
                     <td className="px-8 py-6">
                       <div className="flex items-center justify-end gap-5">
-                        <Link 
-                          href={`/shop/${product.slug}`} 
+                        <Link
+                          href={`/shop/${product.slug}`}
                           target="_blank"
                           className="text-white/20 hover:text-gold transition-colors"
                           title="View on site"
                         >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
                         </Link>
                         <Link href={`/admin/products/${product.id}`} className="text-white/20 hover:text-gold transition-colors" title="Edit">
                           <Pencil size={15} strokeWidth={1.5} />

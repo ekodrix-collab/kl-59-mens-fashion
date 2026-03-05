@@ -2,22 +2,23 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Upload, 
-  Image as ImageIcon, 
-  Film, 
-  Link as LinkIcon, 
-  Check, 
-  Copy, 
-  X, 
-  Loader2, 
-  Plus, 
+import {
+  Upload,
+  Image as ImageIcon,
+  Film,
+  Link as LinkIcon,
+  Check,
+  Copy,
+  X,
+  Loader2,
+  Plus,
   ExternalLink,
   Code2,
   Trash2,
   FileText,
   Search
 } from 'lucide-react'
+import { toast } from 'react-hot-toast'
 
 // Define the Media Item type
 interface MediaItem {
@@ -74,13 +75,13 @@ export default function MediaPage() {
     try {
       const timestamp = Math.round(new Date().getTime() / 1000)
       const paramsToSign = { timestamp }
-      
+
       const signRes = await fetch('/api/admin/cloudinary-sign', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paramsToSign })
       })
-      
+
       const { signature } = await signRes.json()
       setUploadProgress(40)
 
@@ -102,7 +103,7 @@ export default function MediaPage() {
       if (data.secure_url) {
         // Apply optimization parameters for reliable browser display
         const optimizedUrl = data.secure_url.replace('/upload/', '/upload/f_auto,q_auto/');
-        
+
         const newItem: MediaItem = {
           id: data.public_id,
           url: optimizedUrl,
@@ -112,10 +113,11 @@ export default function MediaPage() {
           created_at: new Date().toISOString()
         }
         setAssets([newItem, ...assets])
+        toast.success('Asset uploaded successfully')
       }
     } catch (error) {
       console.error('Upload failed:', error)
-      alert('Upload failed. Check console for details.')
+      toast.error('Upload failed. Please try again.')
     } finally {
       setIsUploading(false)
       setUploadProgress(0)
@@ -132,7 +134,7 @@ export default function MediaPage() {
     setAssets(assets.filter(a => a.id !== id))
   }
 
-  const filteredAssets = assets.filter(a => 
+  const filteredAssets = assets.filter(a =>
     a.public_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
     a.format.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -146,11 +148,11 @@ export default function MediaPage() {
           <h1 className="font-display text-5xl text-white leading-none">Brand <span className="italic font-medium">Gallery</span></h1>
           <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/30 mt-4">Manage boutique visuals and campaign assets</p>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row items-center gap-4">
           <div className="relative w-full sm:w-64 group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-hover:text-gold transition-colors" size={14} />
-            <input 
+            <input
               type="text"
               placeholder="SEARCH ASSETS..."
               value={searchQuery}
@@ -158,7 +160,7 @@ export default function MediaPage() {
               className="w-full bg-white/5 border border-white/10 rounded-none py-3 pl-12 pr-4 text-[10px] font-sans tracking-widest text-white focus:outline-none focus:border-gold transition-all"
             />
           </div>
-          <button 
+          <button
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
             className="w-full sm:w-auto flex items-center justify-center gap-3 px-10 py-4 bg-white hover:bg-gold text-black transition-all duration-500 rounded-none"
@@ -173,7 +175,7 @@ export default function MediaPage() {
       {/* Progress Multi-stage */}
       <AnimatePresence>
         {isUploading && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -193,7 +195,7 @@ export default function MediaPage() {
                 <span className="font-display text-4xl text-gold font-light">{uploadProgress}%</span>
               </div>
               <div className="h-[2px] bg-white/5 w-full relative">
-                <motion.div 
+                <motion.div
                   className="absolute inset-y-0 left-0 bg-gold shadow-[0_0_15px_rgba(212,175,55,0.5)]"
                   initial={{ width: 0 }}
                   animate={{ width: `${uploadProgress}%` }}
@@ -216,7 +218,7 @@ export default function MediaPage() {
           </div>
         ) : (
           filteredAssets.map((asset, index) => (
-            <motion.div 
+            <motion.div
               key={asset.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -230,7 +232,7 @@ export default function MediaPage() {
                 ) : (
                   <img src={asset.url} alt={asset.public_id} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-90 group-hover:opacity-100" />
                 )}
-                
+
                 {/* Format Badge */}
                 <div className="absolute top-4 left-4 flex items-center gap-2">
                   <span className="px-3 py-1 bg-black/80 backdrop-blur-md border border-white/10 text-[8px] font-sans font-bold uppercase tracking-widest text-white">
@@ -246,23 +248,23 @@ export default function MediaPage() {
                 {/* Overlay Actions */}
                 <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm">
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={() => copyToClipboard(asset.url, `url-${asset.id}`)}
                       className="p-3 bg-white text-black hover:bg-gold transition-colors"
                       title="Copy Direct URL"
                     >
                       {copiedId === `url-${asset.id}` ? <Check size={16} /> : <LinkIcon size={16} />}
                     </button>
-                    <button 
+                    <button
                       onClick={() => copyToClipboard(`![${asset.public_id}](${asset.url})`, `md-${asset.id}`)}
                       className="p-3 bg-white text-black hover:bg-gold transition-colors"
                       title="Copy Markdown"
                     >
                       {copiedId === `md-${asset.id}` ? <Check size={16} /> : <Code2 size={16} />}
                     </button>
-                    <a 
-                      href={asset.url} 
-                      target="_blank" 
+                    <a
+                      href={asset.url}
+                      target="_blank"
                       className="p-3 bg-white text-black hover:bg-gold transition-colors"
                     >
                       <ExternalLink size={16} />
@@ -285,7 +287,7 @@ export default function MediaPage() {
                       ID: {asset.id}
                     </p>
                   </div>
-                  <button 
+                  <button
                     onClick={() => deleteAsset(asset.id)}
                     className="text-white/10 hover:text-red-500 transition-colors"
                   >
@@ -314,7 +316,7 @@ export default function MediaPage() {
           <div className="absolute top-0 right-0 p-20 opacity-[0.02] pointer-events-none">
             <FileText size={300} className="text-gold" />
           </div>
-          
+
           <div className="flex-1 space-y-6 relative z-10">
             <h3 className="font-display text-3xl text-white">System <span className="italic">Architecture</span></h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
