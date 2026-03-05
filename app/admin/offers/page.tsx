@@ -6,6 +6,7 @@ import { useOffers } from '@/hooks/use-offers'
 import { useState } from 'react'
 import { ConfirmationModal } from '@/components/ui/confirmation-modal'
 import { LoadingScreen } from '@/components/ui/loading-screen'
+import { toast } from 'react-hot-toast'
 
 export default function AdminOffersPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null)
@@ -16,9 +17,11 @@ export default function AdminOffersPage() {
     if (!deleteId) return
     try {
       await deleteOffer.mutateAsync(deleteId)
+      toast.success('Offer deleted successfully')
       setDeleteId(null)
     } catch (error) {
       console.error('Failed to delete offer:', error)
+      toast.error('Failed to delete offer. Please try again.')
     }
   }
 

@@ -8,6 +8,7 @@ import { useProducts } from '@/hooks/use-products'
 import { uploadToCloudinary } from '@/lib/cloudinary-upload'
 import { OfferType, DiscountType } from '@/types'
 import Link from 'next/link'
+import { toast } from 'react-hot-toast'
 
 const OFFER_TYPES: { value: OfferType; label: string; desc: string }[] = [
     { value: 'product_offer', label: 'Product Offer', desc: 'Single product discount' },
@@ -83,9 +84,10 @@ export default function EditOfferPage() {
         try {
             const url = await uploadToCloudinary(file)
             setBannerImage(url)
+            toast.success('Banner image uploaded')
         } catch (error) {
             console.error('Upload failed:', error)
-            alert('Failed to upload banner image')
+            toast.error('Failed to upload banner image')
         } finally {
             setIsUploading(false)
         }
@@ -128,10 +130,11 @@ export default function EditOfferPage() {
             }
 
             await updateOffer.mutateAsync(payload)
+            toast.success('Offer updated successfully')
             router.push('/admin/offers')
         } catch (error) {
             console.error('Failed to update offer:', error)
-            alert('Error updating offer. See console.')
+            toast.error('Failed to update offer. Please try again.')
         }
     }
 

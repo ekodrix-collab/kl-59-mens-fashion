@@ -86,9 +86,10 @@ export default function EditProductPage() {
             const uploadPromises = Array.from(files).map(file => uploadToCloudinary(file))
             const urls = await Promise.all(uploadPromises)
             setImages(prev => [...prev, ...urls])
+            toast.success('Images uploaded successfully')
         } catch (error) {
             console.error('Upload failed:', error)
-            alert('Failed to upload some images')
+            toast.error('Failed to upload some images. Please try again.')
         } finally {
             setIsUploading(false)
         }
@@ -102,8 +103,14 @@ export default function EditProductPage() {
     }
 
     const handleSave = async (publishedStatus: boolean = isPublished) => {
-        if (!name || selectedCategoryIds.length === 0 || !mrp || !sellingPrice) {
-            toast.error('Please fill required fields (Name, Category, MRP, Selling Price)')
+        const missingFields = []
+        if (!name) missingFields.push('Name')
+        if (selectedCategoryIds.length === 0) missingFields.push('Category')
+        if (!mrp) missingFields.push('MRP')
+        if (!sellingPrice) missingFields.push('Selling Price')
+
+        if (missingFields.length > 0) {
+            toast.error(`Please fill required fields: ${missingFields.join(', ')}`)
             return
         }
 
@@ -153,8 +160,8 @@ export default function EditProductPage() {
                 </Link>
                 <h1 className="font-sans text-2xl md:text-3xl text-white font-light tracking-tight">Edit Product</h1>
                 {product?.slug && (
-                    <Link 
-                        href={`/shop/${product.slug}`} 
+                    <Link
+                        href={`/shop/${product.slug}`}
                         target="_blank"
                         className="ml-auto flex items-center gap-2 text-[10px] font-sans uppercase tracking-[0.2em] text-gold hover:text-white transition-colors"
                     >
@@ -174,7 +181,12 @@ export default function EditProductPage() {
                         className={inputClass}
                         placeholder="e.g. Classic Slim Fit Denim"
                     />
-                    {name && <p className="text-[10px] font-body text-gold mt-2">Slug: {slugify(name)}</p>}
+                    <div className="flex items-center gap-2 mt-2">
+                        <p className="text-[10px] font-body text-gold/60 uppercase tracking-wider">Actual Slug: {product?.slug}</p>
+                        {name && slugify(name) !== product?.slug && (
+                            <p className="text-[10px] font-body text-white/30">(Preview: {slugify(name)})</p>
+                        )}
+                    </div>
                 </div>
 
                 {/* Multi-Category Selection */}
