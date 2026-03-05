@@ -95,6 +95,12 @@ export const metadata: Metadata = {
   creator: 'Ekodrix',
   publisher: "KL-59 Men's Fashion",
 
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: "KL-59",
+  },
+
   formatDetection: {
     email: false,
     address: false,
@@ -163,6 +169,7 @@ import { QueryProvider } from '@/components/providers/query-provider'
 import { PreLoader } from '@/components/home/pre-loader'
 
 import { Toaster } from 'react-hot-toast'
+import { PWARegistration } from '@/components/providers/pwa-registration'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -203,6 +210,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               }
             }}
           />
+          <PWARegistration />
         </QueryProvider>
       </body>
     </html>
