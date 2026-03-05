@@ -11,7 +11,6 @@ import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 
 const OFFER_TYPES: { value: OfferType; label: string; desc: string }[] = [
-    { value: 'product_offer', label: 'Product Offer', desc: 'Single product discount' },
     { value: 'combo', label: 'Combo Deal', desc: 'Bundle at a fixed price' },
     { value: 'bogo', label: 'Buy One Get One', desc: 'Free product with purchase' },
 ]
@@ -26,7 +25,7 @@ export default function EditOfferPage() {
     const { productsQuery } = useProducts()
     const { data: products } = productsQuery
 
-    const [offerType, setOfferType] = useState<OfferType>('product_offer')
+    const [offerType, setOfferType] = useState<OfferType>('combo')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [discountType, setDiscountType] = useState<DiscountType>('percentage')
@@ -197,7 +196,7 @@ export default function EditOfferPage() {
                 {/* ── Type (read-only) ── */}
                 <div className="bg-rich-black/30 p-8 border border-white/5 opacity-50 pointer-events-none">
                     <label className={labelClass}>Offer Type (Cannot change type after creation)</label>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {OFFER_TYPES.map(({ value, label, desc }) => (
                             <button key={value} className={`px-5 py-4 border text-left ${offerType === value ? 'border-gold bg-gold/5' : 'border-white/10'}`}>
                                 <span className={`block font-sans text-[10px] uppercase tracking-[0.2em] font-medium mb-1 ${offerType === value ? 'text-gold' : 'text-white/40'}`}>{label}</span>
