@@ -2,13 +2,19 @@ import { Logo } from "@/components/ui/logo";
 import Link from "next/link";
 import { useStoreInfo } from "@/hooks/use-store-info";
 import { useOffers } from "@/hooks/use-offers";
+import { useState, useEffect } from "react";
 
 export default function Footer() {
+  const [mounted, setMounted] = useState(false);
   const { storeInfoQuery } = useStoreInfo();
   const { data: storeInfo } = storeInfoQuery;
   const { offersQuery } = useOffers();
   const { data: offers } = offersQuery;
   const hasActiveOffers = offers?.some(o => o.is_active);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <footer className="bg-black py-20 border-t border-white/5">
@@ -24,7 +30,7 @@ export default function Footer() {
             { name: "Offers", href: "/offers" },
             { name: "Story", href: "/story" },
             { name: "Store", href: "/store" }
-          ].filter(item => item.name !== "Offers" || hasActiveOffers)
+          ].filter(item => !mounted || item.name !== "Offers" || hasActiveOffers)
             .map((item) => (
               <Link
                 key={item.name}
