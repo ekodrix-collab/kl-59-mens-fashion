@@ -42,7 +42,7 @@ export function CollectionSidebar({ filters, setFilters, availableCategories, av
             {availableCategories.length > 0 && (
                 <FilterSection title="Categories">
                     {availableCategories.map(cat => (
-                        <FilterCheckbox
+                        cat.slug!='uncategorized'&&<FilterCheckbox
                             key={cat.slug}
                             label={`${cat.name} (${cat.count})`}
                             checked={filters.categories.includes(cat.slug)}
