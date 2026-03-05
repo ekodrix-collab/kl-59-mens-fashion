@@ -54,7 +54,7 @@ export function RevealImage({
         <motion.div
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full h-full"
+          className="w-full h-full relative"
         >
           {aspectRatio === "auto" && width && height ? (
             <Image

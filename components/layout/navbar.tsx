@@ -23,6 +23,7 @@ import { useOffers } from "@/hooks/use-offers";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -31,6 +32,7 @@ export default function Navbar() {
   const hasActiveOffers = offers?.some(o => o.is_active);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
@@ -38,10 +40,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Filter links based on offer availability
-  const activeNavLinks = navLinks.filter(link =>
-    link.name !== "Offers" || hasActiveOffers
-  );
+  // Filter links based on offer availability — only after mount to avoid hydration mismatch
+  const activeNavLinks = mounted
+    ? navLinks.filter(link => link.name !== "Offers" || hasActiveOffers)
+    : navLinks;
 
   // Hide nav on home hero
   const showNav = !isHome || scrolled;
