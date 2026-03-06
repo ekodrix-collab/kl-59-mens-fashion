@@ -19,7 +19,7 @@ export function FeaturedProducts() {
   const displayedProducts = featured?.slice(0, 4) || [];
 
   return (
-    <section className="bg-rich-black py-32 md:py-40">
+    <section className="bg-rich-black py-16 md:py-40">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         <div className="flex flex-col gap-24 md:gap-32">
           {/* Featured Row 1: 50/50 */}
@@ -86,10 +86,10 @@ function ProductCard({ product, className, index }: { product: any; className?: 
       className={className}
     >
       <Link href={`/shop/${product.slug}`} className="group block">
-        <RevealImage 
-          src={product.images[0]} 
-          alt={product.name} 
-          aspectRatio="portrait" 
+        <RevealImage
+          src={product.images[0]}
+          alt={product.name}
+          aspectRatio="portrait"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <div className="mt-6 flex justify-between items-start">

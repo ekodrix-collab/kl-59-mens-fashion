@@ -152,7 +152,7 @@ export function CollectionLayout({
         <div className="bg-rich-black min-h-screen">
             <CollectionHero {...heroData} />
 
-            <section className="py-16 md:py-24">
+            <section className="py-8 md:py-24">
                 <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
 
                     {/* Mobile Search & Filter Toggle */}
