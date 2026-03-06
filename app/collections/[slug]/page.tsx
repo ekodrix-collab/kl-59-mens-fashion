@@ -86,10 +86,10 @@ export default function CollectionPage({ params }: { params: { slug: string } })
   processedProducts = [...processedProducts, ...comboOffersAsProducts];
 
   const name = currentCategory?.name || params.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-  
-  // High-end fallback logic for hero images
-  let image = currentCategory?.image;
-  
+
+  // Prefer dedicated banner_image; fall back to category card image, then static assets
+  let image = currentCategory?.banner_image || currentCategory?.image;
+
   if (!image) {
     if (params.slug === "formals") {
       image = "/images/collections/formals.jpg";

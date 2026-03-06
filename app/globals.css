@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Third-party component styles */
+@import 'react-image-crop/dist/ReactCrop.css';
+
 :root {
     --black: #000000;
     --rich-black: #0A0A0A;

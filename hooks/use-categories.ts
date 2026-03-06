@@ -24,10 +24,10 @@ export function useCategories() {
 
     const createCategory = useMutation({
         mutationFn: async (newCategory: Omit<Category, 'id' | 'created_at'>) => {
-            const { name, slug, image, display_order } = newCategory
+            const { name, slug, image, banner_image, display_order } = newCategory
             const { data, error } = await supabase
                 .from('categories')
-                .insert({ name, slug, image, display_order })
+                .insert({ name, slug, image, banner_image, display_order })
                 .select()
                 .single()
 
@@ -41,10 +41,10 @@ export function useCategories() {
 
     const updateCategory = useMutation({
         mutationFn: async (category: Partial<Category> & { id: string }) => {
-            const { id, name, slug, image, display_order } = category
+            const { id, name, slug, image, banner_image, display_order } = category
             const { data, error } = await supabase
                 .from('categories')
-                .update({ name, slug, image, display_order })
+                .update({ name, slug, image, banner_image, display_order })
                 .eq('id', id)
                 .select()
                 .single()
