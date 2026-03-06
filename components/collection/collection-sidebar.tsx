@@ -37,7 +37,7 @@ export function CollectionSidebar({ filters, setFilters, availableCategories, av
     };
 
     return (
-        <div className="w-full flex flex-col gap-10 font-sans max-h-[calc(100vh-140px)] overflow-y-auto pr-4 hide-scrollbar">
+        <div className="w-full flex flex-col gap-10 font-sans max-h-[calc(100vh-160px)] overflow-y-auto pr-6 custom-scrollbar scroll-smooth">
             {/* Categories */}
             {availableCategories.length > 0 && (
                 <FilterSection title="Categories">
