@@ -20,7 +20,7 @@ export function DenimEditorial() {
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
-    <section ref={containerRef} className="bg-black py-24 md:py-40 min-h-[70vh] flex flex-col md:flex-row items-center gap-20 md:gap-32 max-w-[1400px] mx-auto px-6 lg:px-10 overflow-hidden">
+    <section ref={containerRef} className="bg-black py-12 md:py-40 min-h-[70vh] flex flex-col md:flex-row items-center gap-20 md:gap-32 max-w-[1400px] mx-auto px-6 lg:px-10 overflow-hidden">
       {/* Left: Image Container */}
       <div className="relative w-full md:w-[45%] aspect-[3/4] overflow-hidden">
         <motion.div style={{ y }} className="absolute -inset-[10%] w-[120%] h-[120%]">
@@ -54,7 +54,7 @@ export function DenimEditorial() {
           >
             Denim
           </motion.span>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -91,7 +91,7 @@ export function DenimEditorial() {
             className="flex flex-col gap-10"
           >
             <span className="font-sans text-xl text-gold font-medium">Starting ₹999</span>
-            
+
             <MagneticElement>
               <a
                 href="/collections/denim"

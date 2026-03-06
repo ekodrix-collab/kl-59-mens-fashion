@@ -25,7 +25,7 @@ export function NewArrivals() {
   if (isLoading) return null;
 
   return (
-    <section className="bg-dark py-32 md:py-40 overflow-hidden">
+    <section className="bg-dark py-16 md:py-40 overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 mb-16 flex items-end justify-between">
         <div>
           <motion.span

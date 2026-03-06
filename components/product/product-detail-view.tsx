@@ -241,7 +241,7 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
       </div>
 
       {related.length > 0 && (
-        <section className="border-t border-white/5 py-24">
+        <section className="border-t border-white/5 py-12 md:py-24">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
             <div className="flex items-end justify-between mb-16">
               <div>
