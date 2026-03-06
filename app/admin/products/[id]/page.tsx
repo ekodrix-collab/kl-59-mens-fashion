@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { Upload, X, Loader2, Check, ArrowLeft } from 'lucide-react'
 import { SIZES } from '@/lib/constants'
@@ -8,6 +8,7 @@ import { slugify } from '@/lib/utils'
 import { useCategories } from '@/hooks/use-categories'
 import { useProducts } from '@/hooks/use-products'
 import { uploadToCloudinary } from '@/lib/cloudinary-upload'
+import { ImageCropModal } from '@/components/ui/image-crop-modal'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 
@@ -36,6 +37,10 @@ export default function EditProductPage() {
     const [onOffer, setOnOffer] = useState(false)
     const [isPublished, setIsPublished] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
+
+    // Crop queue: list of files waiting to be cropped
+    const [cropQueue, setCropQueue] = useState<File[]>([])
+    const fileInputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         if (product) {
@@ -77,22 +82,32 @@ export default function EditProductPage() {
         })
     }
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files
-        if (!files || files.length === 0) return
+    // When user selects files, push them into the crop queue
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || [])
+        if (files.length === 0) return
+        e.target.value = '' // reset so same file can be re-selected
+        setCropQueue(files)
+    }
 
+    // Called when user applies crop on the current (first) file in the queue
+    const handleCropApplied = async (croppedFile: File) => {
+        setCropQueue(prev => prev.slice(1))
         setIsUploading(true)
         try {
-            const uploadPromises = Array.from(files).map(file => uploadToCloudinary(file))
-            const urls = await Promise.all(uploadPromises)
-            setImages(prev => [...prev, ...urls])
-            toast.success('Images uploaded successfully')
+            const url = await uploadToCloudinary(croppedFile)
+            setImages(prev => [...prev, url])
         } catch (error) {
             console.error('Upload failed:', error)
-            toast.error('Failed to upload some images. Please try again.')
+            toast.error('Failed to upload image. Please try again.')
         } finally {
             setIsUploading(false)
         }
+    }
+
+    // Skip / cancel cropping for the current image in queue
+    const handleCropCancelled = () => {
+        setCropQueue(prev => prev.slice(1))
     }
 
     const addColor = () => {
@@ -151,6 +166,8 @@ export default function EditProductPage() {
 
     const inputClass = "w-full bg-rich-black/50 backdrop-blur-sm px-6 py-4 border border-white/10 text-sm font-body text-white focus:outline-none focus:border-gold transition-colors placeholder:text-white/20 rounded-none";
     const labelClass = "block font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 mb-3";
+
+    const activeCropFile = cropQueue.length > 0 ? cropQueue[0] : null
 
     return (
         <div className="max-w-4xl pb-20">
@@ -233,7 +250,10 @@ export default function EditProductPage() {
 
                 {/* Images */}
                 <div>
-                    <label className={labelClass}>Product Photos</label>
+                    <label className={labelClass}>
+                        Product Photos
+                        <span className="ml-2 text-white/20 normal-case tracking-normal font-normal">— each image will be cropped to 2:3 portrait</span>
+                    </label>
                     <div className="flex flex-wrap gap-4 mb-4">
                         {images.map((url, i) => (
                             <div key={i} className="relative w-24 h-32 border border-white/10 overflow-hidden group">
@@ -246,16 +266,31 @@ export default function EditProductPage() {
                                 </button>
                             </div>
                         ))}
-                    </div>
-                    <label className="border border-dashed border-white/20 bg-white/5 p-12 text-center hover:border-gold transition-colors cursor-pointer group flex flex-col items-center">
-                        {isUploading ? (
-                            <Loader2 className="animate-spin text-gold mb-4" size={24} />
-                        ) : (
-                            <Upload size={24} strokeWidth={1.5} className="mx-auto text-white/30 mb-4 group-hover:text-gold transition-colors" />
+                        {/* Uploading placeholder */}
+                        {isUploading && (
+                            <div className="w-24 h-32 border border-white/10 flex items-center justify-center bg-white/5">
+                                <Loader2 className="animate-spin text-gold" size={20} />
+                            </div>
                         )}
+                    </div>
+                    <div
+                        onClick={() => fileInputRef.current?.click()}
+                        className="border border-dashed border-white/20 bg-white/5 p-12 text-center hover:border-gold transition-colors cursor-pointer group flex flex-col items-center"
+                    >
+                        <Upload size={24} strokeWidth={1.5} className="mx-auto text-white/30 mb-4 group-hover:text-gold transition-colors" />
                         <p className="text-sm font-sans text-white/70">Click to upload images</p>
-                        <input type="file" multiple onChange={handleImageUpload} className="hidden" accept="image/*" />
-                    </label>
+                        {cropQueue.length > 1 && (
+                            <p className="text-[9px] uppercase tracking-[0.2em] text-gold mt-2">{cropQueue.length} images in crop queue</p>
+                        )}
+                    </div>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        onChange={handleFileSelect}
+                        className="hidden"
+                        accept="image/*"
+                    />
                 </div>
 
                 {/* Pricing */}
@@ -348,6 +383,15 @@ export default function EditProductPage() {
                     </button>
                 </div>
             </div>
+
+            {/* Image Crop Modal — processes one file at a time from the queue */}
+            <ImageCropModal
+                file={activeCropFile}
+                aspectRatio={2 / 3}
+                label={`Crop Product Photo${cropQueue.length > 1 ? ` (${cropQueue.length} remaining)` : ''}`}
+                onCrop={handleCropApplied}
+                onCancel={handleCropCancelled}
+            />
         </div>
     )
 }
