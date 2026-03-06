@@ -155,11 +155,7 @@ export const metadata: Metadata = {
   category: 'fashion',
 
   verification: {
-    google: '99aj_R6jNaM1rX67hhjbw_59DceZFBjyOwhXqem8A',
-  },
-
-  other: {
-    'google-site-verification': '99aj_R6jNaM1rX67hhjbw_59DceZFBjyOwhXqem8A',
+    google: 'wUzqzfr9KmqA9YMtF4FjftqJKNvmyAX3UbpjSjGzJP4',
   },
 }
 
