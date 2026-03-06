@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL &&
       !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')
       ? process.env.NEXT_PUBLIC_SITE_URL
-      : 'https://kl-59mensfashion.in'
+      : 'https://www.kl-59mensfashion.in'
   ),
 
   title: {
@@ -110,7 +110,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in',
     siteName: "KL-59 Men's Fashion",
     title: "KL-59 Men's Fashion | Premium Men's Clothing Store",
     description:

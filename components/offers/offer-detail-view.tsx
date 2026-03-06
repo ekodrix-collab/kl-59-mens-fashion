@@ -47,7 +47,7 @@ export function OfferDetailView({ offer }: OfferDetailViewProps) {
 
     const handleWhatsAppOrder = () => {
         const WHATSAPP_NUMBER = "919895884796";
-        const SITE_URL = "https://kl-59-mens-fashion.vercel.app";
+        const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.kl-59mensfashion.in";
 
         let msg = `Hi KL-59! ✨\n\nI am interested in this offer:\n\n`;
 
