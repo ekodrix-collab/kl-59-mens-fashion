@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { StoryView } from '@/components/story/story-view'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
 
 export const metadata: Metadata = {
   title: "Our Story | The Heritage of KL-59",

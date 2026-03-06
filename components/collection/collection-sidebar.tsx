@@ -37,12 +37,12 @@ export function CollectionSidebar({ filters, setFilters, availableCategories, av
     };
 
     return (
-        <div className="w-full flex flex-col gap-10 sticky top-24 font-sans">
+        <div className="w-full flex flex-col gap-10 font-sans max-h-[calc(100vh-160px)] overflow-y-auto pr-6 custom-scrollbar scroll-smooth">
             {/* Categories */}
             {availableCategories.length > 0 && (
                 <FilterSection title="Categories">
                     {availableCategories.map(cat => (
-                        cat.slug!='uncategorized'&&<FilterCheckbox
+                        cat.slug != 'uncategorized' && <FilterCheckbox
                             key={cat.slug}
                             label={`${cat.name} (${cat.count})`}
                             checked={filters.categories.includes(cat.slug)}

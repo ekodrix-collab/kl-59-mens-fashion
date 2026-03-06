@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { OffersView } from '@/components/offers/offers-view'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
 
 export const metadata: Metadata = {
   title: "Exclusive Offers | KL-59 Seasonal Campaigns",

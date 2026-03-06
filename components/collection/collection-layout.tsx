@@ -174,7 +174,7 @@ export function CollectionLayout({
                     <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
 
                         {/* Desktop Sidebar */}
-                        <aside className="hidden lg:block w-1/4 max-w-[280px] shrink-0">
+                        <aside className="hidden lg:block w-1/4 max-w-[280px] shrink-0 sticky top-24 self-start">
                             <CollectionSidebar
                                 filters={filters}
                                 setFilters={setFilters}

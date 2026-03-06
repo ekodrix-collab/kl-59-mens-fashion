@@ -3,7 +3,7 @@ const WHATSAPP_NUMBER =
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost'))
     ? process.env.NEXT_PUBLIC_SITE_URL
-    : "https://kl-59-mens-fashion.vercel.app";
+    : "https://www.kl-59mensfashion.in";
 
 interface ProductForWhatsApp {
     name: string;
