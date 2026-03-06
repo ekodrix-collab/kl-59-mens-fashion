@@ -45,24 +45,18 @@ export function OffersView() {
                   const buyItems = items.slice(0, buyItemsCount);
                   const freeItems = items.slice(buyItemsCount);
 
-                  const buyItem = buyItems[0]
-                  const getItem = freeItems[0] || buyItems[0]
-
-                  const buyProduct = buyItem?.product
-                  const getProduct = getItem?.product
-
                   const cardProps = {
                     name: offer.title,
-                    buyProduct: {
-                      name: buyProduct?.name || 'Product',
-                      image: buyProduct?.images?.[0] || '',
-                      count: buyItems.length > 1 ? buyItems.reduce((acc, i) => acc + i.quantity, 0) : undefined
-                    },
-                    getProduct: {
-                      name: getProduct?.name || 'Product',
-                      image: getProduct?.images?.[0] || '',
-                      count: freeItems.length > 1 ? freeItems.reduce((acc, i) => acc + i.quantity, 0) : undefined
-                    },
+                    buyProducts: buyItems.map(item => ({
+                      name: item.product?.name || 'Product',
+                      image: item.product?.images?.[0] || '',
+                      count: item.quantity
+                    })),
+                    getProducts: freeItems.map(item => ({
+                      name: item.product?.name || 'Product',
+                      image: item.product?.images?.[0] || '',
+                      count: item.quantity
+                    })),
                     savingsValue: offer.discount_value || 0,
                     description: offer.description || undefined,
                     bannerImage: offer.banner_image,
