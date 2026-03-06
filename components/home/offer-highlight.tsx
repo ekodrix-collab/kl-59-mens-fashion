@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useOffers } from "@/hooks/use-offers";
+import { Plus } from "lucide-react";
 
 interface OfferHighlightProps {
   priorityType?: 'combo' | 'bogo';
@@ -30,6 +31,7 @@ export function OfferHighlight({ priorityType, onlyIfBothExist }: OfferHighlight
   const isBogo = activeOffer.offer_type === 'bogo';
   const isCombo = activeOffer.offer_type === 'combo';
   const comboItems = activeOffer.combo_items || [];
+  const isTwoProductCombo = isCombo && comboItems.length === 2;
   const singleProduct = activeOffer.product;
 
   // Calculate combo savings: (Original Total) - Combo Price
@@ -38,10 +40,12 @@ export function OfferHighlight({ priorityType, onlyIfBothExist }: OfferHighlight
     return acc + (price * (item.quantity || 1));
   }, 0) - (activeOffer.combo_price || 0) : 0;
 
+  const detailLink = activeOffer.product_id ? `/product/${activeOffer.product_id}` : `/offers/${activeOffer.id}`;
+
   return (
     <section className="bg-black py-12 md:py-40 border-y border-white/5 overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 ${isTwoProductCombo ? "items-stretch" : "items-center"}`}>
 
           {/* Visual Section */}
           <motion.div
@@ -51,106 +55,117 @@ export function OfferHighlight({ priorityType, onlyIfBothExist }: OfferHighlight
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="relative order-2 lg:order-1"
           >
-            {activeOffer.banner_image ? (
-              <div className="relative aspect-[4/5] md:aspect-[16/10] lg:aspect-[4/5] bg-zinc-900 overflow-hidden">
-                <img
-                  src={activeOffer.banner_image}
-                  alt={activeOffer.title}
-                  className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              </div>
-            ) : isBogo && comboItems.length >= 1 ? (
-              <div className="relative aspect-[4/5] flex items-center justify-center bg-zinc-950 p-8">
-                {/* Buy Product */}
-                <motion.div
-                  initial={{ rotate: -5, x: -20, opacity: 0 }}
-                  whileInView={{ rotate: -8, x: -40, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.2 }}
-                  className="relative z-10 w-[70%] aspect-[3/4] shadow-2xl border border-white/10"
-                >
-                  <img src={comboItems[0].product?.images?.[0]} alt="" className="w-full h-full object-cover" />
-                  <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm px-3 py-1 text-[8px] uppercase tracking-widest text-white border border-white/10">Buy</div>
-                </motion.div>
-
-                {/* Get Product (Free) */}
-                <motion.div
-                  initial={{ rotate: 5, x: 20, opacity: 0 }}
-                  whileInView={{ rotate: 12, x: 60, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1, delay: 0.4 }}
-                  className="absolute z-20 w-[60%] aspect-[3/4] shadow-2xl border border-white/20"
-                >
-                  <img src={comboItems[1]?.product?.images?.[0] || comboItems[0].product?.images?.[0]} alt="" className="w-full h-full object-cover" />
-                  <div className="absolute -top-2 -right-2 bg-gold px-4 py-1 text-[9px] font-bold uppercase tracking-widest text-white shadow-xl">Free</div>
-                </motion.div>
-                <div className="absolute top-4 left-4 z-20 bg-gold px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-2xl">Complete Bundle</div>
-              </div>
-            ) : isCombo && comboItems.length > 0 ? (
-              <div className="relative aspect-[4/5] bg-zinc-950 p-6 flex items-center justify-center">
-                <div className="grid grid-cols-2 gap-4 w-full h-full">
+            <a href={detailLink} className="block group/visual">
+              {activeOffer.banner_image ? (
+                <div className="relative aspect-[4/5] md:aspect-[16/10] lg:aspect-[4/5] bg-zinc-900 overflow-hidden">
+                  <img
+                    src={activeOffer.banner_image}
+                    alt={activeOffer.title}
+                    className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+              ) : isBogo && comboItems.length >= 1 ? (
+                <div className="relative aspect-[4/5] flex items-center justify-center bg-zinc-950 p-8">
+                  {/* Buy Product */}
                   <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
+                    initial={{ rotate: -5, x: -20, opacity: 0 }}
+                    whileInView={{ rotate: -8, x: -40, opacity: 1 }}
                     viewport={{ once: true }}
-                    className="space-y-4 pt-12"
+                    transition={{ duration: 1, delay: 0.2 }}
+                    className="relative z-20 w-[70%] aspect-[3/4] shadow-2xl border border-white/10"
                   >
-                    <div className="aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 shadow-xl group/item relative">
-                      <img src={comboItems[0]?.product?.images?.[0]} className="w-full h-full object-cover grayscale-[0.3] group-hover/item:grayscale-0 transition-all duration-700" />
-                      <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-                        <p className="text-[7px] uppercase tracking-widest text-white/60 truncate">{comboItems[0]?.product?.name}</p>
-                      </div>
-                    </div>
-                    {comboItems[2] && (
+                    <img src={comboItems[0].product?.images?.[0]} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-sm px-3 py-1 text-[8px] uppercase tracking-widest text-white border border-white/10">Buy</div>
+                  </motion.div>
+
+                  {/* Get Product (Free) */}
+                  <motion.div
+                    initial={{ rotate: 5, x: 20, opacity: 0 }}
+                    whileInView={{ rotate: 12, x: 60, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, delay: 0.4 }}
+                    className="absolute z-10 w-[60%] aspect-[3/4] shadow-2xl border border-white/20"
+                  >
+                    <img src={comboItems[1]?.product?.images?.[0] || comboItems[0].product?.images?.[0]} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute -top-2 -right-2 bg-gold px-4 py-1 text-[9px] font-bold uppercase tracking-widest text-white shadow-xl">Free</div>
+                  </motion.div>
+                  <div className="absolute top-4 left-4 z-30 bg-gold px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-2xl">Complete Bundle</div>
+                </div>
+              ) : isCombo && comboItems.length > 0 ? (
+                <div className={`relative ${isTwoProductCombo ? "h-full" : "aspect-[4/5]"} bg-zinc-950 p-6 flex items-center justify-center`}>
+                  <div className="grid grid-cols-2 gap-4 w-full h-full">
+                    <motion.div
+                      initial={{ y: 20, opacity: 0 }}
+                      whileInView={{ y: 0, opacity: 1 }}
+                      viewport={{ once: true }}
+                      className={`space-y-4 ${!isTwoProductCombo ? "pt-12" : ""}`}
+                    >
                       <div className="aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 shadow-xl group/item relative">
-                        <img src={comboItems[2]?.product?.images?.[0]} className="w-full h-full object-cover grayscale-[0.3] group-hover/item:grayscale-0 transition-all duration-700" />
+                        <img src={comboItems[0]?.product?.images?.[0]} className="w-full h-full object-cover grayscale-[0.3] group-hover/item:grayscale-0 transition-all duration-700" />
                         <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-                          <p className="text-[7px] uppercase tracking-widest text-white/60 truncate">{comboItems[2]?.product?.name}</p>
+                          <p className="text-[7px] uppercase tracking-widest text-white/60 truncate">{comboItems[0]?.product?.name}</p>
+                        </div>
+                      </div>
+                      {comboItems[2] && (
+                        <div className="aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 shadow-xl group/item relative">
+                          <img src={comboItems[2]?.product?.images?.[0]} className="w-full h-full object-cover grayscale-[0.3] group-hover/item:grayscale-0 transition-all duration-700" />
+                          <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                            <p className="text-[7px] uppercase tracking-widest text-white/60 truncate">{comboItems[2]?.product?.name}</p>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                    <motion.div
+                      initial={{ y: -20, opacity: 0 }}
+                      whileInView={{ y: 0, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.2 }}
+                      className="space-y-4"
+                    >
+                      <div className="aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 shadow-xl group/item relative">
+                        <img src={comboItems[1]?.product?.images?.[0] || comboItems[0]?.product?.images?.[0]} className="w-full h-full object-cover grayscale-[0.3] group-hover/item:grayscale-0 transition-all duration-700" />
+                        <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                          <p className="text-[7px] uppercase tracking-widest text-white/60 truncate">{comboItems[1]?.product?.name || comboItems[0]?.product?.name}</p>
+                        </div>
+                      </div>
+                      {comboItems.length > 3 && (
+                        <div className="aspect-[3/4] bg-zinc-800 flex items-center justify-center border border-dashed border-white/10">
+                          <span className="font-sans text-[10px] text-white/30 uppercase tracking-[0.2em]">+{comboItems.length - 2} More</span>
+                        </div>
+                      )}
+                    </motion.div>
+
+                    {/* Plus Icon for 2-Product Combo */}
+                    {isTwoProductCombo && (
+                      <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                        <div className="w-12 h-12 bg-black/80 backdrop-blur-md rounded-full border border-white/10 flex items-center justify-center shadow-2xl">
+                          <Plus className="text-gold w-6 h-6" />
                         </div>
                       </div>
                     )}
-                  </motion.div>
-                  <motion.div
-                    initial={{ y: -20, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                    className="space-y-4"
-                  >
-                    <div className="aspect-[3/4] bg-zinc-900 overflow-hidden border border-white/10 shadow-xl group/item relative">
-                      <img src={comboItems[1]?.product?.images?.[0] || comboItems[0]?.product?.images?.[0]} className="w-full h-full object-cover grayscale-[0.3] group-hover/item:grayscale-0 transition-all duration-700" />
-                      <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
-                        <p className="text-[7px] uppercase tracking-widest text-white/60 truncate">{comboItems[1]?.product?.name || comboItems[0]?.product?.name}</p>
-                      </div>
-                    </div>
-                    {comboItems.length > 3 && (
-                      <div className="aspect-[3/4] bg-zinc-800 flex items-center justify-center border border-dashed border-white/10">
-                        <span className="font-sans text-[10px] text-white/30 uppercase tracking-[0.2em]">+{comboItems.length - 2} More</span>
-                      </div>
-                    )}
-                  </motion.div>
+                  </div>
+                  <div className="absolute top-6 right-6 z-30 bg-gold px-3 py-1 text-[8px] font-bold uppercase tracking-widest text-white">Combo Deal</div>
                 </div>
-                <div className="absolute top-6 right-6 z-30 bg-gold px-3 py-1 text-[8px] font-bold uppercase tracking-widest text-white">Combo Deal</div>
-              </div>
-            ) : singleProduct?.images?.[0] ? (
-              <div className="relative aspect-[4/5] bg-zinc-900 overflow-hidden group">
-                <img
-                  src={singleProduct.images[0]}
-                  alt={singleProduct.name}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
-              </div>
-            ) : (
-              <div className="aspect-[4/5] bg-zinc-950 border border-white/5 flex items-center justify-center">
-                <span className="text-white/10 uppercase tracking-widest text-xs italic">Limited Edition Collections</span>
-              </div>
-            )}
+              ) : singleProduct?.images?.[0] ? (
+                <div className="relative aspect-[4/5] bg-zinc-900 overflow-hidden group">
+                  <img
+                    src={singleProduct.images[0]}
+                    alt={singleProduct.name}
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
+                </div>
+              ) : (
+                <div className="aspect-[4/5] bg-zinc-950 border border-white/5 flex items-center justify-center">
+                  <span className="text-white/10 uppercase tracking-widest text-xs italic">Limited Edition Collections</span>
+                </div>
+              )}
 
-            {/* Aesthetic Accents */}
-            <div className="absolute -top-10 -left-10 w-40 h-40 bg-gold/5 blur-[100px] rounded-full pointer-events-none" />
-            <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-white/5 blur-[120px] rounded-full pointer-events-none" />
+              {/* Aesthetic Accents */}
+              <div className="absolute -top-10 -left-10 w-40 h-40 bg-gold/5 blur-[100px] rounded-full pointer-events-none" />
+              <div className="absolute -bottom-10 -right-10 w-60 h-60 bg-white/5 blur-[120px] rounded-full pointer-events-none" />
+            </a>
           </motion.div>
 
           {/* Content Section */}
@@ -221,10 +236,10 @@ export function OfferHighlight({ priorityType, onlyIfBothExist }: OfferHighlight
                 </a>
 
                 <a
-                  href="/shop"
+                  href="/offers"
                   className="font-sans text-[10px] uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors duration-500 py-2 border-b border-transparent hover:border-white/20"
                 >
-                  View All Collections
+                  View All Offers
                 </a>
               </div>
             </motion.div>
