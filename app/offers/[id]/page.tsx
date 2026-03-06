@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!offer) return { title: 'Offer Not Found | KL-59' }
 
-    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
     const title = `${offer.title} | Exclusive Offer at KL-59`
     const description = offer.description || `Explore this exclusive ${offer.offer_type} at KL-59 Men's Fashion. Premium curation and exceptional value.`
     const image = offer.banner_image || offer.product?.images?.[0] || '/images/og-image.jpg'

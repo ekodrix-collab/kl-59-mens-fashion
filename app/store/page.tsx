@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { StoreView } from '@/components/store/store-view'
 import { StoreJsonLd } from '@/components/seo/json-ld'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
 
 export const metadata: Metadata = {
   title: "Visit Our Store | KL-59 Men's Fashion Taliparamba, Kannur",

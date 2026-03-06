@@ -2,7 +2,7 @@
 // These components render <script type="application/ld+json"> tags for Google rich results
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
 
 // ─── Organization + ClothingStore Schema ───────────────────────────
 export function OrganizationJsonLd() {

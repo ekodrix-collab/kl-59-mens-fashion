@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         openGraph: {
             title: `${offer.title} | Combo Offers | KL-59`,
             description,
-            url: `${(process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')) ? process.env.NEXT_PUBLIC_SITE_URL : 'https://kl-59-mens-fashion.vercel.app'}/shop/combo/${id}`,
+            url: `${(process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')) ? process.env.NEXT_PUBLIC_SITE_URL : 'https://www.kl-59mensfashion.in'}/shop/combo/${id}`,
             siteName: "KL-59 Men's Fashion",
             images: primaryImage ? [
                 {

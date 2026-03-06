@@ -79,7 +79,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!product) return { title: 'Product Not Found' }
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
   const category = product.product_categories?.find((pc: any) => pc.is_primary)?.category ||
     product.product_categories?.[0]?.category
 
@@ -137,7 +137,7 @@ export default async function ShopProductPage({ params }: PageProps) {
   if (!product) notFound()
 
   const related = await getRelatedProducts(product)
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://kl-59-mens-fashion.vercel.app'
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
 
   const category = product.product_categories?.find((pc: any) => pc.is_primary)?.category ||
     product.product_categories?.[0]?.category
