@@ -26,7 +26,7 @@ export function CollectionShowcase() {
   const getTheme = (slug: string) => CATEGORY_THEMES[slug.toLowerCase()] || { tagline: 'Defined Style', cta: 'Explore' };
 
   return (
-    <section className="bg-rich-black py-24 md:py-40">
+    <section className="bg-rich-black py-12 md:py-40">
       <div className="max-w-[1400px] mx-auto px-4 lg:px-10">
         <div className="text-center mb-16 md:mb-20">
           <motion.span
