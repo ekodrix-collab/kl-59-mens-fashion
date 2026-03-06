@@ -10,7 +10,7 @@ export function BrandStatement() {
   const { data: storeInfo } = storeInfoQuery;
 
   return (
-    <section className="bg-black py-40 min-h-screen flex items-center justify-center">
+    <section className="bg-black py-20 md:py-40 min-h-screen flex items-center justify-center">
       <div className="max-w-4xl mx-auto px-6 text-center">
         <div className="mb-20">
           <ScrollRevealText
