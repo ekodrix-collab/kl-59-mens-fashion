@@ -29,7 +29,6 @@ export default function NewProductPage() {
   const [colorInput, setColorInput] = useState('')
   const [featured, setFeatured] = useState(false)
   const [newArrival, setNewArrival] = useState(false)
-  const [onOffer, setOnOffer] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
 
   // Crop queue: list of files waiting to be cropped
@@ -115,7 +114,6 @@ export default function NewProductPage() {
         images,
         is_featured: featured,
         is_new_arrival: newArrival,
-        is_on_offer: onOffer,
         is_published: isPublished,
         category_ids: selectedCategoryIds,
         primary_category_id: primaryCategoryId || selectedCategoryIds[0]
@@ -299,7 +297,6 @@ export default function NewProductPage() {
           {[
             { label: 'Featured', value: featured, set: setFeatured },
             { label: 'New Arrival', value: newArrival, set: setNewArrival },
-            { label: 'On Offer', value: onOffer, set: setOnOffer },
           ].map(t => (
             <label key={t.label} className="flex items-center gap-3 cursor-pointer group">
               <div className={`w-4 h-4 border transition-colors flex items-center justify-center ${t.value ? 'bg-gold border-gold' : 'border-white/30 group-hover:border-gold'}`}>
