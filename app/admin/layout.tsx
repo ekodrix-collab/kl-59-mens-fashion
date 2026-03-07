@@ -28,6 +28,14 @@ export default function AdminLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
+  const handleSidebarWheel = (e: React.WheelEvent<HTMLElement>) => {
+    const sidebar = e.currentTarget
+    if (sidebar.scrollHeight <= sidebar.clientHeight) return
+    e.preventDefault()
+    e.stopPropagation()
+    sidebar.scrollTop += e.deltaY
+  }
+
   const confirmSignOut = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
@@ -79,7 +87,7 @@ export default function AdminLayout({
         </button>
       </div>
 
-      <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto" data-lenis-prevent>
+      <nav className="flex-1 px-4 py-8 space-y-2">
         {navItems.map((item) => {
           const isActive = pathname.startsWith(item.href)
           return (
@@ -117,7 +125,11 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen bg-black">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-rich-black border-r border-white/10 text-white fixed inset-y-0 left-0 z-40">
+      <aside
+        className="hidden lg:flex flex-col w-64 bg-rich-black border-r border-white/10 text-white fixed inset-y-0 left-0 z-40 overflow-y-auto overscroll-y-contain custom-scrollbar"
+        data-lenis-prevent
+        onWheel={handleSidebarWheel}
+      >
         <SidebarContent />
       </aside>
 
@@ -137,7 +149,9 @@ export default function AdminLayout({
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 left-0 w-64 bg-rich-black border-r border-white/10 text-white z-50 flex flex-col lg:hidden"
+              className="fixed inset-y-0 left-0 w-64 bg-rich-black border-r border-white/10 text-white z-50 flex flex-col lg:hidden overflow-y-auto overscroll-y-contain custom-scrollbar"
+              data-lenis-prevent
+              onWheel={handleSidebarWheel}
             >
               <SidebarContent />
             </motion.aside>

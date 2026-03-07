@@ -26,6 +26,14 @@ const PRICE_RANGES = [
 ];
 
 export function CollectionSidebar({ filters, setFilters, availableCategories, availableSizes }: CollectionSidebarProps) {
+    const handleSidebarWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+        const sidebar = e.currentTarget;
+        if (sidebar.scrollHeight <= sidebar.clientHeight) return;
+        e.preventDefault();
+        e.stopPropagation();
+        sidebar.scrollTop += e.deltaY;
+    };
+
     const toggleFilter = (type: keyof FilterState, value: string) => {
         setFilters(prev => {
             const current = prev[type];
@@ -37,7 +45,11 @@ export function CollectionSidebar({ filters, setFilters, availableCategories, av
     };
 
     return (
-        <div className="w-full flex flex-col gap-10 font-sans max-h-[calc(100vh-160px)] overflow-y-auto pr-6 custom-scrollbar scroll-smooth">
+        <div
+            className="w-full flex flex-col gap-10 font-sans max-h-[calc(100vh-160px)] overflow-y-auto overscroll-y-contain pr-6 custom-scrollbar scroll-smooth"
+            data-lenis-prevent
+            onWheel={handleSidebarWheel}
+        >
             {/* Categories */}
             {availableCategories.length > 0 && (
                 <FilterSection title="Categories">
