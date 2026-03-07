@@ -33,8 +33,7 @@ export function OfferDetailView({ offer }: OfferDetailViewProps) {
 
     // Collect images based on offer type
     const getImages = () => {
-        if (offer.banner_image) return [offer.banner_image];
-
+        // Exclude banner image from the gallery as per requirements
         if (offer.offer_type === 'product_offer' && offer.product?.images) {
             return offer.product.images;
         }
