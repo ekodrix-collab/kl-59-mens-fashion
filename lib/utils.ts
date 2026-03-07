@@ -28,13 +28,29 @@ export function truncate(str: string, length: number): string {
 }
 
 export function generateWhatsAppLink(product: any): string {
-    const phoneNumber = "919876543210"; // Placeholder, can be changed later
-    const message = `Hi, I am interested in buying: ${product.name} (Code: ${product.slug}).\nPrice: ${formatPrice(product.selling_price)}\nIs it available?`;
+    const phoneNumber = "919895884796";
+    const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost'))
+        ? process.env.NEXT_PUBLIC_SITE_URL
+        : "https://www.kl-59mensfashion.in";
 
-    // Encode the message to be URL safe
+    const hasDiscount = product.mrp > product.selling_price;
+    const discountText = hasDiscount ? `\n🏷️ MRP: ₹${product.mrp.toLocaleString("en-IN")} (${product.discount_percent}% OFF)` : '';
+
+    const message = `Hi KL-59! ✨
+
+I would like to order this from your collection:
+
+👕 *${product.name.toUpperCase()}*
+------------------
+💰 Price: ₹${product.selling_price.toLocaleString("en-IN")}${discountText}
+📦 Availability: Please confirm
+------------------
+
+🔗 ${SITE_URL}/shop/${product.slug}
+
+Looking forward to your response! 🙏`;
+
     const encodedMessage = encodeURIComponent(message);
-
-    // Return the WhatsApp URL
     return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 }
 
