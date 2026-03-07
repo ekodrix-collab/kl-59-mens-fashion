@@ -20,7 +20,7 @@ export function OfferHighlight({ priorityType, onlyIfBothExist }: OfferHighlight
 
   if (priorityType) {
     // Strictly find the latest offer of the requested type
-    activeOffer = activeOffers.find(o => o.offer_type === priorityType);
+    activeOffer = activeOffers.find(o => o.offer_type?.toLowerCase() === priorityType?.toLowerCase());
   } else {
     // Default fallback: show the newest active offer of any type if no priority is set
     activeOffer = activeOffers[0];
@@ -57,13 +57,12 @@ export function OfferHighlight({ priorityType, onlyIfBothExist }: OfferHighlight
           >
             <a href={detailLink} className="block group/visual">
               {activeOffer.banner_image ? (
-                <div className="relative aspect-[4/5] md:aspect-[16/10] lg:aspect-[4/5] bg-zinc-900 overflow-hidden">
+                <div className="relative aspect-[16/10] bg-zinc-900 overflow-hidden">
                   <img
                     src={activeOffer.banner_image}
                     alt={activeOffer.title}
                     className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
               ) : isBogo && comboItems.length >= 1 ? (
                 <div className="relative aspect-[4/5] flex items-center justify-center bg-zinc-950 p-8">

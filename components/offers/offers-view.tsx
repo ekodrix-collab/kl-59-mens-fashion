@@ -23,9 +23,12 @@ export function OffersView() {
     )
   }
 
-  const bogoOffers = activeOffers.filter(o => o.offer_type === 'bogo')
-  const comboOffers = activeOffers.filter(o => o.offer_type === 'combo')
-  const otherOffers = activeOffers.filter(o => o.offer_type !== 'bogo' && o.offer_type !== 'combo')
+  const bogoOffers = activeOffers.filter(o => o.offer_type?.toLowerCase() === 'bogo')
+  const comboOffers = activeOffers.filter(o => o.offer_type?.toLowerCase() === 'combo')
+  const otherOffers = activeOffers.filter(o => {
+    const type = o.offer_type?.toLowerCase();
+    return type !== 'bogo' && type !== 'combo';
+  })
 
   return (
     <section className="bg-black py-32 md:py-40">
@@ -90,22 +93,21 @@ export function OffersView() {
               <div className="lg:w-[60%] relative aspect-[16/9] w-full bg-white/5">
                 {offer.banner_image ? (
                   <div
-                    className="w-full h-full cursor-pointer"
+                    className="w-full h-full cursor-pointer overflow-hidden"
                     onClick={() => router.push(offer.product_id ? `/product/${offer.product_id}` : `/offers/${offer.id}`)}
                   >
-                    <RevealImage
+                    <img
                       src={offer.banner_image}
                       alt={offer.title}
-                      className="w-full h-full"
-                      aspectRatio="landscape"
+                      className="w-full h-full object-cover"
                     />
                   </div>
-                ) : offer.offer_type === 'combo' && offer.combo_items && offer.combo_items.length > 0 ? (
+                ) : (offer.offer_type === 'combo' || (offer.combo_items && offer.combo_items.length > 0)) ? (
                   <div
                     className="w-full h-full flex items-center justify-center bg-zinc-950 p-6 md:p-10 gap-2 md:gap-4 overflow-hidden border border-white/5 cursor-pointer"
                     onClick={() => router.push(`/offers/${offer.id}`)}
                   >
-                    {offer.combo_items.slice(0, 3).map((item, idx, arr) => (
+                    {(offer.combo_items || []).slice(0, 3).map((item, idx, arr) => (
                       <div key={item.id} className="flex items-center w-full h-full">
                         <div className="relative w-full h-full aspect-[3/4] overflow-hidden bg-zinc-900 border border-white/10 shrink">
                           {item.product?.images?.[0] ? (
