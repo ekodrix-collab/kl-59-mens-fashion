@@ -123,31 +123,19 @@ export function NewArrivals() {
           )
         })}
 
-        <div className="min-w-[200px] md:min-w-[320px] snap-start mb-6">
+        <div className="min-w-[220px] md:min-w-[320px] snap-start mb-6">
           <Link
             href="/shop"
-            className="flex flex-col items-center justify-center h-full aspect-[3/4] bg-rich-black border border-white/5 hover:border-gold/30 transition-all duration-700 group relative overflow-hidden"
+            className="group flex h-full aspect-[3/4] items-center justify-center text-center"
           >
-            {/* Professional Editorial Background */}
-            <Image
-              src="/C:/Users/USER/.gemini/antigravity/brain/311f3b96-4654-488b-9e75-0c8d04169122/luxury_fashion_background_1772793157235.png"
-              alt="Explore More"
-              fill
-              className="object-cover opacity-20 group-hover:opacity-40 group-hover:scale-110 transition-all duration-1000 grayscale group-hover:grayscale-0"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80" />
-
-            <div className="relative z-10 flex flex-col items-center gap-6 text-center px-4">
-              <div className="w-14 h-14 rounded-full border border-gold/20 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-all duration-500 group-hover:border-gold shadow-lg shadow-black">
-                <ChevronRight size={28} className="translate-x-0.5" />
-              </div>
-              <div className="space-y-2">
-                <span className="font-sans text-[12px] font-bold uppercase tracking-[0.4em] text-white group-hover:text-gold transition-colors block">
-                  View All
-                </span>
-                <span className="font-serif text-[10px] italic text-white/30 group-hover:text-white/60 tracking-widest block transition-colors">
-                  The Complete Collection
-                </span>
+            <div className="space-y-4">
+              <p className="font-display text-[32px] md:text-5xl text-white leading-none">
+                View All
+              </p>
+              <div className="flex items-center justify-center gap-3 text-gold">
+                <span className="font-sans text-[10px] uppercase tracking-[0.3em]">Shop</span>
+                <span className="h-px w-10 bg-gold/70 transition-all duration-300 group-hover:w-16" />
+                <ChevronRight size={16} className="transition-transform duration-300 group-hover:translate-x-1.5" />
               </div>
             </div>
           </Link>
