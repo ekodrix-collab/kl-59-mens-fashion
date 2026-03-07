@@ -34,7 +34,6 @@ export default function EditProductPage() {
     const [colorInput, setColorInput] = useState('')
     const [featured, setFeatured] = useState(false)
     const [newArrival, setNewArrival] = useState(false)
-    const [onOffer, setOnOffer] = useState(false)
     const [isPublished, setIsPublished] = useState(false)
     const [isUploading, setIsUploading] = useState(false)
 
@@ -53,7 +52,6 @@ export default function EditProductPage() {
             setImages(product.images || [])
             setFeatured(product.is_featured)
             setNewArrival(product.is_new_arrival)
-            setOnOffer(product.is_on_offer)
             setIsPublished(product.is_published)
 
             const catIds = product.product_categories?.map(pc => pc.category_id) || []
@@ -143,7 +141,6 @@ export default function EditProductPage() {
                 images,
                 is_featured: featured,
                 is_new_arrival: newArrival,
-                is_on_offer: onOffer,
                 is_published: publishedStatus,
                 category_ids: selectedCategoryIds,
                 primary_category_id: primaryCategoryId || selectedCategoryIds[0]
@@ -353,7 +350,6 @@ export default function EditProductPage() {
                     {[
                         { label: 'Featured', value: featured, set: setFeatured },
                         { label: 'New Arrival', value: newArrival, set: setNewArrival },
-                        { label: 'On Offer', value: onOffer, set: setOnOffer },
                         { label: 'Published', value: isPublished, set: setIsPublished },
                     ].map(t => (
                         <label key={t.label} className="flex items-center gap-3 cursor-pointer group">
