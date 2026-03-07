@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 
@@ -11,14 +11,32 @@ export function FeaturedProducts() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { productsQuery } = useProducts({ featured: true });
   const { data: featured, isLoading } = productsQuery;
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStart = useRef({ x: 0, scrollLeft: 0 });
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollTo = direction === "left" ? scrollLeft - 400 : scrollLeft + 400;
-      scrollRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
+      const scrollAmount = direction === "left" ? -400 : 400;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
+
+  // Touch drag handlers for mobile swipe
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!scrollRef.current) return;
+    dragStart.current = { x: e.touches[0].clientX, scrollLeft: scrollRef.current.scrollLeft };
+    setIsDragging(true);
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    const dx = e.touches[0].clientX - dragStart.current.x;
+    scrollRef.current.scrollLeft = dragStart.current.scrollLeft - dx;
+  }, [isDragging]);
+
+  const handleTouchEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
 
   if (isLoading) return (
     <div className="py-20 flex justify-center">
@@ -77,21 +95,25 @@ export function FeaturedProducts() {
         </div>
       </div>
 
+      {/* overflow-hidden on desktop (no native scroll = no Lenis conflict), touch drag for mobile */}
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto hide-scrollbar px-6 lg:px-10 pr-20 lg:pr-32 snap-x snap-mandatory"
-        data-lenis-prevent
+        className="flex gap-6 px-6 lg:px-10 pr-20 lg:pr-32 overflow-hidden md:overflow-hidden"
+        style={{ overscrollBehavior: 'none' }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {displayedProducts.map((product, i) => {
           const primaryCat = product.product_categories?.find((pc: any) => pc.is_primary)?.category?.name
           return (
             <motion.div
               key={product.id}
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.1 }}
-              className="min-w-[280px] md:min-w-[380px] snap-start group"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: Math.min(i * 0.08, 0.3) }}
+              className="min-w-[280px] md:min-w-[380px] group will-change-transform"
             >
               <Link href={`/shop/${product.slug}`}>
                 <div className="mb-6 relative overflow-hidden bg-black aspect-[3/4]">
@@ -127,7 +149,7 @@ export function FeaturedProducts() {
           )
         })}
 
-        <div className="min-w-[220px] md:min-w-[320px] snap-start mb-6">
+        <div className="min-w-[220px] md:min-w-[320px] mb-6">
           <Link
             href="/shop"
             className="group flex h-full aspect-[3/4] items-center justify-center text-center"

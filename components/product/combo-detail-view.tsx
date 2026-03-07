@@ -16,8 +16,25 @@ export function ComboDetailView({ offer }: ComboDetailViewProps) {
     const [activeImage, setActiveImage] = useState(0)
 
     const handleOrderClick = () => {
-        const phoneNumber = "919876543210";
-        const message = `Hi, I am interested in buying the combo offer: ${offer.title} (Offer ID: ${offer.id}).\nCombo Price: ${formatPrice(offer.combo_price || 0)}\nIs it available?`;
+        const phoneNumber = "919895884796";
+        const SITE_URL = "https://www.kl-59mensfashion.in";
+        const itemsList = offer.combo_items?.map(i => `${i.product?.name} (x${i.quantity})`).join(', ') || '';
+        const savings = totalOriginalPrice > finalComboPrice ? `\n🏷️ You Save: ${formatPrice(totalOriginalPrice - finalComboPrice)}` : '';
+
+        const message = `Hi KL-59! ✨
+
+I would like to order this combo from your collection:
+
+🎁 *COMBO: ${offer.title.toUpperCase()}*
+------------------
+💰 Combo Price: ${formatPrice(finalComboPrice)}${savings}
+📦 Includes: ${itemsList}
+------------------
+
+🔗 ${SITE_URL}/offers/${offer.id}
+
+Looking forward to your response! 🙏`;
+
         const encodedMessage = encodeURIComponent(message);
         window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank')
     }
