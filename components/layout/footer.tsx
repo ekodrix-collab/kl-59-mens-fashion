@@ -1,5 +1,6 @@
 import { Logo } from "@/components/ui/logo";
 import Link from "next/link";
+import { Instagram } from "lucide-react";
 import { useStoreInfo } from "@/hooks/use-store-info";
 import { useOffers } from "@/hooks/use-offers";
 import { useState, useEffect } from "react";
@@ -42,6 +43,19 @@ export default function Footer() {
             ))}
         </nav>
 
+        {/* Social Icon */}
+        <div className="mb-10">
+          <a
+            href="https://www.instagram.com/kl59__fashion?igsh=MWJ2MnpsbXFxbXZhbg=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center w-11 h-11 border border-white/10 hover:border-gold/50 hover:bg-gold/5 rounded-full transition-all duration-500 group"
+            aria-label="Follow us on Instagram"
+          >
+            <Instagram size={18} className="text-white/50 group-hover:text-gold transition-colors duration-500" />
+          </a>
+        </div>
+
         <div className="w-12 h-[1px] bg-gold mb-12" />
 
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 text-subtle font-sans text-[10px] uppercase tracking-[0.15em] mb-16">
@@ -52,10 +66,6 @@ export default function Footer() {
           <div className="flex flex-col gap-2">
             <span className="text-gold/40 text-[9px] mb-1">Contact</span>
             {storeInfo?.phone || '+91 9895884796'}
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="text-gold/40 text-[9px] mb-1">Archive</span>
-            {storeInfo?.instagram || '@kl59fashion'}
           </div>
         </div>
 
