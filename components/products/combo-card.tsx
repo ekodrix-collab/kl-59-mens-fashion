@@ -46,29 +46,39 @@ export default function ComboCard({ offer }: ComboCardProps) {
 
             {/* Visual Representation */}
             <Link href={`/offers/${offer.id}`} className="relative aspect-[16/10] mt-24 mb-6 px-10 flex items-center justify-center gap-2 md:gap-4 cursor-pointer">
-                {displayItems.map((item, idx) => (
-                    <Fragment key={item.id}>
-                        <div className="relative flex-1 aspect-[3/4] overflow-hidden bg-white/5 border border-white/10 group-hover:scale-105 transition-transform duration-700">
-                            {item.product?.images?.[0] ? (
-                                <img
-                                    src={item.product.images[0]}
-                                    alt={item.product.name}
-                                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
-                                />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[8px] uppercase tracking-widest text-white/20">
-                                    Product {idx + 1}
+                {offer.banner_image ? (
+                    <div className="relative w-full h-full overflow-hidden bg-white/5 border border-white/10 group-hover:scale-105 transition-transform duration-700">
+                        <img
+                            src={offer.banner_image}
+                            alt={offer.title}
+                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+                        />
+                    </div>
+                ) : (
+                    displayItems.map((item, idx) => (
+                        <Fragment key={item.id}>
+                            <div className="relative flex-1 aspect-[3/4] overflow-hidden bg-white/5 border border-white/10 group-hover:scale-105 transition-transform duration-700">
+                                {item.product?.images?.[0] ? (
+                                    <img
+                                        src={item.product.images[0]}
+                                        alt={item.product.name}
+                                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-[8px] uppercase tracking-widest text-white/20">
+                                        Product {idx + 1}
+                                    </div>
+                                )}
+                                <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 border-t border-white/5">
+                                    <p className="text-[8px] uppercase tracking-widest text-white/60 truncate">{item.product?.name}</p>
                                 </div>
-                            )}
-                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-3 border-t border-white/5">
-                                <p className="text-[8px] uppercase tracking-widest text-white/60 truncate">{item.product?.name}</p>
                             </div>
-                        </div>
-                        {idx < displayItems.length - 1 && (
-                            <Plus size={16} className="text-gold/50 flex-shrink-0" />
-                        )}
-                    </Fragment>
-                ))}
+                            {idx < displayItems.length - 1 && (
+                                <Plus size={16} className="text-gold/50 flex-shrink-0" />
+                            )}
+                        </Fragment>
+                    ))
+                )}
             </Link>
 
             {/* Footer Info */}

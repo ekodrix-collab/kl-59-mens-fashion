@@ -49,11 +49,13 @@ export function BogoCardCompact({
             {/* Main Visual Area */}
             <div className="relative flex-1 overflow-hidden cursor-pointer" onClick={onShopNow}>
                 {bannerImage ? (
-                    <motion.img
-                        src={bannerImage}
-                        alt={name}
-                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                    />
+                    <div className="relative w-full h-full overflow-hidden">
+                        <motion.img
+                            src={bannerImage}
+                            alt={name}
+                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        />
+                    </div>
                 ) : (
                     <div className={isStandardBogo ? "grid grid-cols-[60%_40%] h-full" : "relative min-h-[350px]"}>
                         {isStandardBogo ? (
@@ -214,124 +216,116 @@ export function BogoCardWide({
             viewport={{ once: true }}
             className="group relative bg-[#0a0a0a] border border-white/5 overflow-hidden min-h-[400px] flex flex-col lg:flex-row"
         >
-            {/* Banner Priority */}
-            {bannerImage ? (
-                <div
-                    className="absolute inset-0 w-full h-full cursor-pointer"
-                    onClick={onShopNow}
-                >
-                    <img
-                        src={bannerImage}
-                        alt={name}
-                        className="w-full h-full object-cover opacity-40 group-hover:scale-105 transition-transform duration-1000"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
-                </div>
-            ) : null}
 
-            {/* Visual Section (Left) - Only if no banner */}
-            {!bannerImage && (
-                <div
-                    className={`lg:w-1/2 relative flex border-r border-white/5 ${isStandardBogo ? 'aspect-[4/3]' : 'lg:aspect-[4/3] min-h-[600px]'} lg:h-auto overflow-hidden cursor-pointer bg-[#050505]`}
-                    onClick={onShopNow}
-                >
-                    {isStandardBogo ? (
-                        <>
-                            <div className="w-1/2 relative overflow-hidden">
-                                <motion.img
-                                    src={buyProducts[0].image}
-                                    alt={buyProducts[0].name}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                />
-                                <div className="absolute top-6 left-6 z-20 px-4 py-1.5 bg-black/60 backdrop-blur-md border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/90">
-                                    Buy
-                                </div>
+            {/* Visual Section (Left) */}
+            <div
+                className={`lg:w-1/2 relative flex border-r border-white/5 ${isStandardBogo ? 'aspect-[4/3]' : 'lg:aspect-[4/3] min-h-[600px]'} lg:h-auto overflow-hidden cursor-pointer bg-[#050505]`}
+                onClick={onShopNow}
+            >
+                {bannerImage ? (
+                    <div className="w-full h-full relative overflow-hidden">
+                        <motion.img
+                            src={bannerImage}
+                            alt={name}
+                            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        />
+                    </div>
+                ) : isStandardBogo ? (
+                    <>
+                        <div className="w-1/2 relative overflow-hidden">
+                            <motion.img
+                                src={buyProducts[0].image}
+                                alt={buyProducts[0].name}
+                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                            />
+                            <div className="absolute top-6 left-6 z-20 px-4 py-1.5 bg-black/60 backdrop-blur-md border border-white/10 text-[9px] uppercase tracking-[0.3em] font-medium text-white/90">
+                                Buy
                             </div>
-                            <div className="w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent z-10" />
-                            <div className="w-1/2 relative overflow-hidden">
-                                <motion.img
-                                    src={getProducts[0].image}
-                                    alt={getProducts[0].name}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                    style={{ transitionDelay: '100ms' }}
-                                />
-                                <div className="absolute top-6 right-6 z-20 px-4 py-1.5 bg-gold/60 backdrop-blur-md border border-gold/20 text-[9px] uppercase tracking-[0.3em] font-bold text-white">
-                                    Free
-                                </div>
+                        </div>
+                        <div className="w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent z-10" />
+                        <div className="w-1/2 relative overflow-hidden">
+                            <motion.img
+                                src={getProducts[0].image}
+                                alt={getProducts[0].name}
+                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                style={{ transitionDelay: '100ms' }}
+                            />
+                            <div className="absolute top-6 right-6 z-20 px-4 py-1.5 bg-gold/60 backdrop-blur-md border border-gold/20 text-[9px] uppercase tracking-[0.3em] font-bold text-white">
+                                Free
                             </div>
-                        </>
-                    ) : isB2G1 ? (
-                        <div className="w-full h-full flex items-center justify-center bg-black p-6 md:p-8 gap-4 md:gap-8">
-                            {/* Left Side: 2 Buy Stacked Vertically */}
-                            <div className="flex-1 flex flex-col gap-4 h-full max-h-[500px]">
+                        </div>
+                    </>
+                ) : isB2G1 ? (
+                    <div className="w-full h-full flex items-center justify-center bg-black p-6 md:p-8 gap-4 md:gap-8">
+                        {/* Left Side: 2 Buy Stacked Vertically */}
+                        <div className="flex-1 flex flex-col gap-4 h-full max-h-[500px]">
+                            {buyProducts.map((p, idx) => (
+                                <div key={`buy-split-${idx}`} className="flex-1 relative overflow-hidden border border-white/10 group/item">
+                                    <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" />
+                                    <div className="absolute top-2 left-2 z-10 px-2 py-0.5 bg-black/80 text-[7px] uppercase tracking-[0.2em] text-white border border-white/10 font-bold">Buy Item {idx + 1}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Middle: Arrow indicator */}
+                        <div className="flex-shrink-0">
+                            <ArrowRight size={24} className="text-gold opacity-50" />
+                        </div>
+
+                        {/* Right Side: 1 Free Center */}
+                        <div className="flex-1 h-full max-h-[500px] flex items-center">
+                            <div className="w-full aspect-[3/4] relative overflow-hidden border border-gold/40 shadow-[0_0_40px_rgba(212,175,55,0.2)] group/item">
+                                <img src={getProducts[0].image} alt={getProducts[0].name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" />
+                                <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-gold text-[7px] uppercase tracking-[0.3em] text-black font-bold shadow-lg">Free Item</div>
+                                <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="w-full min-h-[600px] lg:h-full flex flex-col md:flex-row items-center justify-center bg-black p-6 md:p-10 gap-6 md:gap-10">
+                        {/* Buy Group */}
+                        <div className="flex-1 w-full space-y-4">
+                            <span className="block text-[9px] uppercase tracking-[0.3em] text-gold/60 font-medium text-center md:text-left">You Buy</span>
+                            <div className={`grid ${buyProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-4 w-full`}>
                                 {buyProducts.map((p, idx) => (
-                                    <div key={`buy-split-${idx}`} className="flex-1 relative overflow-hidden border border-white/10 group/item">
-                                        <img src={p.image} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" />
-                                        <div className="absolute top-2 left-2 z-10 px-2 py-0.5 bg-black/80 text-[7px] uppercase tracking-[0.2em] text-white border border-white/10 font-bold">Buy Item {idx + 1}</div>
+                                    <div key={`buy-${idx}`} className="relative aspect-[3/4] overflow-hidden border border-white/10 group-hover:border-white/20 transition-colors">
+                                        <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                                        <div className="absolute top-2 left-2 px-2 py-1 bg-black/80 text-[7px] uppercase tracking-widest text-white border border-white/10 font-bold">Buy</div>
+                                        {p.count && p.count > 1 && (
+                                            <div className="absolute bottom-2 right-2 bg-gold px-1.5 py-0.5 text-[9px] font-bold text-black shadow-lg">x{p.count}</div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
+                        </div>
 
-                            {/* Middle: Arrow indicator */}
-                            <div className="flex-shrink-0">
-                                <ArrowRight size={24} className="text-gold opacity-50" />
-                            </div>
+                        {/* Directional Indicator */}
+                        <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full border border-gold/20 bg-gold/5">
+                            <ArrowRight size={24} className="text-gold rotate-90 md:rotate-0" />
+                        </div>
 
-                            {/* Right Side: 1 Free Center */}
-                            <div className="flex-1 h-full max-h-[500px] flex items-center">
-                                <div className="w-full aspect-[3/4] relative overflow-hidden border border-gold/40 shadow-[0_0_40px_rgba(212,175,55,0.2)] group/item">
-                                    <img src={getProducts[0].image} alt={getProducts[0].name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100" />
-                                    <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-gold text-[7px] uppercase tracking-[0.3em] text-black font-bold shadow-lg">Free Item</div>
-                                    <div className="absolute inset-0 bg-gold/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </div>
+                        {/* Free Group */}
+                        <div className="flex-1 w-full space-y-4">
+                            <span className="block text-[9px] uppercase tracking-[0.3em] text-gold font-bold text-center md:text-left">You Get Free</span>
+                            <div className={`grid ${getProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-4 w-full`}>
+                                {getProducts.map((p, idx) => (
+                                    <div key={`get-${idx}`} className="relative aspect-[3/4] overflow-hidden border border-gold/40 shadow-[0_0_40px_rgba(212,175,55,0.2)] group-hover:border-gold/60 transition-colors">
+                                        <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                                        <div className="absolute top-2 left-2 px-2 py-1 bg-gold text-[7px] uppercase tracking-widest text-black font-bold shadow-lg">Free Item</div>
+                                        {p.count && p.count > 1 && (
+                                            <div className="absolute bottom-2 right-2 bg-black px-1.5 py-0.5 text-[9px] font-bold text-white border border-white/10">x{p.count}</div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    ) : (
-                        <div className="w-full min-h-[600px] lg:h-full flex flex-col md:flex-row items-center justify-center bg-black p-6 md:p-10 gap-6 md:gap-10">
-                            {/* Buy Group */}
-                            <div className="flex-1 w-full space-y-4">
-                                <span className="block text-[9px] uppercase tracking-[0.3em] text-gold/60 font-medium text-center md:text-left">You Buy</span>
-                                <div className={`grid ${buyProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-4 w-full`}>
-                                    {buyProducts.map((p, idx) => (
-                                        <div key={`buy-${idx}`} className="relative aspect-[3/4] overflow-hidden border border-white/10 group-hover:border-white/20 transition-colors">
-                                            <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
-                                            <div className="absolute top-2 left-2 px-2 py-1 bg-black/80 text-[7px] uppercase tracking-widest text-white border border-white/10 font-bold">Buy</div>
-                                            {p.count && p.count > 1 && (
-                                                <div className="absolute bottom-2 right-2 bg-gold px-1.5 py-0.5 text-[9px] font-bold text-black shadow-lg">x{p.count}</div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Directional Indicator */}
-                            <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full border border-gold/20 bg-gold/5">
-                                <ArrowRight size={24} className="text-gold rotate-90 md:rotate-0" />
-                            </div>
-
-                            {/* Free Group */}
-                            <div className="flex-1 w-full space-y-4">
-                                <span className="block text-[9px] uppercase tracking-[0.3em] text-gold font-bold text-center md:text-left">You Get Free</span>
-                                <div className={`grid ${getProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-4 w-full`}>
-                                    {getProducts.map((p, idx) => (
-                                        <div key={`get-${idx}`} className="relative aspect-[3/4] overflow-hidden border border-gold/40 shadow-[0_0_40px_rgba(212,175,55,0.2)] group-hover:border-gold/60 transition-colors">
-                                            <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
-                                            <div className="absolute top-2 left-2 px-2 py-1 bg-gold text-[7px] uppercase tracking-widest text-black font-bold shadow-lg">Free Item</div>
-                                            {p.count && p.count > 1 && (
-                                                <div className="absolute bottom-2 right-2 bg-black px-1.5 py-0.5 text-[9px] font-bold text-white border border-white/10">x{p.count}</div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
-                </div>
-            )}
+                    </div>
+                )}
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500" />
+            </div>
 
             {/* Content Section (Right/Overlay) */}
-            <div className={`relative flex-1 p-10 lg:p-16 flex flex-col justify-center items-start z-10 ${bannerImage ? 'lg:w-2/3' : 'lg:w-1/2'}`}>
+            <div className={`relative flex-1 p-10 lg:p-16 flex flex-col justify-center items-start z-10 ${bannerImage ? 'lg:w-1/2' : 'lg:w-1/2'}`}>
                 <div className="space-y-6 max-w-md">
                     <div className="space-y-2">
                         <motion.span

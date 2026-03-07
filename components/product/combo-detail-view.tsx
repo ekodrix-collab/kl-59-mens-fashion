@@ -28,7 +28,7 @@ export function ComboDetailView({ offer }: ComboDetailViewProps) {
 
     // Collect images from banner or items
     const itemImages = offer.combo_items?.filter(ci => ci.product?.images?.[0]).map(ci => ci.product!.images[0]) || [];
-    const images = offer.banner_image ? [offer.banner_image, ...itemImages] : itemImages;
+    const images = itemImages; // Exclude banner_image from gallery as per requirements
 
     return (
         <main className="min-h-screen bg-black text-white pt-20 md:pt-24 uppercase">
