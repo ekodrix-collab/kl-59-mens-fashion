@@ -123,7 +123,7 @@ export function HeroVideo() {
           className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4"
         >
           <div className="w-[1px] h-10 md:h-12 bg-gradient-to-b from-gold/50 to-transparent" />
-          <span className="text-[9px] uppercase tracking-[0.4em] text-white/50 hidden md:block">Scroll to Explore Story</span>
+          <span className="text-[9px] uppercase tracking-[0.4em] text-white/50 hidden md:block">Scroll to Explore</span>
         </motion.div>
       </div>
     </section>
