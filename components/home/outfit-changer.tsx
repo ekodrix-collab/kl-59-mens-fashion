@@ -83,12 +83,19 @@ export default function OutfitChanger() {
             </AnimatePresence>
 
             {/* Thumbnails */}
-            <div className="flex gap-3 mt-8 justify-center lg:justify-start overflow-x-auto" data-lenis-prevent>
+            <div
+              className="flex gap-3 mt-8 justify-center lg:justify-start overflow-x-auto snap-x snap-proximity hide-scrollbar scroll-smooth"
+              data-lenis-prevent
+              style={{
+                WebkitOverflowScrolling: "touch",
+                overscrollBehaviorX: "contain"
+              }}
+            >
               {looks.map((look, i) => (
                 <button
                   key={look.id}
                   onClick={() => setActive(i)}
-                  className={`relative w-24 h-32 rounded-lg overflow-hidden flex-shrink-0 transition-all duration-500 ${i === active ? 'ring-2 ring-accent scale-105 z-10' : 'opacity-40 hover:opacity-100 grayscale'
+                  className={`relative w-24 h-32 rounded-lg overflow-hidden flex-shrink-0 transition-all duration-500 snap-start ${i === active ? 'ring-2 ring-accent scale-105 z-10' : 'opacity-40 hover:opacity-100 grayscale'
                     }`}
                 >
                   <img src={look.thumb} alt="" className="w-full h-full object-cover" />
