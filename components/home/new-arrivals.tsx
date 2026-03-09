@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 
@@ -12,7 +12,8 @@ export function NewArrivals() {
   const { productsQuery } = useProducts();
   const { data: products, isLoading } = productsQuery;
   const [isDragging, setIsDragging] = useState(false);
-  const dragStart = useRef({ x: 0, scrollLeft: 0 });
+  const dragStart = useRef({ x: 0, y: 0, scrollLeft: 0 });
+  const touchLock = useRef<"horizontal" | "vertical" | null>(null);
 
   const arrivals = products?.filter(p => p.is_new_arrival) || [];
 
@@ -24,21 +25,60 @@ export function NewArrivals() {
   };
 
   // Touch drag handlers for mobile swipe
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+  const handleTouchStart = useCallback((e: TouchEvent) => {
     if (!scrollRef.current) return;
-    dragStart.current = { x: e.touches[0].clientX, scrollLeft: scrollRef.current.scrollLeft };
+    const touch = e.touches[0];
+    dragStart.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      scrollLeft: scrollRef.current.scrollLeft
+    };
+    touchLock.current = null;
     setIsDragging(true);
   }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!isDragging || !scrollRef.current) return;
-    const dx = e.touches[0].clientX - dragStart.current.x;
-    scrollRef.current.scrollLeft = dragStart.current.scrollLeft - dx;
-  }, [isDragging]);
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!scrollRef.current) return;
+
+    const touch = e.touches[0];
+    const dx = touch.clientX - dragStart.current.x;
+    const dy = touch.clientY - dragStart.current.y;
+
+    // Determine direction lock on first significant movement
+    if (!touchLock.current) {
+      if (Math.abs(dx) > Math.abs(dy)) {
+        touchLock.current = "horizontal";
+      } else if (Math.abs(dy) > Math.abs(dx)) {
+        touchLock.current = "vertical";
+      }
+    }
+
+    // If horizontal, prevent vertical page scroll and update slider scroll
+    if (touchLock.current === "horizontal") {
+      if (e.cancelable) e.preventDefault();
+      scrollRef.current.scrollLeft = dragStart.current.scrollLeft - dx;
+    }
+  }, []);
 
   const handleTouchEnd = useCallback(() => {
     setIsDragging(false);
+    touchLock.current = null;
   }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    el.addEventListener("touchstart", handleTouchStart as any, { passive: true });
+    el.addEventListener("touchmove", handleTouchMove as any, { passive: false });
+    el.addEventListener("touchend", handleTouchEnd as any, { passive: true });
+
+    return () => {
+      el.removeEventListener("touchstart", handleTouchStart as any);
+      el.removeEventListener("touchmove", handleTouchMove as any);
+      el.removeEventListener("touchend", handleTouchEnd as any);
+    };
+  }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
 
   if (isLoading) return null;
 
@@ -96,9 +136,6 @@ export function NewArrivals() {
         ref={scrollRef}
         className="flex gap-6 px-6 lg:px-10 pr-20 lg:pr-32 overflow-hidden md:overflow-hidden"
         style={{ overscrollBehavior: 'none' }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
         {arrivals.map((product, i) => {
           const primaryCat = product.product_categories?.find(pc => pc.is_primary)?.category?.name
