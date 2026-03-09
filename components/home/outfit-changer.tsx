@@ -87,7 +87,6 @@ export default function OutfitChanger() {
               className="flex gap-3 mt-8 justify-center lg:justify-start overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth"
               data-lenis-prevent
               style={{
-                touchAction: "pan-y",
                 WebkitOverflowScrolling: "touch",
                 overscrollBehaviorX: "contain"
               }}
