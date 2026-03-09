@@ -80,3 +80,16 @@
     background-color: rgba(200, 169, 126, 0.2);
     color: #C8A97E;
 }
+
+/* Hide scrollbar utility */
+@layer utilities {
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        /* IE and Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+}
