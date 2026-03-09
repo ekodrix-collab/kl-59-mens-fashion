@@ -166,7 +166,7 @@ export function ProductDetailView({ product, related }: ProductDetailViewProps) 
                 <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-white/40 block mb-3">
                   Color — {selectedColor || 'Select'}
                 </span>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   {product.colors.map((color: string) => (
                     <button
                       key={color}
