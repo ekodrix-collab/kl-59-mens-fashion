@@ -34,6 +34,7 @@ export default function MediaPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [assets, setAssets] = useState<MediaItem[]>([])
+  const [erroredAssets, setErroredAssets] = useState<Set<string>>(new Set())
   const [searchQuery, setSearchQuery] = useState('')
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -42,19 +43,14 @@ export default function MediaPage() {
   useEffect(() => {
     const saved = localStorage.getItem('kl59_admin_media')
     if (saved) {
-      setAssets(JSON.parse(saved))
+      const parsed = JSON.parse(saved)
+      // One-time cleanup: remove the old hardcoded sample asset
+      const filtered = parsed.filter((a: any) =>
+        a.id !== '1' && a.public_id !== 'shyckfjvi3jyyazd'
+      )
+      setAssets(filtered)
     } else {
-      // Sample data for "Real Practice"
-      setAssets([
-        {
-          id: '1',
-          url: 'https://res.cloudinary.com/du6cwjfyw/image/upload/f_auto,q_auto/v1740815525/shyckfjvi3jyyazd.heic',
-          public_id: 'shyckfjvi3jyyazd',
-          format: 'heic',
-          resource_type: 'image',
-          created_at: new Date().toISOString()
-        }
-      ])
+      setAssets([])
     }
   }, [])
 
@@ -132,6 +128,15 @@ export default function MediaPage() {
 
   const deleteAsset = (id: string) => {
     setAssets(assets.filter(a => a.id !== id))
+    setErroredAssets(prev => {
+      const next = new Set(prev)
+      next.delete(id)
+      return next
+    })
+  }
+
+  const handleMediaError = (id: string) => {
+    setErroredAssets(prev => new Set(prev).add(id))
   }
 
   const filteredAssets = assets.filter(a =>
@@ -227,10 +232,29 @@ export default function MediaPage() {
             >
               {/* Preview Area */}
               <div className="aspect-[4/5] bg-rich-black relative overflow-hidden">
-                {asset.resource_type === 'video' ? (
-                  <video src={asset.url} className="w-full h-full object-cover" muted loop onMouseOver={e => e.currentTarget.play()} onMouseOut={e => e.currentTarget.pause()} />
+                {erroredAssets.has(asset.id) ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-red-500/10 text-red-500/50 p-6 text-center">
+                    <ImageIcon size={32} className="mb-2 opacity-20" />
+                    <span className="font-sans text-[8px] uppercase tracking-widest font-bold">Media Error</span>
+                    <p className="font-sans text-[7px] mt-1 opacity-50">This asset could not be retrieved from the CDN.</p>
+                  </div>
+                ) : asset.resource_type === 'video' ? (
+                  <video
+                    src={asset.url}
+                    className="w-full h-full object-cover"
+                    muted
+                    loop
+                    onMouseOver={e => e.currentTarget.play()}
+                    onMouseOut={e => e.currentTarget.pause()}
+                    onError={() => handleMediaError(asset.id)}
+                  />
                 ) : (
-                  <img src={asset.url} alt={asset.public_id} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-90 group-hover:opacity-100" />
+                  <img
+                    src={asset.url}
+                    alt={asset.public_id}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-90 group-hover:opacity-100"
+                    onError={() => handleMediaError(asset.id)}
+                  />
                 )}
 
                 {/* Format Badge */}
