@@ -83,7 +83,14 @@ export default function OutfitChanger() {
             </AnimatePresence>
 
             {/* Thumbnails */}
-            <div className="flex gap-3 mt-8 justify-center lg:justify-start overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth" data-lenis-prevent>
+            <div
+              className="flex gap-3 mt-8 justify-center lg:justify-start overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth"
+              data-lenis-prevent
+              style={{
+                touchAction: 'pan-x',
+                WebkitOverflowScrolling: 'touch'
+              }}
+            >
               {looks.map((look, i) => (
                 <button
                   key={look.id}

@@ -72,10 +72,13 @@ export function NewArrivals() {
         </div>
       </div>
 
-      {/* overflow-hidden on desktop (no native scroll = no Lenis conflict), overflow-x-auto on mobile for swipe */}
       <div
         ref={scrollRef}
-        className="flex gap-6 px-6 lg:px-10 pr-20 lg:pr-32 overflow-x-auto overflow-y-hidden snap-x snap-mandatory touch-pan-y hide-scrollbar scroll-smooth"
+        className="flex gap-6 px-6 lg:px-10 pr-20 lg:pr-32 overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar scroll-smooth"
+        style={{
+          touchAction: 'pan-x',
+          WebkitOverflowScrolling: 'touch'
+        }}
       >
         {arrivals.map((product, i) => {
           const primaryCat = product.product_categories?.find(pc => pc.is_primary)?.category?.name
@@ -86,7 +89,7 @@ export function NewArrivals() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: Math.min(i * 0.08, 0.3) }}
-              className="min-w-[280px] md:min-w-[380px] group will-change-transform snap-start"
+              className="min-w-[280px] md:min-w-[380px] flex-shrink-0 group will-change-transform snap-start"
             >
               <Link href={`/shop/${product.slug}`}>
                 <div className="mb-6 relative overflow-hidden bg-rich-black aspect-[3/4]">
