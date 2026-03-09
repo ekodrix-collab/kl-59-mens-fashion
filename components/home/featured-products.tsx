@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useProducts } from "@/hooks/use-products";
 
@@ -11,8 +11,6 @@ export function FeaturedProducts() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { productsQuery } = useProducts({ featured: true });
   const { data: featured, isLoading } = productsQuery;
-  const dragStart = useRef({ x: 0, y: 0, scrollLeft: 0 });
-  const touchLock = useRef<"horizontal" | "vertical" | null>(null);
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -20,60 +18,6 @@ export function FeaturedProducts() {
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
-
-  // Touch drag handlers for mobile swipe
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    if (!scrollRef.current) return;
-    const touch = e.touches[0];
-    dragStart.current = {
-      x: touch.clientX,
-      y: touch.clientY,
-      scrollLeft: scrollRef.current.scrollLeft
-    };
-    touchLock.current = null;
-  }, []);
-
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!scrollRef.current) return;
-
-    const touch = e.touches[0];
-    const dx = touch.clientX - dragStart.current.x;
-    const dy = touch.clientY - dragStart.current.y;
-
-    // Determine direction lock on first significant movement
-    if (!touchLock.current) {
-      if (Math.abs(dx) > Math.abs(dy)) {
-        touchLock.current = "horizontal";
-      } else if (Math.abs(dy) > Math.abs(dx)) {
-        touchLock.current = "vertical";
-      }
-    }
-
-    // If horizontal, prevent vertical page scroll and update slider scroll
-    if (touchLock.current === "horizontal") {
-      if (e.cancelable) e.preventDefault();
-      scrollRef.current.scrollLeft = dragStart.current.scrollLeft - dx;
-    }
-  }, []);
-
-  const handleTouchEnd = useCallback(() => {
-    touchLock.current = null;
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    el.addEventListener("touchstart", handleTouchStart as any, { passive: true });
-    el.addEventListener("touchmove", handleTouchMove as any, { passive: false });
-    el.addEventListener("touchend", handleTouchEnd as any, { passive: true });
-
-    return () => {
-      el.removeEventListener("touchstart", handleTouchStart as any);
-      el.removeEventListener("touchmove", handleTouchMove as any);
-      el.removeEventListener("touchend", handleTouchEnd as any);
-    };
-  }, [handleTouchStart, handleTouchMove, handleTouchEnd]);
 
   if (isLoading) return (
     <div className="py-20 flex justify-center">
@@ -134,8 +78,8 @@ export function FeaturedProducts() {
 
       <div
         ref={scrollRef}
-        className="flex gap-6 px-6 lg:px-10 pr-20 lg:pr-32 overflow-hidden md:overflow-hidden"
-        style={{ overscrollBehavior: 'none' }}
+        className="flex gap-6 px-6 lg:px-10 pr-20 lg:pr-32 overflow-x-auto overflow-y-hidden snap-x snap-mandatory touch-pan-y hide-scrollbar scroll-smooth"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {displayedProducts.map((product, i) => {
           const primaryCat = product.product_categories?.find((pc: any) => pc.is_primary)?.category?.name
@@ -146,7 +90,7 @@ export function FeaturedProducts() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: Math.min(i * 0.08, 0.3) }}
-              className="min-w-[280px] md:min-w-[380px] group will-change-transform"
+              className="min-w-[280px] md:min-w-[380px] group will-change-transform snap-start"
             >
               <Link href={`/shop/${product.slug}`}>
                 <div className="mb-6 relative overflow-hidden bg-black aspect-[3/4]">
