@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Montserrat, Inter, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
+import { Analytics } from "@vercel/analytics/next"
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -184,10 +185,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <main id="main-content">
                 {children}
               </main>
+              <Analytics />
             </NavbarWrapper>
           </SmoothScroll>
-          <Toaster 
-            position="top-center" 
+          <Toaster
+            position="top-center"
             toastOptions={{
               style: {
                 background: '#1A1A1A',

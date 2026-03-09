@@ -132,7 +132,7 @@ export function ProductInfo({ product }: { product: any }) {
           <span className="font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-subtle">
             Select Color
           </span>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             {product.colors.map((color: string) => (
               <button
                 key={color}
