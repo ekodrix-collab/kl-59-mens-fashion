@@ -60,3 +60,59 @@ export function optimizeImageSizes(url: string) {
         full: optimizeImage(url, 1920),
     }
 }
+
+/**
+ * Extracts the public ID from a Cloudinary URL.
+ */
+export function extractPublicId(url: string): string | null {
+    if (!url || !url.includes('cloudinary.com')) return null
+
+    // Cloudinary URL format: https://res.cloudinary.com/cloud_name/image/upload/v12345678/folder/public_id.jpg
+    // We need everything after /upload/ (excluding version and extension)
+    const parts = url.split('/upload/')
+    if (parts.length !== 2) return null
+
+    // Parts[1] is something like "v12345678/folder/public_id.jpg" or "folder/public_id.jpg"
+    let publicIdWithExt = parts[1]
+
+    // Remove version if it exists (starts with 'v' followed by digits)
+    if (publicIdWithExt.match(/^v\d+\//)) {
+        publicIdWithExt = publicIdWithExt.replace(/^v\d+\//, '')
+    }
+
+    // Remove extension
+    const lastDotIndex = publicIdWithExt.lastIndexOf('.')
+    if (lastDotIndex === -1) return publicIdWithExt
+    return publicIdWithExt.substring(0, lastDotIndex)
+}
+
+/**
+ * Calls the internal API to delete one or more images from Cloudinary.
+ */
+export async function deleteCloudinaryImages(urls: string | string[], resourceType: 'image' | 'video' = 'image') {
+    const urlArray = Array.isArray(urls) ? urls : [urls]
+    const publicIds = urlArray
+        .map(url => extractPublicId(url))
+        .filter((id): id is string => id !== null)
+
+    if (publicIds.length === 0) return
+
+    try {
+        await Promise.all(
+            publicIds.map(async (publicId) => {
+                const response = await fetch('/api/admin/cloudinary-delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ public_id: publicId, resource_type: resourceType }),
+                })
+
+                if (!response.ok) {
+                    const error = await response.json()
+                    console.error(`Failed to delete Cloudinary asset ${publicId}:`, error)
+                }
+            })
+        )
+    } catch (error) {
+        console.error('Error in deleteCloudinaryImages:', error)
+    }
+}
