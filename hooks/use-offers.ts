@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { createClient } from '@/lib/supabase/client'
+import { deleteCloudinaryImages } from '@/lib/cloudinary'
 import type { Offer, ComboItem } from '@/types'
 
 const supabase = createClient()
@@ -92,6 +93,19 @@ export function useOffers(type?: string) {
         mutationFn: async (updatedOffer: any & { id: string }) => {
             const { id, combo_items, ...offerData } = updatedOffer
 
+            // 0. Handle banner image deletion if it changed
+            if (offerData.banner_image) {
+                const { data: currentOffer } = await supabase
+                    .from('offers')
+                    .select('banner_image')
+                    .eq('id', id)
+                    .single()
+
+                if (currentOffer && currentOffer.banner_image && currentOffer.banner_image !== offerData.banner_image) {
+                    await deleteCloudinaryImages(currentOffer.banner_image)
+                }
+            }
+
             // 1. Update basic fields
             const { data, error } = await supabase
                 .from('offers')
@@ -130,6 +144,17 @@ export function useOffers(type?: string) {
 
     const deleteOffer = useMutation({
         mutationFn: async (id: string) => {
+            // 0. Get banner image before deleting
+            const { data: offer } = await supabase
+                .from('offers')
+                .select('banner_image')
+                .eq('id', id)
+                .single()
+
+            if (offer && offer.banner_image) {
+                await deleteCloudinaryImages(offer.banner_image)
+            }
+
             const { error } = await supabase.from('offers').delete().eq('id', id)
             if (error) throw error
         },
