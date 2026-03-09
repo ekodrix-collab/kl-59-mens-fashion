@@ -74,7 +74,7 @@ export function NewArrivals() {
 
       <div
         ref={scrollRef}
-        className="flex gap-6 px-6 lg:px-10 pr-20 lg:pr-32 overflow-x-auto overflow-y-hidden snap-x snap-mandatory hide-scrollbar scroll-smooth"
+        className="flex gap-6 px-6 lg:px-10 pr-32 lg:pr-40 overflow-x-auto overflow-y-hidden snap-x snap-proximity hide-scrollbar scroll-smooth"
         style={{
           WebkitOverflowScrolling: "touch",
           overscrollBehaviorX: "contain"

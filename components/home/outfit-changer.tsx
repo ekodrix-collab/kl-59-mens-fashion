@@ -84,7 +84,7 @@ export default function OutfitChanger() {
 
             {/* Thumbnails */}
             <div
-              className="flex gap-3 mt-8 justify-center lg:justify-start overflow-x-auto snap-x snap-mandatory hide-scrollbar scroll-smooth"
+              className="flex gap-3 mt-8 justify-center lg:justify-start overflow-x-auto snap-x snap-proximity hide-scrollbar scroll-smooth"
               data-lenis-prevent
               style={{
                 WebkitOverflowScrolling: "touch",
