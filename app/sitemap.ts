@@ -4,9 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost'))
-        ? process.env.NEXT_PUBLIC_SITE_URL
-        : 'https://www.kl-59mensfashion.in'
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
 
     // Static routes with proper priorities
     const staticPages: MetadataRoute.Sitemap = [
@@ -94,7 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
         return [...staticPages, ...collectionPages, ...productPages, ...offerPages]
     } catch (error) {
-        console.error('Sitemap generation error:', error)
+        // Silent error
     }
 
     return staticPages

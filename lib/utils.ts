@@ -29,14 +29,12 @@ export function truncate(str: string, length: number): string {
 
 export function generateWhatsAppLink(product: any): string {
     const phoneNumber = "919895884796";
-    const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL && !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost'))
-        ? process.env.NEXT_PUBLIC_SITE_URL
-        : "https://www.kl-59mensfashion.in";
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.kl-59mensfashion.in";
 
     const hasDiscount = product.mrp > product.selling_price;
     const discountText = hasDiscount ? `\n🏷️ MRP: ₹${product.mrp.toLocaleString("en-IN")} (${product.discount_percent}% OFF)` : '';
 
-    const message = `Hi KL-59! ✨
+    const message = `Hi KL-59! 👔
 
 I would like to order this from your collection:
 
@@ -50,7 +48,11 @@ I would like to order this from your collection:
 
 Looking forward to your response! 🙏`;
 
-    const encodedMessage = encodeURIComponent(message);
+    const encodedMessage = encodeURIComponent(
+        new TextDecoder().decode(
+            new TextEncoder().encode(message)
+        )
+    );
     return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 }
 

@@ -48,10 +48,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL &&
-      !process.env.NEXT_PUBLIC_SITE_URL.includes('localhost')
-      ? process.env.NEXT_PUBLIC_SITE_URL
-      : 'https://www.kl-59mensfashion.in'
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kl-59mensfashion.in'
   ),
 
   title: {
