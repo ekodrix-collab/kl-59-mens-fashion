@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageSquare, ChevronLeft, MapPin, ArrowRight, Package, Plus, Check, ShieldCheck, Award, Tag } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
+import { generateOfferWhatsAppURL } from '@/lib/whatsapp'
 import type { Offer, Product } from '@/types'
 
 interface OfferDetailViewProps {
@@ -45,31 +46,8 @@ export function OfferDetailView({ offer }: OfferDetailViewProps) {
     const images = getImages();
 
     const handleWhatsAppOrder = () => {
-        const WHATSAPP_NUMBER = "919895884796";
-        const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.kl-59mensfashion.in";
-
-        let msg = `Hi KL-59! ✨\n\nI am interested in this offer:\n\n`;
-
-        if (offer.offer_type === 'combo') {
-            msg += `🎁 *COMBO: ${offer.title.toUpperCase()}*\n`;
-            msg += `💰 Price: ${formatPrice(offer.combo_price || 0)}\n`;
-            msg += `📦 Includes: ${offer.combo_items?.map(i => `${i.product?.name} (x${i.quantity})`).join(', ')}\n`;
-        } else if (offer.offer_type === 'bogo') {
-            msg += `🔥 *BOGO: ${offer.title.toUpperCase()}*\n`;
-            const buyItemsText = buyItems.map(i => `${i.product?.name}${i.quantity > 1 ? ` (x${i.quantity})` : ''}`).join(', ') || 'Item';
-            const freeItemsText = freeItems.map(i => `${i.product?.name}${i.quantity > 1 ? ` (x${i.quantity})` : ''}`).join(', ') || 'Free Item';
-            msg += `🛒 Buy: ${buyItemsText}\n`;
-            msg += `✨ Get Free: ${freeItemsText}\n`;
-        } else {
-            msg += `🏷️ *OFFER: ${offer.title.toUpperCase()}*\n`;
-            msg += `👕 Product: ${offer.product?.name}\n`;
-            msg += `💰 Offer Price: ${formatPrice(offer.product?.selling_price || 0)}\n`;
-        }
-
-        msg += `\n🔗 View on site: ${SITE_URL}/offers/${offer.id}\n\nIs it available? 🙏`;
-
-        const encodedMessage = encodeURIComponent(msg);
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank');
+        const url = generateOfferWhatsAppURL(offer);
+        window.open(url, '_blank');
     }
 
     return (

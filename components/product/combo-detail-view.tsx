@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageSquare, ChevronLeft, MapPin } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
+import { generateComboWhatsAppURL } from '@/lib/whatsapp'
 import type { Offer } from '@/types'
 
 interface ComboDetailViewProps {
@@ -16,27 +17,8 @@ export function ComboDetailView({ offer }: ComboDetailViewProps) {
     const [activeImage, setActiveImage] = useState(0)
 
     const handleOrderClick = () => {
-        const phoneNumber = "919895884796";
-        const SITE_URL = "https://www.kl-59mensfashion.in";
-        const itemsList = offer.combo_items?.map(i => `${i.product?.name} (x${i.quantity})`).join(', ') || '';
-        const savings = totalOriginalPrice > finalComboPrice ? `\n🏷️ You Save: ${formatPrice(totalOriginalPrice - finalComboPrice)}` : '';
-
-        const message = `Hi KL-59! ✨
-
-I would like to order this combo from your collection:
-
-🎁 *COMBO: ${offer.title.toUpperCase()}*
-------------------
-💰 Combo Price: ${formatPrice(finalComboPrice)}${savings}
-📦 Includes: ${itemsList}
-------------------
-
-🔗 ${SITE_URL}/offers/${offer.id}
-
-Looking forward to your response! 🙏`;
-
-        const encodedMessage = encodeURIComponent(message);
-        window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank')
+        const url = generateComboWhatsAppURL(offer);
+        window.open(url, '_blank');
     }
 
     // Calculate total original selling price sum
